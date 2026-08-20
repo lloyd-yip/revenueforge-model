@@ -773,6 +773,11 @@ function labels(){
  $("hrsWeek").previousElementSibling;
 }
 var KEY="revenueforge-model-v1", saveTimer=null;
+function markCustom(){
+ document.querySelectorAll('.presets button[data-preset]').forEach(function(b){
+  b.setAttribute("aria-pressed","false")});
+ var t=$("savedTag"); if(t){t.textContent="custom";t.classList.add("on")}
+}
 function getState(){
  var o={};IDS.forEach(function(i){o[i]=$(i).value});o.target=$("target").value;
  o._p=document.querySelector('.presets button[aria-pressed="true"]');
@@ -785,8 +790,11 @@ function applyState(o){
  IDS.forEach(function(i){if(o[i]!==undefined&&$(i)){$(i).value=o[i];any=true}});
  if(o.target!==undefined)$("target").value=o.target;
  $("hrsWeek").value=Math.round(parseFloat($("hrsMonth").value)/WPM);
+ var clean=o._p&&P[o._p]&&IDS.every(function(i){
+  return P[o._p][i]===undefined||String(P[o._p][i])===String(o[i])});
  document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
-  b.setAttribute("aria-pressed",b.dataset.preset===o._p?"true":"false")});
+  b.setAttribute("aria-pressed",(clean&&b.dataset.preset===o._p)?"true":"false")});
+ if(!clean){var t=$("savedTag");if(t){t.textContent="custom";t.classList.add("on")}}
  return any;
 }
 function encode(o){
@@ -805,8 +813,13 @@ function persist(){
  try{localStorage.setItem(KEY,str)}catch(e){}
  try{history.replaceState(null,"","#"+str)}catch(e){}
  var t=$("savedTag");
- if(t){t.classList.add("on");clearTimeout(saveTimer);
-  saveTimer=setTimeout(function(){t.classList.remove("on")},900)}
+ if(t){t.textContent="saved";t.classList.add("on");clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){t.textContent=activePreset()?"":"custom";
+   if(!activePreset())t.classList.add("on");else t.classList.remove("on")},1200)}
+}
+function activePreset(){
+ var b=document.querySelector('.presets button[data-preset][aria-pressed="true"]');
+ return b?b.dataset.preset:null;
 }
 function restore(){
  var fromHash=decode(location.hash.replace(/^#/,""));
@@ -846,8 +859,9 @@ var _r=render;
 render=function(){_r();tagLabels()};
 
 IDS.forEach(function(i){$(i).addEventListener("input",function(){
+  markCustom();
   if(i==="hrsMonth"){syncHours("month");return} render()})});
-$("hrsWeek").addEventListener("input",function(){syncHours("week")});
+$("hrsWeek").addEventListener("input",function(){markCustom();syncHours("week")});
 $("target").addEventListener("input",render);
 $("matchBtn").addEventListener("click",function(){
  $("target").value=sustain(V(),eff(V(),0)).toFixed(2);render()});
