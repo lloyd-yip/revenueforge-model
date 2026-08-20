@@ -39,6 +39,43 @@ h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin
  align-self:center;margin-left:10px}
 .saved.on{opacity:1}
 .presets button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.tabs{display:flex;gap:0;margin:0 0 22px;border-bottom:1px solid var(--rule)}
+.tabs button{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
+ text-transform:uppercase;padding:12px 20px;border:0;background:transparent;color:var(--ink-3);
+ cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500}
+.tabs button:hover{color:var(--ink-2)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.tabs .count{display:inline-block;margin-left:8px;background:var(--accent);color:var(--ground);
+ font-size:9px;padding:1px 6px;border-radius:9px;vertical-align:middle}
+.ideas-h1{font-size:clamp(22px,3vw,29px);font-weight:700;letter-spacing:-.02em;margin:0 0 8px;line-height:1.15}
+.ideas-sf{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink-2);
+ margin:0 0 28px;max-width:64ch}
+.idea{border:1px solid var(--rule);background:var(--surface);margin-bottom:18px;max-width:900px}
+.idea-h{padding:13px 18px;border-bottom:1px solid var(--rule);background:var(--surface-2);
+ display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.idea-n{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--accent);font-weight:600}
+.chip{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+ padding:3px 8px;border:1px solid var(--rule-strong);color:var(--ink-3);margin-left:auto}
+.chip.open{border-color:var(--warn);color:var(--warn);background:var(--warn-soft)}
+.chip.verify{border-color:var(--crit);color:var(--crit);background:var(--crit-soft)}
+.idea-q{font-size:16px;font-weight:600;letter-spacing:-.01em;line-height:1.35;margin:0;flex:1 1 100%}
+.idea-b{padding:16px 18px}
+.idea-b p{font-family:"Source Serif 4",Georgia,serif;font-size:14px;color:var(--ink-2);margin:0 0 12px;line-height:1.65}
+.idea-b p:last-child{margin-bottom:0}
+.idea-b strong{color:var(--ink)}
+.known{background:var(--surface-2);border-left:3px solid var(--accent);padding:12px 15px;margin:14px 0}
+.known-k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.13em;
+ text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.known ul{margin:0;padding-left:18px}
+.known li{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;color:var(--ink-2);
+ margin-bottom:5px;line-height:1.55}
+.known li:last-child{margin-bottom:0}
+.known b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink)}
+.settle{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px 15px;margin-top:14px}
+.settle-k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.13em;
+ text-transform:uppercase;color:var(--warn);font-weight:600;margin-bottom:6px}
+.settle p{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;color:var(--ink-2);margin:0;line-height:1.55}
 .seq{display:flex;align-items:center;gap:9px;margin:22px 0 8px;flex-wrap:wrap}
 .seq i{width:22px;height:1px;background:var(--rule-strong);display:block}
 .seq span{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;
@@ -235,6 +272,12 @@ td.pause{color:var(--crit)}
   </div><span class="saved" id="savedTag">saved</span></div>
 </div>
 
+<div class="tabs" role="tablist">
+  <button type="button" role="tab" id="tab-model" aria-selected="true">The model</button>
+  <button type="button" role="tab" id="tab-ideas" aria-selected="false">Ideas &amp; open questions <span class="count">6</span></button>
+</div>
+
+<div id="panel-model">
 <div class="seq"><span>Capacity</span><i></i><span>sets the target</span><i></i><span>which sets the funnel</span></div>
 
 <div class="box">
@@ -434,6 +477,106 @@ td.pause{color:var(--crit)}
       conservative floor, so this understates the business on purpose. The hiring extension is the next build.</p>
   </div>
 </div>
+</div><!-- /panel-model -->
+
+<div id="panel-ideas" hidden>
+  <h2 class="ideas-h1">Questions we'll have to answer to scale</h2>
+  <p class="ideas-sf">Things the model surfaced but deliberately doesn't answer. Each is parked here with what we
+    already know and what would settle it &mdash; so we're not rediscovering the same tension in three months.</p>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">01</span><span class="chip open">open</span>
+      <p class="idea-q">Should onboarding and long-term account maintenance eventually be separate people?</p></div>
+    <div class="idea-b">
+      <p>You can only run so many onboardings a month, but recurring accounts <strong>stack indefinitely</strong>.
+        Every client added keeps drawing maintenance hours forever, so the maintenance load grows while onboarding
+        capacity stays flat. At some point one person cannot hold both.</p>
+      <p>The tension: the dev who built a client's system maintains it far more cheaply than anyone else, because
+        the context is in their head. Handing it over means paying someone to slowly learn what Geri already knows.
+        <strong>But context in a head is a choice, not a law.</strong> The same factory work that takes onboarding
+        from 100 hours to 40 &mdash; specs, reusable adapters, runbooks, monitoring &mdash; is exactly what makes
+        maintenance transferable. One investment, not two.</p>
+      <div class="known"><div class="known-k">What we already know</div><ul>
+        <li>At <b>96</b> of Geri's delivery hours a month and <b>12 hrs</b> upkeep per client, maintenance alone
+          consumes him entirely at <b>8 live clients</b>.</li>
+        <li>The model puts the two-person ceiling at <b>9&ndash;14 live clients</b> &mdash; so the maintenance wall and
+          the capacity ceiling arrive at <b>the same moment</b>. Not a distant problem.</li>
+        <li>Halving upkeep to <b>6 hrs</b> moves the wall to <b>16 clients</b> &mdash; the same lever that fixes
+          everything else in this model.</li>
+        <li>A likely answer is splitting by <b>problem type</b>, not by person: recurring failures, monitoring and
+          data hygiene delegate cleanly; novel breakage and change requests don't.</li>
+      </ul></div>
+      <div class="settle"><div class="settle-k">What would settle it</div>
+        <p>Track, from client #1, what share of maintenance is <em>recurring</em> versus <em>novel</em>. If most fixes
+          are the same handful of failure modes across clients, maintenance is delegable and the hire is cheap. If
+          every client breaks differently, it stays welded to the builder &mdash; and that argues for tighter
+          qualification, not a bigger team.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">02</span><span class="chip verify">verify</span>
+      <p class="idea-q">How many hours does a live client actually consume each month?</p></div>
+    <div class="idea-b">
+      <p>The most load-bearing assumption in the model, and currently a guess. It sets the capacity ceiling, the
+        parity price for the recurring tier, and when the maintenance wall arrives.</p>
+      <div class="known"><div class="known-k">What we already know</div><ul>
+        <li>Currently assumed <b>12 hrs/month</b> per live client, scaling down with efficiency.</li>
+        <li>At 12 hrs, recurring parity sits at <b>$2,400/mo</b> &mdash; so $3,000 is only <b>1.25&times;</b> ahead.</li>
+        <li>At 6 hrs, parity drops to <b>$1,200</b> and $3,000 becomes <b>2.5&times;</b> ahead. Halving upkeep does the
+          same work as doubling the price, without a pricing conversation.</li>
+      </ul></div>
+      <div class="settle"><div class="settle-k">What would settle it</div>
+        <p>Geri logs maintenance hours per client for the first two clients. Two months of real data replaces the
+          most consequential guess in the model.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">03</span><span class="chip open">open</span>
+      <p class="idea-q">Should efficiency improve with clients delivered rather than with time?</p></div>
+    <div class="idea-b">
+      <p>The model currently improves efficiency on a monthly timer. But you learn by <strong>shipping</strong>, not
+        by waiting &mdash; a month with two onboardings should teach more than a month with none. Driving the curve off
+        completed clients would make early throughput self-reinforcing, and would correctly punish a slow start.</p>
+      <div class="settle"><div class="settle-k">What would settle it</div>
+        <p>Straightforward to change once there's real data on how much cheaper client #3 was than client #1.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">04</span><span class="chip open">open</span>
+      <p class="idea-q">Do we refuse clients on non-standard stacks?</p></div>
+    <div class="idea-b">
+      <p>A client on an exotic CRM could cost <strong>2&ndash;3&times;</strong> a normal onboarding and eat a month.
+        Worse, their maintenance never standardises &mdash; so they stay welded to Geri permanently rather than ever
+        becoming delegable. A stronger reason to decline than the onboarding hours alone.</p>
+      <div class="settle"><div class="settle-k">What would settle it</div>
+        <p>Probably a qualification rule in the audit &mdash; <em>we deploy onto these systems</em> &mdash; rather than a
+          lever in the model.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">05</span><span class="chip parked">parked</span>
+      <p class="idea-q">The model is deliberately pessimistic about retention. How much?</p></div>
+    <div class="idea-b">
+      <p>Expansion revenue is switched off, referrals aren't modelled, and a retained client's biggest hidden benefit
+        &mdash; that it needs <strong>no sales or pre-sales time at all</strong> &mdash; is invisible here. Every one of
+        those pushes the same way, so any conclusion this model reaches about keeping clients is a
+        <strong>floor, not a forecast</strong>.</p>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">06</span><span class="chip parked">parked</span>
+      <p class="idea-q">The hiring extension &mdash; what happens past the two-person ceiling?</p></div>
+    <div class="idea-b">
+      <p>Phase 2 of the model. Delivery hires first, then when a commission-only closer becomes viable &mdash; they
+        need <strong>5 deals a month</strong> to clear $10k at 10% of upfront, well beyond what two people deliver.</p>
+    </div>
+  </div>
+</div><!-- /panel-ideas -->
 </div>
 
 <script>
@@ -895,6 +1038,18 @@ document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
  b.addEventListener("click",function(){applyPreset(b.dataset.preset)})});
 
 installTips();
+function showTab(name){
+ var isModel=name!=="ideas";
+ $("panel-model").hidden=!isModel;
+ $("panel-ideas").hidden=isModel;
+ $("tab-model").setAttribute("aria-selected",isModel?"true":"false");
+ $("tab-ideas").setAttribute("aria-selected",isModel?"false":"true");
+ document.querySelector(".presets").style.visibility=isModel?"visible":"hidden";
+ if(isModel)render();
+}
+$("tab-model").addEventListener("click",function(){showTab("model")});
+$("tab-ideas").addEventListener("click",function(){showTab("ideas")});
+
 applyPreset("cons");
 if(restore()){render()}
 IDS.forEach(function(i){$(i).addEventListener("change",persist)});
