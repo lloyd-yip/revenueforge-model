@@ -1,4 +1,7 @@
 <title>RevenueForge Capacity Model</title>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 <style>
 :root{--ground:#E7EBEB;--surface:#F7F9F9;--surface-2:#EFF3F3;--sunken:#DCE2E2;
@@ -1082,26 +1085,34 @@ function showTab(name){
 $("tab-model").addEventListener("click",function(){showTab("model")});
 $("tab-ideas").addEventListener("click",function(){showTab("ideas")});
 
-var BUILD_ID="0819-2349";
+var BUILD_ID="0819-2353";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
 });
-// quietly check whether a newer build has been deployed
-if(BUILD_ID.indexOf("__")!==0){
- setTimeout(function(){
-  fetch(location.pathname+"?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()})
-   .then(function(t){
-    var m=t.match(/BUILD_ID="0819-2349"]+)"/);
-    if(m&&m[1]!==BUILD_ID){
-     $("latestBtn").classList.add("stale");
-     $("latestBtn").textContent="\u21bb New version";
-     $("buildTag").classList.add("stale");
-     $("buildTag").textContent="build "+BUILD_ID+" \u00b7 newer available";
-    }
-   }).catch(function(){});
- },1500);
-}
+// GitHub Pages sends cache-control: max-age=600, so a plain reload can serve a
+// 10-minute-old page. Check for a newer build and heal it automatically, once.
+(function(){
+ if(BUILD_ID.indexOf("__")===0)return;          // local/unstamped copy, nothing to check
+ var KEY_R="rf-autoreloaded";
+ fetch(location.pathname+"?cb="+Date.now(),{cache:"no-store"})
+  .then(function(r){return r.text()})
+  .then(function(t){
+   var m=t.match(/BUILD_ID="0819-2353"]+)"/);
+   if(!m||m[1]===BUILD_ID){try{sessionStorage.removeItem(KEY_R)}catch(e){} return}
+   var already=false;
+   try{already=sessionStorage.getItem(KEY_R)===m[1]}catch(e){}
+   if(already){                                  // reloaded once already and still stale: tell, do not loop
+    $("latestBtn").classList.add("stale");
+    $("latestBtn").textContent="\u21bb New version";
+    $("buildTag").classList.add("stale");
+    $("buildTag").textContent="build "+BUILD_ID+" \u00b7 "+m[1]+" available";
+    return;
+   }
+   try{sessionStorage.setItem(KEY_R,m[1])}catch(e){}
+   location.replace(location.pathname+"?v="+m[1]+location.hash);
+  }).catch(function(){});
+})();
 
 applyPreset("cons");
 if(restore()){render()}
