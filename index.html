@@ -282,7 +282,7 @@ td.pause{color:var(--crit)}
 .cplot{position:relative;border-left:1px solid var(--rule-strong);border-bottom:1px solid var(--rule-strong)}
 .cgrid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between}
 .cgrid i{display:block;height:1px;background:var(--rule)}
-.cbars{position:relative;display:flex;align-items:flex-end;gap:3px;height:170px;padding:0 3px}
+.cbars{position:relative;display:flex;align-items:flex-end;gap:3px;height:170px;padding:0 3px;margin-top:30px}
 .ccol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative;cursor:crosshair;min-width:0}
 .ccol:hover{background:rgba(127,184,179,.12)}
 .ccol i{display:block}
@@ -297,9 +297,12 @@ td.pause{color:var(--crit)}
  text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:7px}
 .cline{position:absolute;left:0;right:0;border-top:2px dashed var(--crit);z-index:2;pointer-events:none}
 .cmark{position:absolute;top:0;bottom:0;width:2px;background:var(--warn);z-index:3;pointer-events:none}
-.cmark em{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-style:normal;
- font-family:"IBM Plex Mono",monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;
- color:var(--warn);white-space:nowrap}
+.cmark em{position:absolute;top:-14px;left:50%;transform:translateX(-50%);font-style:normal;
+ font-family:"IBM Plex Mono",monospace;font-size:8.5px;letter-spacing:.06em;text-transform:uppercase;
+ color:var(--warn);white-space:nowrap;background:var(--surface);padding:1px 4px;border:1px solid var(--warn)}
+.cmark.lo em{top:-27px}
+.cmark.edgeL em{left:0;transform:none}
+.cmark.edgeR em{left:auto;right:0;transform:none}
 .ctip{display:none;position:absolute;bottom:calc(100% + 10px);z-index:40;width:214px;
  background:var(--ink);color:var(--ground);padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.4);
  font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.5;pointer-events:none;
@@ -1166,12 +1169,13 @@ function render(){
 
  // tiles
  $("tiles").innerHTML=[
-  {k:"Cash / mo",v:money(last.cash)},
-  {k:"MRR",v:money(last.recR),s:"recurring only"},
-  {k:"Live clients",v:Math.round(last.live)},
-  {k:"Clients started",v:String(rows.reduce(function(a,r){return a+r.starts},0)),
-   s:"over "+rows.length+" months"},
-  {k:"Max starts / mo",v:nm(last.maxStarts,2),s:"what current capacity allows"}
+  {k:"Net new clients / mo",v:String(last.starts),s:"onboarded in month "+last.m},
+  {k:"Max possible / mo",v:nm(last.maxStarts,2),s:"what this capacity allows"},
+  {k:"Active clients",v:String(Math.round(last.live)),s:Math.round(last.paying)+" paying monthly"},
+  {k:"MRR",v:money(last.recR),s:"recurring fees only"},
+  {k:"Cash / mo",v:money(last.cash),s:"audits + upfront + recurring"},
+  {k:"Clients onboarded",v:String(rows.reduce(function(a,r){return a+r.starts},0)),
+   s:"total over "+rows.length+" months"}
  ].map(function(t){return '<div class="tl"><div class="tlk">'+t.k+'</div><div class="tlv">'+t.v+
    '</div>'+(t.s?'<div class="tls">'+t.s+'</div>':'')+'</div>'}).join("");
 
@@ -1194,7 +1198,7 @@ function render(){
    tip:tip("Month "+r.m,[["Clients onboarded",r.starts],
      ["Onboarding",Math.round(r.onbHrs)+" hrs"],["Steady-state",Math.round(r.steadyHrs)+" hrs"],
      ["Hours used",Math.round(r.load)+" / "+Math.round(v.hrsMonth),1],
-     ["Hours free",Math.round(r.free)],["Live clients",Math.round(r.live)],
+     ["Hours free",Math.round(r.free)],["Active clients",Math.round(r.live)],
      ["Queue waiting",Math.floor(r.queue)]])
    }}),maxLoad,
    '<div class="capline" style="bottom:'+(v.hrsMonth/maxLoad*170).toFixed(1)+'px"><span class="caplbl">hours available '+Math.round(v.hrsMonth)+'</span></div>');
@@ -1221,7 +1225,7 @@ function render(){
    tag:r.paused?"paused":"",
    tip:tip("Month "+r.m,[["Audits run",Math.floor(r.audits)],
      ["Deals closed",Math.floor(r.won)],["Invites needed",r.invites>0?kf(r.invites):"0"],
-     ["Clients started",r.starts,1],["Cash collected",money(r.cash)]]
+     ["Net new clients",r.starts,1],["Cash collected",money(r.cash)]]
      .concat(r.paused?[["Status","paused"]]:[]))
    }}),maxAcq);
  axis($("aY"),maxAcq,function(x){return String(Math.round(x))});
@@ -1362,8 +1366,12 @@ function drawChart(el,cfg){
   return '<div class="ccol" data-i="'+i+'">'+(cfg.grouped?'<div class="cgrp">'+inner+'</div>':inner)+'</div>';
  }).join("");
  var capline=cfg.capGet?'<div class="cline" style="bottom:'+(cfg.capGet(cfg.rows[n-1])/max*170).toFixed(1)+'px"></div>':"";
- var marks=(cfg.marks||[]).filter(function(k){return k.i>=0&&k.i<n}).map(function(k){
-  return '<div class="cmark" style="left:'+((k.i+0.5)/n*100).toFixed(2)+'%"><em>'+k.label+'</em></div>'}).join("");
+ var mk=(cfg.marks||[]).filter(function(k){return k.i>=0&&k.i<n});
+ var marks=mk.map(function(k,mi){
+  var pc=(k.i+0.5)/n*100, cls="cmark";
+  if(mi%2===1)cls+=" lo";                       // stagger so neighbours cannot collide
+  if(pc<9)cls+=" edgeL"; else if(pc>91)cls+=" edgeR";
+  return '<div class="'+cls+'" style="left:'+pc.toFixed(2)+'%"><em>'+k.label+'</em></div>'}).join("");
  var every=Math.max(1,Math.ceil(n/14));
  el.innerHTML='<div class="cyt">Y \u2014 '+cfg.y+'</div><div class="cwrap"><div class="cy">'+
   [1,.667,.333,0].map(function(f){return "<span>"+cfg.fmt(max*f)+"</span>"}).join("")+
@@ -1416,10 +1424,10 @@ function loadChart(sel,rows,rngId,marks){
   series:[{label:"Steady-state",color:CV("--accent-2"),get:function(r){return r.styHrs}},
           {label:"Onboarding",color:CV("--accent"),get:function(r){return r.onbHrs}}],
   capGet:function(r){return r.cap}, capLabel:"Hours available", marks:marks||[],
-  tip:function(r){return [["Clients started",r.starts],["Delivery team",r.delTeam],
+  tip:function(r){return [["Net new clients",r.starts],["Delivery hires",r.delTeam],
    ["Hours used",Math.round(r.load)+" / "+Math.round(r.cap),1],["Hours free",Math.round(r.free)],
    ["Needed to start one",Math.round(r.onbPerMo)],["At capacity",r.maxed?"yes":"no"],
-   ["Live clients",Math.round(r.live)]]}});
+   ["Active clients",Math.round(r.live)]]}});
 }
 function acqChart(sel,rows,rngId,withRep){
  if(rngId&&$(rngId))$(rngId).textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
@@ -1434,7 +1442,7 @@ function acqChart(sel,rows,rngId,withRep){
   fmt:function(x){return Math.round(x)}, series:se,
   tip:function(r){return [["Audits run",Math.floor(r.audits)],
    ["\u2014 yours",Math.floor(r.myAudits)],["\u2014 reps",Math.floor(r.repAudits)],
-   ["Deals closed",Math.floor(r.won),1],["Clients started",r.starts],
+   ["Deals closed",Math.floor(r.won),1],["Net new clients",r.starts],
    ["Queue waiting",Math.floor(r.queue)],
    ["Invites needed",r.audits>0?kf(r.audits/((v_.auditConv/100)*(1+v_.followup/100))/(v_.attRate/100)):"0"]]}});
 }
@@ -1465,11 +1473,13 @@ function renderPhases(){
    '<p class="note">Locked at whatever phase 1 ended on. Change anything on tab 1 and every later phase moves.</p>';
 
  tilesInto("tiles2",[
-  {k:"Starts / mo",v:String(last2.starts),s:"from "+f1.starts},
-  {k:"Delivery team",v:String(last2.delTeam),s:"+ you and Geri"},
-  {k:"Live clients",v:String(Math.round(last2.live))},
-  {k:"MRR",v:money(last2.recR),s:"recurring only"},
-  {k:"Cash / mo",v:money(last2.cash),s:nm(last2.auditsWk,1)+" audits/wk, ceiling "+v.auditCap},
+  {k:"Net new clients / mo",v:String(last2.starts),s:"was "+f1.starts+" at end of phase 1"},
+  {k:"Max possible / mo",v:nm(last2.maxStarts,2),s:"what this capacity allows"},
+  {k:"Delivery hires",v:String(last2.delTeam),s:"people hired, plus you and Geri"},
+  {k:"Active clients",v:String(Math.round(last2.live)),s:Math.round(last2.paying)+" paying monthly"},
+  {k:"Your audits / wk",v:nm(last2.auditsWk,1),s:"your ceiling is "+v.auditCap},
+  {k:"MRR",v:money(last2.recR),s:"recurring fees only"},
+  {k:"Cash / mo",v:money(last2.cash),s:"audits + upfront + recurring"},
   {k:"Net / mo",v:money(last2.net),s:costLine(last2)}]);
  drawChart(document.querySelector('[data-chart="cap2"]'),{
   y:"delivery hours consumed", rows:s2,
@@ -1479,10 +1489,10 @@ function renderPhases(){
           {label:"Onboarding",color:CV("--accent"),get:function(r){return r.onbHrs}}],
   capGet:function(r){return r.cap}, capLabel:"Hours available",
   marks:F.delHires.map(function(hm,i){var ix=-1;s2.forEach(function(r,j){if(r.m===hm+1)ix=j});
-   return {i:ix,label:"hire "+(i+1)}}),
-  tip:function(r){return [["Clients started",r.starts],["Delivery team",r.delTeam],
+   return {i:ix,label:"+1 delivery"}}),
+  tip:function(r){return [["Net new clients",r.starts],["Delivery hires",r.delTeam],
    ["Hours used",Math.round(r.load)+" / "+Math.round(r.cap),1],["Hours free",Math.round(r.free)],
-   ["Live clients",Math.round(r.live)],["Your audits / wk",nm(r.auditsWk,1)],
+   ["Active clients",Math.round(r.live)],["Your audits / wk",nm(r.auditsWk,1)],
    ["Cash / mo",money(r.cash),1],["Net of payroll",money(r.net)]]}});
  moneyChart('[data-chart="money2"]',s2,"rng2m");
  acqChart('[data-chart="acq2"]',s2,"rng2a",false);
@@ -1501,28 +1511,30 @@ function renderPhases(){
  if($("repCloseNote"))$("repCloseNote").innerHTML="You close at "+v.closeRate+"%, so a rep closes at "+
   nm(v.closeRate*v.repClose/100,1)+"%.";
  tilesInto("tiles3",[
-  {k:"Starts / mo",v:String(last3.starts)},
-  {k:"Delivery team",v:String(last3.delTeam)},
-  {k:"Sales reps",v:String(last3.repTeam)},
-  {k:"MRR",v:money(last3.recR),s:"recurring only"},
-  {k:"Cash / mo",v:money(last3.cash)},
+  {k:"Net new clients / mo",v:String(last3.starts),s:"onboarded in month "+last3.m},
+  {k:"Max possible / mo",v:nm(last3.maxStarts,2),s:"what this capacity allows"},
+  {k:"Delivery hires",v:String(last3.delTeam),s:"people hired, plus you and Geri"},
+  {k:"Sales reps",v:String(last3.repTeam),s:"commission only, no base"},
+  {k:"Active clients",v:String(Math.round(last3.live)),s:Math.round(last3.paying)+" paying monthly"},
+  {k:"MRR",v:money(last3.recR),s:"recurring fees only"},
+  {k:"Cash / mo",v:money(last3.cash),s:"audits + upfront + recurring"},
   {k:"Net / mo",v:money(last3.net),s:costLine(last3)}]);
  drawChart(document.querySelector('[data-chart="head3"]'),{
-  y:"people on the team", rows:s3,
+  y:"team members (delivery and sales)", rows:s3,
   max:Math.max(4,Math.max.apply(null,s3.map(function(r){return r.delTeam+r.repTeam}))+1),
   fmt:function(x){return Math.round(x)},
   series:[{label:"Sales reps",color:CV("--warn"),get:function(r){return r.repTeam}},
           {label:"Delivery",color:CV("--accent"),get:function(r){return r.delTeam}}],
   marks:F.repHires.map(function(rm,i){var ix=-1;s3.forEach(function(r,j){if(r.m===rm+1)ix=j});
-   return {i:ix,label:"rep "+(i+1)}}),
-  tip:function(r){return [["Delivery team",r.delTeam],["Sales reps",r.repTeam],
-   ["Clients started",r.starts,1],["Live clients",Math.round(r.live)],
+   return {i:ix,label:"+1 rep"}}),
+  tip:function(r){return [["Delivery hires",r.delTeam],["Sales reps",r.repTeam],
+   ["Net new clients",r.starts,1],["Active clients",Math.round(r.live)],
    ["Your audits / wk",nm(r.myWk,1)],["Rep audits / wk",nm(r.repWk,1)],
    ["Cash / mo",money(r.cash)],["Commission",money(-r.commission)],["Payroll",money(-r.payroll)],
    ["Net cash",money(r.net),1]]}});
  moneyChart('[data-chart="money3"]',s3,"rng3m");
  loadChart('[data-chart="load3"]',s3,"rng3l",F.delHires.map(function(hm,i){var ix=-1;
-   s3.forEach(function(r,j){if(r.m===hm+1)ix=j}); return {i:ix,label:"hire "+(i+1)}}));
+   s3.forEach(function(r,j){if(r.m===hm+1)ix=j}); return {i:ix,label:"+1 delivery"}}));
  acqChart('[data-chart="acq3"]',s3,"rng3a",true);
  tableInto("th3","tb3",[
   {h:"Mo",f:function(r){return r.m}},{h:"Del",f:function(r){return r.delTeam}},
@@ -1563,8 +1575,10 @@ function renderPhases(){
   {k:"MRR at end",v:money(last4.recR),s:"recurring only"},
   {k:"Cash / mo at end",v:money(last4.cash)},
   {k:"Net / mo at end",v:money(last4.net),s:costLine(last4)},
-  {k:"Team",v:String(last4.delTeam+last4.repTeam),s:last4.delTeam+" delivery, "+last4.repTeam+" sales"},
-  {k:"Live clients",v:String(Math.round(last4.live))}]);
+  {k:"People hired",v:String(last4.delTeam+last4.repTeam),
+   s:last4.delTeam+" delivery, "+last4.repTeam+" sales \u2014 plus you and Geri"},
+  {k:"Active clients",v:String(Math.round(last4.live)),s:Math.round(last4.paying)+" paying monthly"},
+  {k:"Net new clients / mo",v:String(last4.starts),s:"at the end of the arc"}]);
  drawChart(document.querySelector('[data-chart="arc4"]'),{
   y:"cash collected / month", rows:R,
   max:Math.max.apply(null,R.map(function(r){return r.cash}))*1.12,
@@ -1572,11 +1586,11 @@ function renderPhases(){
   series:[{label:"Recurring",color:CV("--accent-2"),get:function(r){return r.recR}},
           {label:"Upfront",color:CV("--accent"),get:function(r){return r.upR}},
           {label:"Audit fees",color:CV("--warn"),get:function(r){return r.auditRev}}],
-  marks:F.delHires.map(function(hm){return {i:hm,label:"del"}})
-        .concat(F.repHires.map(function(rm,i){return {i:rm,label:"rep "+(i+1)}})),
+  marks:F.delHires.map(function(hm){return {i:hm,label:"+1 delivery"}})
+        .concat(F.repHires.map(function(rm,i){return {i:rm,label:"+1 rep"}})),
   tip:function(r){return [["Phase",r.m<=f1.m?"1 \u00b7 Startup":(r.m<=last2.m?"2 \u00b7 Scale delivery":"3 \u00b7 Scale sales")],
-   ["Clients started",r.starts],["Live clients",Math.round(r.live)],
-   ["Team",r.delTeam+" del / "+r.repTeam+" sales"],
+   ["Net new clients",r.starts],["Active clients",Math.round(r.live)],
+   ["People hired",r.delTeam+" delivery, "+r.repTeam+" sales"],
    ["Cash / mo",money(r.cash),1],["Net / mo",money(r.net)]]}});
  if($("wall4")){$("wall4").className="wall ok";
   $("wall4").innerHTML="Phase 1 runs to <b>M"+f1.m+"</b>, when delivery capacity maxes. Phase 2 to <b>M"+
@@ -1609,7 +1623,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0029";
+var BUILD_ID="0820-0033";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
