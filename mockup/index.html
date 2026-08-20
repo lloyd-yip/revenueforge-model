@@ -18,10 +18,17 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:"Archivo",Ar
 .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;
  text-transform:uppercase;color:var(--ink-3);margin:26px 0 14px}
 .tabs{display:flex;border-bottom:1px solid var(--rule);margin-bottom:22px;flex-wrap:wrap}
-.tabs button{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
- text-transform:uppercase;padding:12px 18px;border:0;background:transparent;color:var(--ink-3);
- cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500}
-.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button{display:flex;flex-direction:column;align-items:flex-start;gap:3px;
+ padding:11px 18px;border:0;background:transparent;cursor:pointer;
+ border-bottom:2px solid transparent;margin-bottom:-1px;text-align:left}
+.tabs button em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:11px;
+ letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
+.tabs button i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:9px;
+ letter-spacing:.08em;color:var(--ink-3);opacity:.6}
+.tabs button:hover em{color:var(--ink-2)}
+.tabs button[aria-selected="true"] em{color:var(--ink)}
+.tabs button[aria-selected="true"] i{color:var(--accent);opacity:1}
+.tabs button[aria-selected="true"]{border-bottom-color:var(--accent)}
 .tabs .count{margin-left:7px;background:var(--accent);color:var(--ground);font-size:9px;
  padding:1px 6px;border-radius:9px}
 
@@ -119,22 +126,32 @@ input[type=range]{width:100%;accent-color:var(--accent);height:16px;margin:0;dis
 
 <p class="eyebrow">RevenueForge &middot; Unit Economics</p>
 <div class="tabs" role="tablist">
-  <button role="tab" aria-selected="false">1 &middot; Startup</button>
-  <button role="tab" aria-selected="true">2 &middot; Scale delivery</button>
-  <button role="tab" aria-selected="false">3 &middot; Scale sales</button>
-  <button role="tab" aria-selected="false">4 &middot; Full arc</button>
-  <button role="tab" aria-selected="false">Ideas <span class="count">6</span></button>
+  <button role="tab" data-p="p1" aria-selected="false"><em>1 &middot; Startup</em><i>M1 &ndash; M13</i></button>
+  <button role="tab" data-p="p2" aria-selected="true"><em>2 &middot; Scale delivery</em><i>M13 &ndash; M21</i></button>
+  <button role="tab" data-p="p3" aria-selected="false"><em>3 &middot; Scale sales</em><i>M21 &ndash; M38</i></button>
+  <button role="tab" data-p="p4" aria-selected="false"><em>4 &middot; Full arc</em><i>M1 &ndash; M38</i></button>
+  <button role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">7</span></em><i>open questions</i></button>
 </div>
 
-<!-- shared phase banner, present on every tab -->
-<div class="phase">
-  <div class="ph done"><div class="ph-k">Phase 1 &middot; Startup</div><div class="ph-v">M1 &ndash; M13</div>
-    <div class="ph-s">you + Geri &middot; ends when capacity maxes</div></div>
-  <div class="ph on"><div class="ph-k">Phase 2 &middot; Scale delivery</div><div class="ph-v">M13 &ndash; M21</div>
-    <div class="ph-s">2 delivery hires &middot; ends when your calendar maxes</div></div>
-  <div class="ph"><div class="ph-k">Phase 3 &middot; Scale sales</div><div class="ph-v">M21 &ndash; M38</div>
-    <div class="ph-s">reps + more delivery &middot; ends at 2 full-time reps</div></div>
+<div id="p1" hidden>
+  <h1>Startup &mdash; months 1 to 13</h1>
+  <p class="sf">This tab already exists and is fully wired &mdash; it's the model you've been using. Nothing changes
+    here except that it now stops at the month the first delivery hire is triggered, rather than running a fixed
+    12 months.</p>
+  <div class="wall" style="border-left-color:var(--accent);background:var(--accent-soft)">
+    Open the live model to see this tab: <b>lloyd-yip.github.io/revenueforge-model/</b>
+  </div>
 </div>
+
+<div id="p5" hidden>
+  <h1>Ideas &amp; open questions</h1>
+  <p class="sf">Also already built and live. Now carries a seventh entry &mdash; the multi-tenant platform work.</p>
+  <div class="wall" style="border-left-color:var(--accent);background:var(--accent-soft)">
+    Open the live model to see this tab: <b>lloyd-yip.github.io/revenueforge-model/</b>
+  </div>
+</div>
+
+<div id="p2">
 
 <h1>Scale delivery &mdash; months 13 to 21</h1>
 <p class="sf">Picks up exactly where phase 1 cut off. Efficiency has bottomed out, so process improvement is
@@ -219,8 +236,13 @@ maxed for two consecutive months, and the phase ends when your own calendar beco
   </div>
 </div>
 
-<!-- ===================== TAB 3 SKETCH ===================== -->
-<div class="sect">Tab 3 &middot; Scale sales &mdash; what changes</div>
+</div><!-- /p2 -->
+
+<div id="p3" hidden>
+<h1>Scale sales &mdash; months 21 to 38</h1>
+<p class="sf">Starts where phase 2 cut off. Delivery hires keep landing automatically in the background &mdash; the
+new decision here is sales headcount. The phase runs as long as it takes to reach the number of full-time reps
+you set on the left.</p>
 
 <div class="cols">
   <div>
@@ -296,7 +318,12 @@ maxed for two consecutive months, and the phase ends when your own calendar beco
   </div>
 </div>
 
-<div class="sect">Tab 4 &middot; Full arc &mdash; all three phases on one axis</div>
+</div><!-- /p3 -->
+
+<div id="p4" hidden>
+<h1>Full arc &mdash; months 1 to 38</h1>
+<p class="sf">Every phase on one axis, never cut. Each hire marked, and the phase boundaries are the moments the
+binding constraint changed.</p>
 <div class="box"><div class="box-b">
   <div class="axttl">Y &mdash; cash / month, months 1 to 38</div>
   <div class="chartwrap">
@@ -328,5 +355,20 @@ maxed for two consecutive months, and the phase ends when your own calendar beco
     just never cut.
   </div>
 </div></div>
+</div><!-- /p4 -->
 
 </div>
+
+<script>
+(function(){
+ var tabs=document.querySelectorAll('.tabs button');
+ function show(id){
+  ["p1","p2","p3","p4","p5"].forEach(function(p){
+   var el=document.getElementById(p); if(el)el.hidden=(p!==id);
+  });
+  tabs.forEach(function(b){b.setAttribute("aria-selected",b.dataset.p===id?"true":"false")});
+  window.scrollTo(0,0);
+ }
+ tabs.forEach(function(b){b.addEventListener("click",function(){show(b.dataset.p)})});
+})();
+</script>

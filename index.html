@@ -274,7 +274,7 @@ td.pause{color:var(--crit)}
 
 <div class="tabs" role="tablist">
   <button type="button" role="tab" id="tab-model" aria-selected="true">The model</button>
-  <button type="button" role="tab" id="tab-ideas" aria-selected="false">Ideas &amp; open questions <span class="count">6</span></button>
+  <button type="button" role="tab" id="tab-ideas" aria-selected="false">Ideas &amp; open questions <span class="count">7</span></button>
 </div>
 
 <div id="panel-model">
@@ -533,7 +533,34 @@ td.pause{color:var(--crit)}
   </div>
 
   <div class="idea">
-    <div class="idea-h"><span class="idea-n">03</span><span class="chip open">open</span>
+    <div class="idea-h"><span class="idea-n">03</span><span class="chip verify">verify</span>
+      <p class="idea-q">What does it actually take to make the apps usable by outside companies &mdash; and when do we pay for it?</p></div>
+    <div class="idea-b">
+      <p>The machines were built <strong>single-tenant</strong>, running on our own data. Client #1 forces the
+        question: separate logins per client, isolation so one client can never see another's pipeline, per-client
+        secrets, and config that isn't hardcoded to QS. In plain terms, it's the difference between a house you
+        built for yourself and an apartment building &mdash; same structure, but it now needs its own front doors
+        and walls that actually work.</p>
+      <p>It was briefly in the model at <strong>80 hours</strong>, then taken out, and taking it out was right:
+        <strong>it is paid once and never again</strong>, so it isn't a per-client cost and doesn't belong among
+        levers that are all variable. But it doesn't disappear &mdash; it's a prerequisite that lands before any
+        revenue does.</p>
+      <div class="known"><div class="known-k">What we already know</div><ul>
+        <li>The <b>80 hr</b> figure is a guess, and the <b>least-informed number</b> in anything we've estimated.</li>
+        <li>If the apps were written with tenancy in mind it could be <b>30 hrs</b>. If QS is hardcoded through the
+          schema it could be <b>150</b>.</li>
+        <li>At 160 delivery hours a month, 80 hrs is <b>half of your first month</b> spent before client #1 produces
+          anything.</li>
+      </ul></div>
+      <div class="settle"><div class="settle-k">What would settle it</div>
+        <p>Geri reviews the current apps against one question: <em>what breaks if a second company's data lands in
+          this?</em> An afternoon of his time replaces the guess, and it's the one estimate that changes when you
+          can start.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">04</span><span class="chip open">open</span>
       <p class="idea-q">Should efficiency improve with clients delivered rather than with time?</p></div>
     <div class="idea-b">
       <p>The model currently improves efficiency on a monthly timer. But you learn by <strong>shipping</strong>, not
@@ -545,7 +572,7 @@ td.pause{color:var(--crit)}
   </div>
 
   <div class="idea">
-    <div class="idea-h"><span class="idea-n">04</span><span class="chip open">open</span>
+    <div class="idea-h"><span class="idea-n">05</span><span class="chip open">open</span>
       <p class="idea-q">Do we refuse clients on non-standard stacks?</p></div>
     <div class="idea-b">
       <p>A client on an exotic CRM could cost <strong>2&ndash;3&times;</strong> a normal onboarding and eat a month.
@@ -558,7 +585,7 @@ td.pause{color:var(--crit)}
   </div>
 
   <div class="idea">
-    <div class="idea-h"><span class="idea-n">05</span><span class="chip parked">parked</span>
+    <div class="idea-h"><span class="idea-n">06</span><span class="chip parked">parked</span>
       <p class="idea-q">The model is deliberately pessimistic about retention. How much?</p></div>
     <div class="idea-b">
       <p>Expansion revenue is switched off, referrals aren't modelled, and a retained client's biggest hidden benefit
@@ -569,7 +596,7 @@ td.pause{color:var(--crit)}
   </div>
 
   <div class="idea">
-    <div class="idea-h"><span class="idea-n">06</span><span class="chip parked">parked</span>
+    <div class="idea-h"><span class="idea-n">07</span><span class="chip parked">parked</span>
       <p class="idea-q">The hiring extension &mdash; what happens past the two-person ceiling?</p></div>
     <div class="idea-b">
       <p>Phase 2 of the model. Delivery hires first, then when a commission-only closer becomes viable &mdash; they
