@@ -377,6 +377,12 @@ td.pause{color:var(--crit)}
       <div class="lev"><label for="upkeep">Steady-state upkeep</label><input type="range" id="upkeep" min="0" max="60" step="1"></div>
     </div>
 
+    <div class="grouphdr">When phase 1 ends</div>
+    <div class="levers">
+      <div class="lev"><label for="trigM">Months at full capacity before hiring</label><input type="range" id="trigM" min="1" max="6" step="1"></div>
+      <div class="linknote" style="grid-column:2/-1">Phase 1 ends the month you have been at capacity this many months running <em>and</em> efficiency has already bottomed out. Both must be true &mdash; otherwise you would hire during the window when process improvement was still solving it for free.</div>
+    </div>
+
     <div class="grouphdr">Acquisition throttle</div>
     <div class="levers">
       <div class="lev"><label for="qThresh">Pause selling when queue exceeds</label><input type="range" id="qThresh" min="0.5" max="6" step="0.5"></div>
@@ -565,10 +571,8 @@ td.pause{color:var(--crit)}
             overhead and Geri drifting toward management.</p></div>
         <div class="mini-s"><div class="mini"><span>Cost per hire / mo</span><b id="o_hireCost"></b></div>
           <input type="range" id="hireCost" min="2000" max="20000" step="500"></div>
-        <div class="mini-s"><div class="mini"><span>Trigger: months maxed</span><b id="o_trigM"></b></div>
-          <input type="range" id="trigM" min="1" max="6" step="1">
-          <p class="note">Hire only after capacity has been full this many months running <em>and</em> efficiency
-            has already hit its floor.</p></div>
+        <div class="mini-s"><div class="mini"><span>Trigger: months maxed</span><b id="o_trigM2"></b></div>
+          <p class="note">Set on tab 1 &mdash; it decides where phase 1 ends and phase 2 begins.</p></div>
       </div></div>
       <div class="box"><div class="box-h"><span class="box-t">Carried from phase 1</span></div>
         <div class="box-b" id="carry2"></div></div>
@@ -907,52 +911,7 @@ function sustainCap(v,e,cap){
  return L>0?cap/L:0;
 }
 
-function sim(v){
- var rows=[],cohorts=[],queue=0,cum=0;
- for(var m=0;m<M;m++){
-  var e=eff(v,m), onbTotal=v.baseHrs*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
-  var load=0,live=0,paying=0,onbCount=0,onbHrs=0,steadyHrs=0;
-  cohorts.forEach(function(c){
-   var age=m-c.start;
-   if(age<v.spread){onbHrs+=c.n*c.onbPerMo;onbCount+=c.n;live+=c.n}
-   else if(age<v.retention){steadyHrs+=c.n*c.up;live+=c.n;if(age>=v.billed)paying+=c.n}
-  });
-  load=onbHrs+steadyHrs;
-  var free=Math.max(0,v.hrsMonth-load);
-
-  // acquisition throttle
-  var qMonths=v.hrsMonth>0?(queue*onbTotal)/v.hrsMonth:99;
-  var roomToStart=free>=onbPerMo*0.999;
-  var paused=(qMonths>v.qThresh)||!roomToStart;
-
-  var audits=0;
-  if(!paused){
-   var want=sustain(v,e);
-   audits=want/Math.max(v.closeRate/100,0.001);
-   audits=Math.min(audits,v.auditCap*WPM);
-  }
-  var won=audits*(v.closeRate/100)+live*(v.expansion/100);
-  queue=queue*(1-v.drop/100)+won;
-
-  // clients are whole people: you cannot start 0.6 of an onboarding, and you
-  // cannot bank spare hours. Leftover capacity in a month is simply lost.
-  var starts=Math.max(0,Math.min(Math.floor(queue),Math.floor(onbPerMo>0?free/onbPerMo:0)));
-  queue-=starts;
-  if(starts>0)cohorts.push({start:m,n:starts,onbPerMo:onbPerMo,up:up});
-  onbHrs+=starts*onbPerMo;load+=starts*onbPerMo;onbCount+=starts;live+=starts;
-  free=Math.max(0,v.hrsMonth-load);
-
-  var auditRev=audits*v.auditPrice, upR=starts*v.upfront, recR=paying*v.recurring;
-  var cash=auditRev+upR+recR; cum+=cash;
-  var invites=audits>0?audits/((v.auditConv/100)*(1+v.followup/100))/(v.attRate/100):0;
-
-  rows.push({m:m+1,e:e,onbTotal:onbTotal,audits:audits,won:won,starts:starts,queue:queue,
-   load:load,free:free,onbHrs:onbHrs,steadyHrs:steadyHrs,live:live,paying:paying,
-   auditRev:auditRev,upR:upR,recR:recR,cash:cash,cum:cum,
-   paused:paused,invites:invites});
- }
- return rows;
-}
+/* sim() retired \u2014 every tab now reads fullSim() so the phases always agree. */
 
 function lbl(id,v){switch(id){
  case "attRate":return nm(v.attRate,2)+"%";
@@ -1031,7 +990,7 @@ function niceMax(v){
  var top=m*e;
  return Math.max(3,Math.ceil(top/3)*3);   // divisible by 3 so all four ticks are whole
 }
-function xaxis(el){el.innerHTML=Array.from({length:M},function(_,i){return "<span>M"+(i+1)+"</span>"}).join("")}
+function xaxis(el,rows){el.innerHTML=rows.map(function(r){return "<span>M"+r.m+"</span>"}).join("")}
 function row(el,vals){el.innerHTML=vals.map(function(x){return "<span>"+x+"</span>"}).join("")}
 
 
@@ -1088,7 +1047,10 @@ function render(){
  IDS.forEach(function(i){var o=$("o_"+i);if(o)o.textContent=lbl(i,v)});
  $("o_invw").textContent="";
 
- var rows=sim(v), last=rows[M-1];
+ var _F=fullSim(v);
+ var rows=_F.rows.slice(0,_F.p1End+1);
+ if(!rows.length)rows=_F.rows.slice(0,1);
+ var last=rows[rows.length-1];
  var eNow=eff(v,0), eEnd=v.floor/100;
  var sNow=sustain(v,eNow), sCeil=sustain(v,eEnd);
 
@@ -1167,7 +1129,7 @@ function render(){
    }}),maxCash);
  axis($("mY"),maxCash,function(x){return money(x)});
  axis($("mY2"),last.cum,function(x){return money(x)});
- xaxis($("mX"));
+ xaxis($("mX"),rows);
  row($("mRow"),rows.map(function(r){return money(r.cash)}));
 
  // load chart
@@ -1182,7 +1144,7 @@ function render(){
    }}),maxLoad,
    '<div class="capline" style="bottom:'+(v.hrsMonth/maxLoad*170).toFixed(1)+'px"><span class="caplbl">hours available '+Math.round(v.hrsMonth)+'</span></div>');
  axis($("lY"),maxLoad,function(x){return Math.round(x)});
- xaxis($("lX"));
+ xaxis($("lX"),rows);
  row($("lRow1"),rows.map(function(r){return String(r.starts)}));
  row($("lRow2"),rows.map(function(r){return Math.round(r.load)}));
  row($("lRow3"),rows.map(function(r){return Math.round(r.free)}));
@@ -1198,7 +1160,7 @@ function render(){
      .concat(r.paused?[["Status","paused"]]:[]))
    }}),maxAcq);
  axis($("aY"),maxAcq,function(x){return String(Math.round(x))});
- xaxis($("aX"));
+ xaxis($("aX"),rows);
  row($("aRow1"),rows.map(function(r){return String(Math.floor(r.audits))}));
  row($("aRow2"),rows.map(function(r){return String(Math.floor(r.won))}));
  row($("aRow3"),rows.map(function(r){return r.invites>0?kf(r.invites):"0"}));
@@ -1365,6 +1327,7 @@ var CV=function(x){return getComputedStyle(document.documentElement).getProperty
 
 function renderPhases(){
  var v=V(), F=fullSim(v), R=F.rows; if(!R.length)return;
+ if($("o_trigM2"))$("o_trigM2").textContent=v.trigM+" mo";
  var s1=R.slice(0,F.p1End+1), s2=R.slice(F.p1End,F.p2End+1), s3=R.slice(F.p2End,F.p3End+1);
  if(s2.length<2)s2=R.slice(F.p1End);
  if(s3.length<2)s3=R.slice(F.p2End);
@@ -1506,7 +1469,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0004";
+var BUILD_ID="0820-0015";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
