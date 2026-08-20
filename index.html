@@ -445,7 +445,6 @@ td.pause{color:var(--crit)}
 
     <div class="grouphdr">Acquisition throttle</div>
     <div class="levers">
-      <div class="lev"><label for="qThresh">Pause selling when queue exceeds</label><input type="range" id="qThresh" min="0.5" max="6" step="0.5"></div>
       <div class="linknote" style="grid-column:2/-1">Months of onboarding capacity already committed to closed deals. Above this, stop running audits rather than sell something you cannot deliver.</div>
     </div>
 
@@ -498,7 +497,6 @@ td.pause{color:var(--crit)}
           and burning the list. Values above it are exploratory only. If required invites exceed this ceiling you
           become <em>demand</em>-constrained rather than delivery-constrained: sales capacity sits idle and delivery
           stops needing to grow.</p></div>
-      <div class="mini-s"><div class="mini"><span>Queue drop-off</span><b id="o_drop"></b></div><input type="range" id="drop" min="0" max="50" step="1"></div>
     </div></div>
 
     <div class="box"><div class="box-h"><span class="box-t">Deal economics</span></div><div class="box-b">
@@ -512,7 +510,6 @@ td.pause{color:var(--crit)}
         <label for="reprice">Re-price existing clients when pricing rises</label></div>
       <p class="note" style="margin:-8px 0 12px">Off = clients keep the price they signed at, which is the honest default.
         On = your whole book moves to current pricing whenever you raise it.</p>
-      <div class="mini-s"><div class="mini"><span>Expansion / mo</span><b id="o_expansion"></b></div><input type="range" id="expansion" min="0" max="15" step="1"></div>
     </div></div>
 
     <div class="box"><div class="box-h"><span class="box-t">Your sales time</span></div><div class="box-b">
@@ -587,12 +584,12 @@ td.pause{color:var(--crit)}
         <div class="legend">
           <span><i style="background:var(--warn)"></i>Audits run</span>
           <span><i style="background:var(--accent)"></i>Deals closed</span>
-          <span><i style="background:var(--crit)"></i>Acquisition paused</span>
+          <span><i style="background:var(--crit)"></i>Audits needed</span>
         </div>
         <div class="gapnote" style="border-left-color:var(--warn);background:var(--warn-soft)">
-          Acquisition is <b>throttled by the delivery queue</b>, not by free hours &mdash; at equilibrium free hours sit near zero,
-          so a free-hours trigger would switch selling off forever. Selling pauses when closed-but-unstarted deals exceed
-          <b id="g_thresh"></b> months of onboarding capacity, or when there is no room to start anyone.
+          The model runs <b>backwards</b>: delivery hours decide how many clients can start, that decides how many deals
+          you may close, and only then how many audits you need to run. You never sell what you cannot deliver, so
+          <b>nothing queues</b> &mdash; and in a month with no room to start anyone, you run no audits at all.
         </div>
       </div></div>
 
@@ -614,7 +611,7 @@ td.pause{color:var(--crit)}
     <div class="box"><div class="box-h"><span class="box-n">09</span><span class="box-t">Month by month</span></div>
       <div class="tw"><table>
         <thead><tr><th>Mo</th><th>Eff</th><th>Hrs/client</th><th>Audits</th><th>Won</th><th>Started</th>
-          <th>Queue</th><th>Hrs used</th><th>Hrs free</th><th>Live</th><th>Paying</th>
+          <th>Bound by</th><th>Hrs used</th><th>Hrs free</th><th>Live</th><th>Paying</th>
           <th>Cash</th></tr></thead>
         <tbody id="tbody"></tbody></table></div></div>
 
@@ -947,9 +944,9 @@ var M=12, WPM=4.33;
 // Presets are built by MERGING onto a complete baseline, so a preset can never
 // again be missing a lever that was added later -- the failure that left
 // "Balanced" and "Aggressive" silently inheriting 19 conservative values.
-var DEF={hrsMonth:160,baseHrs:100,spread:3,upkeep:12,qThresh:1.5,floor:40,toFloor:11,
-   attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,drop:10,
-   auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,expansion:0,
+var DEF={hrsMonth:160,baseHrs:100,spread:3,upkeep:12,floor:40,toFloor:11,
+   attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,
+   auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,
    auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
    m1cap:1,myAud1:2.5,myAud2:0,
    mgrPer:5,mgrCost:10000,maxInv:1500000,
@@ -961,21 +958,21 @@ var P={
  cons:preset({}),
  // Balanced: a warmer list, a better close, clients who stay a year. Delivery gets
  // more efficient (audit covers more, CS carries more), pricing ambition unchanged.
- base:preset({hrsMonth:200,baseHrs:85,spread:3,upkeep:10,qThresh:2,floor:38,toFloor:9,
+ base:preset({hrsMonth:200,baseHrs:85,spread:3,upkeep:10,floor:38,toFloor:9,
    attRate:0.20,auditConv:5,closeRate:35,followup:12,
    recurring:3500,retention:12,
    m1cap:2,auditCovers:20,csPer:25,diagCount:2,diagAud:5}),
  // Aggressive: the upside case -- two-year retention, half the audits close, and
  // pricing escalates harder in phases 2 and 3.
- agg:preset({hrsMonth:240,baseHrs:70,spread:2,upkeep:8,qThresh:2.5,floor:35,toFloor:7,
-   attRate:0.50,auditConv:10,closeRate:50,followup:15,drop:5,
+ agg:preset({hrsMonth:240,baseHrs:70,spread:2,upkeep:8,floor:35,toFloor:7,
+   attRate:0.50,auditConv:10,closeRate:50,followup:15,
    upfront:25000,recurring:4000,retention:24,
    m1cap:3,auditCovers:25,csPer:30,diagCount:2,diagAud:6,
    upfront2:35000,recurring2:6000,upfront3:50000,recurring3:8000})
 };
-var IDS=["hrsMonth","baseHrs","spread","upkeep","qThresh","floor","toFloor",
- "attRate","auditConv","closeRate","webinars","followup","drop","auditPrice","upfront",
- "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","m1cap","myAud1","myAud2","mgrPer","mgrCost","maxInv","upfront2","recurring2","upfront3","recurring3","diagCount","diagAud","diagClose","diagBase","diagCommUp","diagCommRec","diagRecMo","diagSpec","auditCovers","csPer","csCost"];
+var IDS=["hrsMonth","baseHrs","spread","upkeep","floor","toFloor",
+ "attRate","auditConv","closeRate","webinars","followup","auditPrice","upfront",
+ "recurring","billed","retention","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","m1cap","myAud1","myAud2","mgrPer","mgrCost","maxInv","upfront2","recurring2","upfront3","recurring3","diagCount","diagAud","diagClose","diagBase","diagCommUp","diagCommRec","diagRecMo","diagSpec","auditCovers","csPer","csCost"];
 // fail loudly in the console if a preset ever falls behind the lever list again
 (function(){for(var n in P){var miss=IDS.filter(function(i){return P[n][i]===undefined});
  if(miss.length)console.error("preset "+n+" missing levers:",miss.join(","))}})();
@@ -1008,7 +1005,7 @@ function lifetimeHrs(v,e){
 function sustain(v,e){var L=lifetimeHrs(v,e);return L>0?v.hrsMonth/L:0}
 
 function fullSim(v){
- var MAXM=140, rows=[], cohorts=[], queue=0, del=[], reps=[], mgrs=[], diags=[], maxedRun=0, calRun=0, cum=0, decayIdx=0;
+ var MAXM=140, rows=[], cohorts=[], del=[], reps=[], mgrs=[], diags=[], maxedRun=0, calRun=0, cum=0, decayIdx=0;
  var p1End=null, p2End=null, p3End=null;
  for(var m=0;m<MAXM;m++){
   var e=eff(v,m), onbTotal=Math.max(5,(v.baseHrs-v.auditCovers))*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
@@ -1044,33 +1041,45 @@ function fullSim(v){
   var audCapMo=(mine+diagWk+repWk)*WPM;
   diagShareNow=audCapMo>0?(diagWk*WPM/audCapMo):0;
 
-  // ---- demand: run only as many audits as capacity can absorb ----
+  // ---- CAPACITY FIRST ----
+  // Hours decide how many clients can START. Starts decide how many deals we may
+  // CLOSE. Closes decide how many AUDITS we need. Audits decide how many INVITES.
+  // Nothing is ever sold that cannot be delivered, so there is no queue.
   var myClose=v.closeRate/100, repCloseR=0;
-  // Demand is never the constraint: sell as hard as the calendar and the list allow.
-  // The queue-depth throttle below is what stops this becoming overselling, and a
-  // backed-up queue is exactly what justifies the next delivery hire.
-  var sustain_=sustainCap(v,e,cap);
   var diagCloseR=myClose*(v.diagClose/100);
   var totWk=mine+diagWk;
   var blended=totWk>0 ? (mine*myClose+diagWk*diagCloseR)/totWk : myClose;
-  var auditsNeeded=audCapMo;
-  var perAudit=(v.attRate/100)*(v.auditConv/100)*(1+v.followup/100); // audits per invite sent
-  var INVCAP=(v.maxInv>=2000000)?Infinity:v.maxInv;   // top of the slider = genuinely no limit
-  var auditsFromInvites=INVCAP*perAudit;
-  var audits=Math.min(audCapMo,auditsFromInvites);
-  var inviteBound=isFinite(INVCAP)&&(auditsFromInvites<audCapMo-0.001);
-  var share=function(w){return audCapMo>0?audits*(w*WPM/Math.max(audCapMo,0.0001)):0};
-  var myAudits=share(mine), diagAudits=share(diagWk), repAudits=audits-myAudits-diagAudits;
-  var won=myAudits*myClose+diagAudits*diagCloseR+live*(v.expansion/100);
-
-  queue=queue*(1-v.drop/100)+won;
   // a weaker spec makes the build cost more hours, in proportion to how much of the
   // deal flow this AI Revenue Architect architected
   var specDrag=1+(diagShareNow*((v.diagSpec-100)/100));
   var onbPerMoEff=onbPerMo*specDrag;
-  var starts=Math.max(0,Math.min(Math.floor(queue),Math.floor(onbPerMoEff>0?free/onbPerMoEff:0)));
-  if(m===0)starts=Math.min(starts,v.m1cap);   // one ideal client first, whatever the hours allow
-  queue-=starts;
+
+  // 1. what delivery can absorb -- whole clients only, no banking of spare hours
+  var capStarts=Math.max(0,Math.floor(onbPerMoEff>0?free/onbPerMoEff:0));
+  if(m===0)capStarts=Math.min(capStarts,v.m1cap);   // one ideal client first
+
+  // 2. the selling that would take, and no more. An audit you cannot convert into a
+  //    start is a call that should never have been booked.
+  var auditsNeeded=blended>0?capStarts/blended:0;
+
+  // 3. what the calendar and the list can actually supply
+  var perAudit=(v.attRate/100)*(v.auditConv/100)*(1+v.followup/100); // audits per invite sent
+  var INVCAP=(v.maxInv>=2000000)?Infinity:v.maxInv;   // top of the slider = genuinely no limit
+  var auditsFromInvites=INVCAP*perAudit;
+  var auditsAvail=Math.min(audCapMo,auditsFromInvites);
+  var audits=Math.min(auditsNeeded,auditsAvail);
+
+  // 4. you start everything you close, so closes are capped by capacity as well
+  var won=Math.min(capStarts,Math.floor(audits*blended+1e-9));
+  var starts=won;
+
+  var share=function(w){return audCapMo>0?audits*(w*WPM/Math.max(audCapMo,0.0001)):0};
+  var myAudits=share(mine), diagAudits=share(diagWk), repAudits=audits-myAudits-diagAudits;
+
+  // which wall did we hit this month? this replaces the queue as the hiring signal
+  var inviteBound=isFinite(INVCAP)&&(auditsFromInvites<Math.min(auditsNeeded,audCapMo)-0.001);
+  var calendarBound=(audCapMo<auditsNeeded-0.001)&&!inviteBound;
+  var bound=inviteBound?"invites":(calendarBound?"calendar":"capacity");
   if(starts>0)cohorts.push({start:m,n:starts,onbPerMo:onbPerMoEff,up:up,upf:curUp,rec:curRec,diagShare:diagShareNow});
   onbHrs+=starts*onbPerMoEff; load+=starts*onbPerMoEff; live+=starts;
   free=Math.max(0,cap-load);
@@ -1094,7 +1103,8 @@ function fullSim(v){
 
   cum+=cash;
   rows.push({m:m+1,e:e,onbTotal:onbTotal,onbPerMo:onbPerMo,cap:cap,load:load,free:free,cum:cum,onbHrs:onbHrs,styHrs:styHrs,
-   audits:audits,myAudits:myAudits,repAudits:repAudits,won:won,starts:starts,queue:queue,
+   audits:audits,myAudits:myAudits,repAudits:repAudits,won:won,starts:starts,
+   capStarts:capStarts,auditsNeeded:auditsNeeded,bound:bound,
    live:live,paying:paying,auditRev:auditRev,upR:upR,recR:recR,cash:cash,
    commission:commission,payroll:payroll,net:net,
    delTeam:del.filter(function(h){return m>=h.m}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
@@ -1108,40 +1118,36 @@ function fullSim(v){
    maxStarts:sustainCap(v,e,cap), curUp:curUp, curRec:curRec, phaseNow:phaseNow});
 
   // ---- triggers ----
-  // "at capacity" = not enough free hours to START another client, not zero hours left
-  var maxed=free<onbPerMo*0.999;
-  maxedRun=maxed?maxedRun+1:0;
+  // Delivery is the wall when selling could fill more than the hours allow.
   var atFloor=e<=v.floor/100+0.001;
+  var maxed=(bound==="capacity");
+  // the clock only starts once efficiency has bottomed out: hiring before then
+  // buys hours you were about to find for free
+  maxedRun=(maxed&&atFloor)?maxedRun+1:0;
   rows[rows.length-1].maxed=maxed;
   rows[rows.length-1].maxedRun=maxedRun;
-  rows[rows.length-1].calendarBound=calendarBound;
+  rows[rows.length-1].calendarBound=(bound!=="capacity");
 
-  if(maxedRun>=v.trigM && atFloor && queue>0.5){
+  if(maxedRun>=v.trigM && atFloor){
    if(p1End===null)p1End=m;
    del.push({m:m+1,k:decayIdx}); decayIdx++; maxedRun=0;
    // a manager lands every N delivery hires, and resets the coordination decay
    if(v.mgrPer>0 && del.length%v.mgrPer===0){ mgrs.push(m+1); decayIdx=0; }
   }
-  // sales hire when audit demand outruns the calendar
-  // your calendar is the constraint when you are selling flat out AND still have
-  // delivery room you cannot feed
-  var calendarBound=(audits>=audCapMo*0.999)&&(free>onbPerMo)&&(queue<1);
-  calRun=(calendarBound && p1End!==null)?calRun+1:0;
+  // sales hire when the calendar cannot feed the delivery room you already have
+  calRun=((bound!=="capacity") && p1End!==null)?calRun+1:0;
   if(calRun>=v.trigM && p1End!==null && diags.length<v.diagCount){
    if(p2End===null)p2End=m;
    diags.push(m+1); calRun=0;
   }
   // phase 3 ends only once the system has RE-STABILISED: reps are all hired, delivery
-  // has finished catching up to the demand they unlocked, and the queue has drained.
   // phase 3 ends once every planned hire is in AND nothing has been hired for a
-  // while AND the queue has drained -- whatever mix of hires that took
   var lastHire=Math.max(
     del.length?del[del.length-1].m-1:-99,
     reps.length?reps[reps.length-1]-1:-99,
     diags.length?diags[diags.length-1]-1:-99);
-  // settled = nobody hired for a while and the queue has drained, whatever mix of
-  // architects it took.
-  if(p2End!==null && p3End===null && (m-lastHire)>=v.trigM+6 && queue<1) p3End=m;
+  // settled = every planned hire is in and nothing has been hired for a while
+  if(p2End!==null && p3End===null && (m-lastHire)>=v.trigM+6) p3End=m;
   if(p3End!==null && m>p3End+2) break;
  }
  var n=rows.length;
@@ -1165,13 +1171,11 @@ function lbl(id,v){
  case "closeRate":return v.closeRate+"%";
  case "webinars":return v.webinars+"/mo";
  case "followup":return "+"+v.followup+"%";
- case "drop":return v.drop+"%";
  case "auditPrice":return money0(v.auditPrice);
  case "upfront":return money0(v.upfront);
  case "recurring":return money0(v.recurring);
  case "billed":return v.billed+" mo";
  case "retention":return v.retention+" mo";
- case "expansion":return v.expansion+"%";
  case "auditCap":return String(v.auditCap);
  case "hrsAudit":return nm(v.hrsAudit,1);
  case "hireHrs":return Math.round(v.hireHrs)+" hrs";
@@ -1260,7 +1264,6 @@ var TIPS={
  baseHrs:"Total human hours to take one new client from signed to live, at today\u2019s efficiency. Roughly 70 hrs of technical work plus 30 hrs of calls and training.",
  spread:"How many months that onboarding work is spread across. Three means the hours land over the client\u2019s first three months, not all in week one.",
  upkeep:"Hours a month a finished client keeps consuming forever \u2014 monitoring, small fixes, the odd question. This is what eventually eats your capacity.",
- qThresh:"How big a backlog of sold-but-not-started clients you will tolerate before you stop selling. 1.5 means you let a month and a half of work queue up, then pause acquisition.",
  floor:"The cheapest a client can ever get to onboard, as a share of today\u2019s cost. 40% of 100 hrs = 40 hrs. Below this, better systems stop helping \u2014 what is left is meetings.",
  toFloor:"How many months of practice it takes to get down to that floor.",
  target:"How many new clients you want to start each month. Everything in the funnel is worked backwards from this number.",
@@ -1269,13 +1272,11 @@ var TIPS={
  closeRate:"Of the people who buy an audit, the share who then buy a build. They have already paid and spent two hours with you, so this is the warmest number in the funnel.",
  webinars:"How many webinars you run per month.",
  followup:"Extra audits sold by post-webinar email automation, as a percentage on top of the live number.",
- drop:"Each month, the share of queued buyers who get tired of waiting for a delivery slot and walk away.",
  auditPrice:"What you charge for the Revenue Audit.",
  upfront:"The build fee, paid up front.",
  recurring:"The monthly fee, which only starts after the billing window closes.",
  billed:"How many months the upfront fee covers. Nothing monthly is billed during it. This is separate from how long the build actually takes.",
  retention:"How many months a client stays in total, from signing to leaving. Six is your deliberate floor \u2014 reality is likely far longer.",
- expansion:"Share of live clients per month who come back and buy another build. Switched off by your instruction.",
  auditCap:"The most audits a week you are willing to personally run before you want to hand them off.",
  hrsAudit:"Your time per audit \u2014 discovery call, presenting the results, plus prep and report review.",
 };
@@ -1409,7 +1410,7 @@ function render(){
      ["Onboarding",Math.round(r.onbHrs)+" hrs"],["Steady-state",Math.round(r.styHrs)+" hrs"],
      ["Hours used",Math.round(r.load)+" / "+Math.round(v.hrsMonth),1],
      ["Hours free",Math.round(r.free)],["Active clients",Math.round(r.live)],
-     ["Queue waiting",Math.floor(r.queue)]])
+     ["Constrained by",r.bound]])
    }}),maxLoad,
    '<div class="capline" style="bottom:'+(v.hrsMonth/maxLoad*170).toFixed(1)+'px"><span class="caplbl">hours available '+Math.round(v.hrsMonth)+'</span></div>');
  axis($("lY"),maxLoad,function(x){return Math.round(x)});
@@ -1432,18 +1433,17 @@ function render(){
  var maxAcq=niceMax(Math.max.apply(null,rows.map(function(r){return r.audits})));
  grpBars($("aBars"),rows.map(function(r){return {
    parts:[{v:r.audits,c:"gA"},{v:r.won,c:"gB"}],
-   tag:r.paused?"paused":"",
+   tag:r.capStarts===0?"no room":"",
    tip:tip("Month "+r.m,[["Audits run",Math.floor(r.audits)],
      ["Deals closed",Math.floor(r.won)],["Invites needed",kf(r.invitesNeeded)],
      ["Net new clients",r.starts,1],["Cash collected",money(r.cash)]]
-     .concat(r.paused?[["Status","paused"]]:[]))
+     .concat(r.capStarts===0?[["Status","no room to start anyone"]]:[]))
    }}),maxAcq);
  axis($("aY"),maxAcq,function(x){return String(Math.round(x))});
  xaxis($("aX"),rows);
  row($("aRow1"),rows.map(function(r){return String(Math.floor(r.audits))}));
  row($("aRow2"),rows.map(function(r){return String(Math.floor(r.won))}));
  row($("aRow3"),rows.map(function(r){return kf(r.invitesNeeded)}));
- $("g_thresh").textContent=nm(v.qThresh,1);
 
  // calendar
  var awk=last.audits/WPM;
@@ -1461,8 +1461,9 @@ function render(){
  // table
  $("tbody").innerHTML=rows.map(function(r){return "<tr>"+
   "<td>"+r.m+"</td><td>"+Math.round(r.e*100)+"%</td><td>"+Math.round(r.onbTotal)+"</td>"+
-  '<td class="'+(r.paused?"pause":"")+'">'+nm(r.audits,1)+"</td>"+
-  "<td>"+Math.floor(r.won)+"</td><td>"+r.starts+"</td><td>"+Math.floor(r.queue)+"</td>"+
+  '<td class="'+(r.capStarts===0?"pause":"")+'">'+nm(r.audits,1)+"</td>"+
+  "<td>"+Math.floor(r.won)+"</td><td>"+r.starts+"</td>"+
+  '<td class="'+(r.bound==="capacity"?"":"pause")+'">'+r.bound+"</td>"+
   "<td>"+Math.round(r.load)+"</td><td>"+Math.round(r.free)+"</td>"+
   "<td>"+Math.round(r.live)+"</td><td>"+Math.round(r.paying)+"</td>"+
   "<td>"+money(r.cash)+"</td></tr>"}).join("");
@@ -1661,8 +1662,8 @@ function acqChart(sel,rows,rngId,withRep){
   tip:function(r){return [["Audits run",Math.floor(r.audits)],
    ["\u2014 yours",Math.floor(r.myAudits)],
    ["Deals closed",Math.floor(r.won),1],["Net new clients",r.starts],
-   ["Queue waiting",Math.floor(r.queue)],
-   ["Invites needed",kf(r.invitesNeeded)],["Demand-capped",r.inviteBound?"yes":"no"]]}});
+   ["Audits needed",nm(r.auditsNeeded,1)],
+   ["Invites needed",kf(r.invitesNeeded)],["Constrained by",r.bound]]}});
 }
 var v_={};
 function headChart(sel,rows,rngId,marks){
@@ -1734,8 +1735,8 @@ function funnelInto(id,first,last,v){
   (last.inviteBound
    ? '<p class="note" style="color:var(--crit)"><b>Invite volume is the constraint.</b> Your calendar could run more audits than '+intc(last.inviteCeil)+' invites can produce, so sales capacity sits idle and delivery never needs to grow. Raise the ceiling, run more webinars, or improve a conversion rate.</p>'
    : (last.calendarBound
-     ? '<p class="note" style="color:var(--warn)"><b>Your calendar is the constraint.</b> You are selling flat out and still have delivery room you cannot feed. A sales hire is what unlocks the next step.</p>'
-     : '<p class="note"><b>Delivery is the constraint.</b> The funnel can supply more than capacity can absorb &mdash; the queue is what pulls in the next delivery hire.</p>'));
+     ? '<p class="note" style="color:var(--warn)"><b>Your calendar is the constraint.</b> Delivery has room you cannot feed, because filling it would take more audits than you are willing to run. A sales hire is what unlocks the next step.</p>'
+     : '<p class="note"><b>Delivery is the constraint.</b> Your calendar could sell more than the hours can absorb, so every extra call would be a client you cannot start. This is what pulls in the next delivery hire.</p>'));
 }
 function avgOf(rows,n,fn){
  var take=rows.slice(-Math.min(n,rows.length));
@@ -1949,7 +1950,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-1621";
+var BUILD_ID="0820-1806";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
