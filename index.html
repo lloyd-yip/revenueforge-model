@@ -1184,10 +1184,10 @@ function render(){
  $("r_ceilsub").innerHTML="At <b>"+Math.round(v.baseHrs*eEnd)+" hrs</b>/client. <b>"+nm(sCeil/Math.max(sNow,0.001),1)+"&times;</b> today. ~"+nm(sCeil*Math.max(0,v.retention-v.spread),1)+" live clients.";
  var _rr=(rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014");
  ["rngMoney","rngLoad","rngAcq","rngEff"].forEach(function(id){if($(id))$(id).textContent=_rr});
- if($("rngProd"))$("rngProd").textContent="month "+(rows.length?rows[rows.length-1].m:0);
+ if($("rngProd"))$("rngProd").textContent="end of phase";
  var _rr=(rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014");
  ["rngMoney","rngLoad","rngAcq","rngEff"].forEach(function(id){if($(id))$(id).textContent=_rr});
- if($("rngProd"))$("rngProd").textContent="month "+(rows.length?rows[rows.length-1].m:0);
+ if($("rngProd"))$("rngProd").textContent="end of phase";
  var effs=rows.map(function(r){return r.e});
  $("r_eff").innerHTML=effs.map(function(e,i){
   var atFloor=e<=v.floor/100+0.001;
@@ -1241,12 +1241,12 @@ function render(){
 
  // tiles
  $("tiles").innerHTML=[
-  {k:"Net new clients / mo",v:String(last.starts),s:"onboarded in month "+last.m},
-  {k:"Max possible / mo",v:nm(last.maxStarts,2),s:"what this capacity allows"},
+  {k:"Net new clients / mo",v:nm(avgOf(rows,3,function(r){return r.starts}),1),s:"average of the last 3 months"},
+  {k:"Max possible / mo",v:nm(last.maxStarts,2),s:"ceiling at this capacity"},
   {k:"Active clients",v:String(Math.round(last.live)),s:Math.round(last.paying)+" paying monthly"},
-  {k:"Upfront fees / mo",v:money(last.upR),s:"one-time, from "+last.starts+" new client"+(last.starts===1?"":"s")},
+  {k:"Upfront fees / mo",v:money(last.maxStarts*v.upfront),s:"at full capacity, one-time"},
   {k:"MRR",v:money(last.recR),s:"recurring fees per month"},
-  {k:"Cash / mo",v:money(last.cash),s:"audits + upfront + recurring"},
+  {k:"Cash / mo",v:money(avgOf(rows,3,function(r){return r.cash})),s:"average of the last 3 months"},
   {k:"Clients onboarded",v:String(rows.reduce(function(a,r){return a+r.starts},0)),
    s:"total over "+rows.length+" months"}
  ].map(function(t){return '<div class="tl"><div class="tlk">'+t.k+'</div><div class="tlv">'+t.v+
@@ -1563,6 +1563,11 @@ function funnelInto(id,first,last,v){
    ? '<p class="note" style="color:var(--crit)"><b>Demand-constrained.</b> You cannot send enough invites to feed delivery, so capacity is sitting idle. Raise the invite ceiling, run more webinars, or improve a conversion rate.</p>'
    : '<p class="note">Delivery is still the binding constraint &mdash; the funnel can supply what capacity can absorb.</p>');
 }
+function avgOf(rows,n,fn){
+ var take=rows.slice(-Math.min(n,rows.length));
+ if(!take.length)return 0;
+ return take.reduce(function(a,r){return a+fn(r)},0)/take.length;
+}
 function costLine(r){
  var parts=[];
  if(r.delCost>0)parts.push(money(-r.delCost)+" delivery ("+r.delTeam+"\u00d7)");
@@ -1591,15 +1596,15 @@ function renderPhases(){
 
  funnelInto("funnel2",s2[0],last2,v);
  tilesInto("tiles2",[
-  {k:"Net new clients / mo",v:String(last2.starts),s:"was "+f1.starts+" at end of phase 1"},
-  {k:"Max possible / mo",v:nm(last2.maxStarts,2),s:"what this capacity allows"},
+  {k:"Net new clients / mo",v:nm(avgOf(s2,3,function(r){return r.starts}),1),s:"average of the last 3 months"},
+  {k:"Max possible / mo",v:nm(last2.maxStarts,2),s:"ceiling at this capacity"},
   {k:"Delivery hires",v:String(last2.delTeam),s:"people hired, plus you and Geri"},
   {k:"Active clients",v:String(Math.round(last2.live)),s:Math.round(last2.paying)+" paying monthly"},
   {k:"Your audits / wk",v:nm(last2.auditsWk,1),s:"your ceiling is "+v.auditCap},
-  {k:"Upfront fees / mo",v:money(last2.upR),s:"one-time, from "+last2.starts+" new client"+(last2.starts===1?"":"s")},
+  {k:"Upfront fees / mo",v:money(last2.maxStarts*v.upfront),s:"at full capacity, one-time"},
   {k:"MRR",v:money(last2.recR),s:"recurring fees per month"},
-  {k:"Cash / mo",v:money(last2.cash),s:"audits + upfront + recurring"},
-  {k:"Net / mo",v:money(last2.net),s:costLine(last2)}]);
+  {k:"Cash / mo",v:money(avgOf(s2,3,function(r){return r.cash})),s:"average of the last 3 months"},
+  {k:"Net / mo",v:money(avgOf(s2,3,function(r){return r.net})),s:costLine(last2)}]);
  drawChart(document.querySelector('[data-chart="cap2"]'),{
   y:"delivery hours consumed", rows:s2,
   max:Math.max.apply(null,s2.map(function(r){return Math.max(r.cap,r.load)}))*1.15,
@@ -1631,16 +1636,16 @@ function renderPhases(){
   nm(v.closeRate*v.repClose/100,1)+"%.";
  funnelInto("funnel3",s3[0],last3,v);
  tilesInto("tiles3",[
-  {k:"Net new clients / mo",v:String(last3.starts),s:"onboarded in month "+last3.m},
-  {k:"Max possible / mo",v:nm(last3.maxStarts,2),s:"what this capacity allows"},
+  {k:"Net new clients / mo",v:nm(avgOf(s3,3,function(r){return r.starts}),1),s:"average of the last 3 months"},
+  {k:"Max possible / mo",v:nm(last3.maxStarts,2),s:"ceiling at this capacity"},
   {k:"Delivery hires",v:String(last3.delTeam),s:"people hired, plus you and Geri"},
   {k:"Managers",v:String(last3.mgrTeam),s:"one per "+v.mgrPer+" delivery hires"},
   {k:"Sales reps",v:String(last3.repTeam),s:"commission only, no base"},
   {k:"Active clients",v:String(Math.round(last3.live)),s:Math.round(last3.paying)+" paying monthly"},
-  {k:"Upfront fees / mo",v:money(last3.upR),s:"one-time, from "+last3.starts+" new client"+(last3.starts===1?"":"s")},
+  {k:"Upfront fees / mo",v:money(last3.maxStarts*v.upfront),s:"at full capacity, one-time"},
   {k:"MRR",v:money(last3.recR),s:"recurring fees per month"},
-  {k:"Cash / mo",v:money(last3.cash),s:"audits + upfront + recurring"},
-  {k:"Net / mo",v:money(last3.net),s:costLine(last3)}]);
+  {k:"Cash / mo",v:money(avgOf(s3,3,function(r){return r.cash})),s:"average of the last 3 months"},
+  {k:"Net / mo",v:money(avgOf(s3,3,function(r){return r.net})),s:costLine(last3)}]);
  headChart('[data-chart="head3"]',s3,null,
   F.repHires.map(function(rm){var ix=-1;s3.forEach(function(r,j){if(r.m===rm)ix=j});return {i:ix,label:"+1 rep"}})
    .concat(F.mgrHires.map(function(mm){var ix=-1;s3.forEach(function(r,j){if(r.m===mm)ix=j});return {i:ix,label:"+1 manager"}})));
@@ -1685,14 +1690,15 @@ function renderPhases(){
 
  tilesInto("tiles4",[
   {k:"Months modelled",v:String(last4.m)},
-  {k:"Upfront fees / mo",v:money(last4.upR),s:"one-time, from "+last4.starts+" new client"+(last4.starts===1?"":"s")},
+  {k:"Upfront fees / mo",v:money(last4.maxStarts*v.upfront),s:"at full capacity, one-time"},
   {k:"MRR at end",v:money(last4.recR),s:"recurring per month"},
-  {k:"Cash / mo at end",v:money(last4.cash)},
-  {k:"Net / mo at end",v:money(last4.net),s:costLine(last4)},
+  {k:"Cash / mo at end",v:money(avgOf(R,3,function(r){return r.cash})),s:"average of the last 3 months"},
+  {k:"Net / mo at end",v:money(avgOf(R,3,function(r){return r.net})),s:costLine(last4)},
   {k:"People hired",v:String(last4.delTeam+last4.mgrTeam+last4.repTeam),
    s:last4.delTeam+" delivery, "+last4.mgrTeam+" mgr, "+last4.repTeam+" sales \u2014 plus you and Geri"},
   {k:"Active clients",v:String(Math.round(last4.live)),s:Math.round(last4.paying)+" paying monthly"},
-  {k:"Net new clients / mo",v:String(last4.starts),s:"at the end of the arc"}]);
+  {k:"Net new clients / mo",v:nm(avgOf(R,3,function(r){return r.starts}),1),s:"average of the last 3 months"},
+  {k:"Max possible / mo",v:nm(last4.maxStarts,2),s:"ceiling at final capacity"}]);
  drawChart(document.querySelector('[data-chart="arc4"]'),{
   y:"cash collected / month, by source", rows:R,
   max:Math.max.apply(null,R.map(function(r){return r.cash}))*1.12,
@@ -1759,7 +1765,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0055";
+var BUILD_ID="0820-0100";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
