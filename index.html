@@ -593,6 +593,14 @@ td.pause{color:var(--crit)}
             overhead and Geri drifting toward management.</p></div>
         <div class="mini-s"><div class="mini"><span>Cost per hire / mo</span><b id="o_hireCost"></b></div>
           <input type="range" id="hireCost" min="2000" max="20000" step="500"></div>
+        <div class="mini-s"><div class="mini"><span>Manager per N hires</span><b id="o_mgrPer"></b></div>
+          <input type="range" id="mgrPer" min="2" max="12" step="1">
+          <p class="note">A delivery manager lands every this many delivery hires. They add no delivery hours
+            themselves &mdash; what they do is <em>reset the decay</em>, so the hires after them perform like early
+            ones again. Coordination overhead is exactly what the decay slider represents, so this is the fix for it
+            rather than a second charge for the same thing.</p></div>
+        <div class="mini-s"><div class="mini"><span>Manager salary / mo</span><b id="o_mgrCost"></b></div>
+          <input type="range" id="mgrCost" min="4000" max="30000" step="1000"></div>
         <div class="mini-s"><div class="mini"><span>Trigger: months maxed</span><b id="o_trigM2"></b></div>
           <p class="note">Set on tab 1 &mdash; it decides where phase 1 ends and phase 2 begins.</p></div>
       </div></div>
@@ -690,9 +698,23 @@ td.pause{color:var(--crit)}
     moments the binding constraint changed.</p>
   <div class="tiles" id="tiles4"></div>
   <div class="box" style="margin-top:16px"><div class="box-h"><span class="box-n">01</span>
-    <span class="box-t">Cash &amp; headcount over the whole arc</span><span class="box-s">hover any month</span></div>
+    <span class="box-t">Money &mdash; <span id="rng4m"></span></span>
+    <span class="box-s">where the cash actually comes from &middot; hover any month</span></div>
     <div class="box-b"><div class="chartbox" data-chart="arc4"></div>
+      <div class="costgrid" id="mix4" style="margin-top:14px"></div>
       <div class="wall" id="wall4"></div></div></div>
+  <div class="box"><div class="box-h"><span class="box-n">02</span>
+    <span class="box-t">Delivery load &mdash; <span id="rng4l"></span></span>
+    <span class="box-s">hours consumed against hours available &middot; hover any month</span></div>
+    <div class="box-b"><div class="chartbox" data-chart="load4"></div></div></div>
+  <div class="box"><div class="box-h"><span class="box-n">03</span>
+    <span class="box-t">Acquisition &mdash; <span id="rng4a"></span></span>
+    <span class="box-s">audits run and deals closed &middot; hover any month</span></div>
+    <div class="box-b"><div class="chartbox" data-chart="acq4"></div></div></div>
+  <div class="box"><div class="box-h"><span class="box-n">04</span>
+    <span class="box-t">Headcount &mdash; <span id="rng4h"></span></span>
+    <span class="box-s">delivery, managers and sales &middot; hover any month</span></div>
+    <div class="box-b"><div class="chartbox" data-chart="head4"></div></div></div>
 </div><!-- /p4 -->
 
 
@@ -835,7 +857,8 @@ var P={
    attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,drop:10,
    auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,expansion:0,
    auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
-   repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0},
+   repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0,
+   mgrPer:5,mgrCost:10000},
  base:{hrsMonth:200,baseHrs:85,spread:3,upkeep:10,qThresh:2,floor:38,toFloor:9,
    attRate:0.20,auditConv:5,closeRate:35,webinars:4,followup:12,drop:10,
    auditPrice:897,upfront:20000,recurring:3500,billed:3,retention:12,expansion:0,
@@ -849,7 +872,7 @@ var P={
 };
 var IDS=["hrsMonth","baseHrs","spread","upkeep","qThresh","floor","toFloor",
  "attRate","auditConv","closeRate","webinars","followup","drop","auditPrice","upfront",
- "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","repAud","repClose","repRamp","comm","targetReps","myAud1","myAud2"];
+ "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","repAud","repClose","repRamp","comm","targetReps","myAud1","myAud2","mgrPer","mgrCost"];
 
 function money(n){var a=Math.abs(n);
  if(a>=1e6)return (n<0?"-":"")+"$"+(a/1e6).toFixed(2)+"M";
@@ -872,15 +895,15 @@ function lifetimeHrs(v,e){
 function sustain(v,e){var L=lifetimeHrs(v,e);return L>0?v.hrsMonth/L:0}
 
 function fullSim(v){
- var MAXM=140, rows=[], cohorts=[], queue=0, del=[], reps=[], maxedRun=0, cum=0;
+ var MAXM=140, rows=[], cohorts=[], queue=0, del=[], reps=[], mgrs=[], maxedRun=0, cum=0, decayIdx=0;
  var p1End=null, p2End=null, p3End=null;
  for(var m=0;m<MAXM;m++){
   var e=eff(v,m), onbTotal=v.baseHrs*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
 
   // ---- delivery capacity: base + each hire, decayed ----
   var cap=v.hrsMonth, effHires=0;
-  del.forEach(function(hm,idx){
-   if(m>=hm){ cap += v.hireHrs*(v.hireEff/100)*Math.pow(v.decay/100,idx); effHires++; }
+  del.forEach(function(h){
+   if(m>=h.m){ cap += v.hireHrs*(v.hireEff/100)*Math.pow(v.decay/100,h.k); effHires++; }
   });
 
   // ---- existing load ----
@@ -921,7 +944,8 @@ function fullSim(v){
   var auditRev=audits*v.auditPrice, upR=starts*v.upfront, recR=paying*v.recurring;
   var cash=auditRev+upR+recR;
   var commission=repAudits*repCloseR*v.upfront*(v.comm/100);
-  var payroll=del.filter(function(hm){return m>=hm}).length*v.hireCost;
+  var mgrTeam=mgrs.filter(function(x){return m>=x}).length;
+  var payroll=del.filter(function(h){return m>=h.m}).length*v.hireCost + mgrTeam*v.mgrCost;
    var net=cash-commission-payroll;
 
   cum+=cash;
@@ -929,7 +953,8 @@ function fullSim(v){
    audits:audits,myAudits:myAudits,repAudits:repAudits,won:won,starts:starts,queue:queue,
    live:live,paying:paying,auditRev:auditRev,upR:upR,recR:recR,cash:cash,
    commission:commission,payroll:payroll,net:net,
-   delTeam:del.filter(function(hm){return m>=hm}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
+   delTeam:del.filter(function(h){return m>=h.m}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
+   mgrTeam:mgrTeam, mgrCost:mgrTeam*v.mgrCost, delCost:del.filter(function(h){return m>=h.m}).length*v.hireCost,
    myWk:mine, repWk:repWk, auditsWk:audits/WPM, atFloor:e<=v.floor/100+0.001,
    maxStarts:sustainCap(v,e,cap)});
 
@@ -943,7 +968,9 @@ function fullSim(v){
 
   if(maxedRun>=v.trigM && atFloor && queue>0.5){
    if(p1End===null)p1End=m;
-   del.push(m+1); maxedRun=0;
+   del.push({m:m+1,k:decayIdx}); decayIdx++; maxedRun=0;
+   // a manager lands every N delivery hires, and resets the coordination decay
+   if(v.mgrPer>0 && del.length%v.mgrPer===0){ mgrs.push(m+1); decayIdx=0; }
   }
   // sales hire when audit demand outruns the calendar
   if(auditsNeeded>audCapMo*1.02 && reps.length<v.targetReps && p1End!==null){
@@ -954,7 +981,7 @@ function fullSim(v){
   if(p3End!==null && m>p3End+2) break;
  }
  var n=rows.length;
- return {rows:rows, p1End:p1End===null?n-1:p1End, p2End:p2End===null?n-1:p2End,
+ return {rows:rows, mgrHires:mgrs, p1End:p1End===null?n-1:p1End, p2End:p2End===null?n-1:p2End,
          p3End:p3End===null?n-1:p3End, delHires:del, repHires:reps};
 }
 function sustainCap(v,e,cap){
@@ -991,6 +1018,8 @@ function lbl(id,v){switch(id){
  case "targetReps":return v.targetReps+" rep"+(v.targetReps>1?"s":"");
  case "myAud1":return nm(v.myAud1,1)+"/wk";
  case "myAud2":return nm(v.myAud2,1)+"/wk";
+ case "mgrPer":return "every "+v.mgrPer;
+ case "mgrCost":return money0(v.mgrCost);
 } return String(v[id])}
 
 function tip(title,pairs){
@@ -1172,7 +1201,7 @@ function render(){
   {k:"Net new clients / mo",v:String(last.starts),s:"onboarded in month "+last.m},
   {k:"Max possible / mo",v:nm(last.maxStarts,2),s:"what this capacity allows"},
   {k:"Active clients",v:String(Math.round(last.live)),s:Math.round(last.paying)+" paying monthly"},
-  {k:"MRR",v:money(last.recR),s:"recurring fees only"},
+  {k:"MRR",v:money(last.recR),s:"recurring fees per month"},
   {k:"Cash / mo",v:money(last.cash),s:"audits + upfront + recurring"},
   {k:"Clients onboarded",v:String(rows.reduce(function(a,r){return a+r.starts},0)),
    s:"total over "+rows.length+" months"}
@@ -1447,9 +1476,24 @@ function acqChart(sel,rows,rngId,withRep){
    ["Invites needed",r.audits>0?kf(r.audits/((v_.auditConv/100)*(1+v_.followup/100))/(v_.attRate/100)):"0"]]}});
 }
 var v_={};
+function headChart(sel,rows,rngId,marks){
+ if(rngId&&$(rngId))$(rngId).textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
+ drawChart(document.querySelector(sel),{
+  y:"team members (delivery, managers, sales)", rows:rows,
+  max:Math.max(4,Math.max.apply(null,rows.map(function(r){return r.delTeam+r.repTeam+r.mgrTeam}))+1),
+  fmt:function(x){return Math.round(x)},
+  series:[{label:"Sales reps",color:CV("--warn"),get:function(r){return r.repTeam}},
+          {label:"Managers",color:CV("--accent-3"),get:function(r){return r.mgrTeam}},
+          {label:"Delivery",color:CV("--accent"),get:function(r){return r.delTeam}}],
+  marks:marks||[],
+  tip:function(r){return [["Delivery hires",r.delTeam],["Managers",r.mgrTeam],["Sales reps",r.repTeam],
+   ["Total hired",r.delTeam+r.mgrTeam+r.repTeam,1],["Net new clients",r.starts],
+   ["Active clients",Math.round(r.live)],["Payroll",money(-r.payroll)]]}});
+}
 function costLine(r){
  var parts=[];
- if(r.payroll>0)parts.push(money(-r.payroll)+" payroll ("+r.delTeam+"\u00d7)");
+ if(r.delCost>0)parts.push(money(-r.delCost)+" delivery ("+r.delTeam+"\u00d7)");
+ if(r.mgrCost>0)parts.push(money(-r.mgrCost)+" managers ("+r.mgrTeam+"\u00d7)");
  if(r.commission>0)parts.push(money(-r.commission)+" commission");
  return parts.length?("after "+parts.join(", ")):"no costs yet";
 }
@@ -1478,7 +1522,7 @@ function renderPhases(){
   {k:"Delivery hires",v:String(last2.delTeam),s:"people hired, plus you and Geri"},
   {k:"Active clients",v:String(Math.round(last2.live)),s:Math.round(last2.paying)+" paying monthly"},
   {k:"Your audits / wk",v:nm(last2.auditsWk,1),s:"your ceiling is "+v.auditCap},
-  {k:"MRR",v:money(last2.recR),s:"recurring fees only"},
+  {k:"MRR",v:money(last2.recR),s:"recurring fees per month"},
   {k:"Cash / mo",v:money(last2.cash),s:"audits + upfront + recurring"},
   {k:"Net / mo",v:money(last2.net),s:costLine(last2)}]);
  drawChart(document.querySelector('[data-chart="cap2"]'),{
@@ -1488,7 +1532,7 @@ function renderPhases(){
   series:[{label:"Steady-state",color:CV("--accent-2"),get:function(r){return r.styHrs}},
           {label:"Onboarding",color:CV("--accent"),get:function(r){return r.onbHrs}}],
   capGet:function(r){return r.cap}, capLabel:"Hours available",
-  marks:F.delHires.map(function(hm,i){var ix=-1;s2.forEach(function(r,j){if(r.m===hm+1)ix=j});
+  marks:F.delHires.map(function(h,i){var ix=-1;s2.forEach(function(r,j){if(r.m===h.m)ix=j});
    return {i:ix,label:"+1 delivery"}}),
   tip:function(r){return [["Net new clients",r.starts],["Delivery hires",r.delTeam],
    ["Hours used",Math.round(r.load)+" / "+Math.round(r.cap),1],["Hours free",Math.round(r.free)],
@@ -1514,24 +1558,15 @@ function renderPhases(){
   {k:"Net new clients / mo",v:String(last3.starts),s:"onboarded in month "+last3.m},
   {k:"Max possible / mo",v:nm(last3.maxStarts,2),s:"what this capacity allows"},
   {k:"Delivery hires",v:String(last3.delTeam),s:"people hired, plus you and Geri"},
+  {k:"Managers",v:String(last3.mgrTeam),s:"one per "+v.mgrPer+" delivery hires"},
   {k:"Sales reps",v:String(last3.repTeam),s:"commission only, no base"},
   {k:"Active clients",v:String(Math.round(last3.live)),s:Math.round(last3.paying)+" paying monthly"},
-  {k:"MRR",v:money(last3.recR),s:"recurring fees only"},
+  {k:"MRR",v:money(last3.recR),s:"recurring fees per month"},
   {k:"Cash / mo",v:money(last3.cash),s:"audits + upfront + recurring"},
   {k:"Net / mo",v:money(last3.net),s:costLine(last3)}]);
- drawChart(document.querySelector('[data-chart="head3"]'),{
-  y:"team members (delivery and sales)", rows:s3,
-  max:Math.max(4,Math.max.apply(null,s3.map(function(r){return r.delTeam+r.repTeam}))+1),
-  fmt:function(x){return Math.round(x)},
-  series:[{label:"Sales reps",color:CV("--warn"),get:function(r){return r.repTeam}},
-          {label:"Delivery",color:CV("--accent"),get:function(r){return r.delTeam}}],
-  marks:F.repHires.map(function(rm,i){var ix=-1;s3.forEach(function(r,j){if(r.m===rm+1)ix=j});
-   return {i:ix,label:"+1 rep"}}),
-  tip:function(r){return [["Delivery hires",r.delTeam],["Sales reps",r.repTeam],
-   ["Net new clients",r.starts,1],["Active clients",Math.round(r.live)],
-   ["Your audits / wk",nm(r.myWk,1)],["Rep audits / wk",nm(r.repWk,1)],
-   ["Cash / mo",money(r.cash)],["Commission",money(-r.commission)],["Payroll",money(-r.payroll)],
-   ["Net cash",money(r.net),1]]}});
+ headChart('[data-chart="head3"]',s3,null,
+  F.repHires.map(function(rm){var ix=-1;s3.forEach(function(r,j){if(r.m===rm)ix=j});return {i:ix,label:"+1 rep"}})
+   .concat(F.mgrHires.map(function(mm){var ix=-1;s3.forEach(function(r,j){if(r.m===mm)ix=j});return {i:ix,label:"+1 manager"}})));
  moneyChart('[data-chart="money3"]',s3,"rng3m");
  loadChart('[data-chart="load3"]',s3,"rng3l",F.delHires.map(function(hm,i){var ix=-1;
    s3.forEach(function(r,j){if(r.m===hm+1)ix=j}); return {i:ix,label:"+1 delivery"}}));
@@ -1546,9 +1581,10 @@ function renderPhases(){
  if($("costs3")){
   var L=last3;
   $("costs3").innerHTML=[
-   {k:"Cash collected",v:money(L.cash),s:"audits + upfront + recurring"},
-   {k:"Delivery payroll",v:money(-L.payroll),s:L.delTeam+" hires \u00d7 "+money0(v.hireCost)+"/mo",neg:1},
-   {k:"Sales commission",v:money(-L.commission),s:v.comm+"% of upfront on rep-closed deals",neg:1},
+   {k:"Cash collected / mo",v:money(L.cash),s:"audits + upfront + recurring"},
+   {k:"Delivery payroll / mo",v:money(-L.delCost),s:L.delTeam+" hires \u00d7 "+money0(v.hireCost)+"/mo",neg:1},
+   {k:"Manager payroll / mo",v:money(-L.mgrCost),s:L.mgrTeam+" \u00d7 "+money0(v.mgrCost)+"/mo \u2014 resets the decay",neg:1},
+   {k:"Sales commission / mo",v:money(-L.commission),s:v.comm+"% of upfront on rep-closed deals",neg:1},
    {k:"Net / mo",v:money(L.net),s:"cash less both",tot:1}
   ].map(function(c){return '<div class="costcell'+(c.neg?" neg":"")+(c.tot?" tot":"")+'">'+
     '<div class="cck2">'+c.k+'</div><div class="ccv2">'+c.v+'</div><div class="ccs2">'+c.s+'</div></div>'}).join("");
@@ -1572,26 +1608,45 @@ function renderPhases(){
 
  tilesInto("tiles4",[
   {k:"Months modelled",v:String(last4.m)},
-  {k:"MRR at end",v:money(last4.recR),s:"recurring only"},
+  {k:"MRR at end",v:money(last4.recR),s:"recurring per month"},
   {k:"Cash / mo at end",v:money(last4.cash)},
   {k:"Net / mo at end",v:money(last4.net),s:costLine(last4)},
-  {k:"People hired",v:String(last4.delTeam+last4.repTeam),
-   s:last4.delTeam+" delivery, "+last4.repTeam+" sales \u2014 plus you and Geri"},
+  {k:"People hired",v:String(last4.delTeam+last4.mgrTeam+last4.repTeam),
+   s:last4.delTeam+" delivery, "+last4.mgrTeam+" mgr, "+last4.repTeam+" sales \u2014 plus you and Geri"},
   {k:"Active clients",v:String(Math.round(last4.live)),s:Math.round(last4.paying)+" paying monthly"},
   {k:"Net new clients / mo",v:String(last4.starts),s:"at the end of the arc"}]);
  drawChart(document.querySelector('[data-chart="arc4"]'),{
-  y:"cash collected / month", rows:R,
+  y:"cash collected / month, by source", rows:R,
   max:Math.max.apply(null,R.map(function(r){return r.cash}))*1.12,
   fmt:function(x){return money(x)},
   series:[{label:"Recurring",color:CV("--accent-2"),get:function(r){return r.recR}},
           {label:"Upfront",color:CV("--accent"),get:function(r){return r.upR}},
           {label:"Audit fees",color:CV("--warn"),get:function(r){return r.auditRev}}],
-  marks:F.delHires.map(function(hm){return {i:hm,label:"+1 delivery"}})
-        .concat(F.repHires.map(function(rm,i){return {i:rm,label:"+1 rep"}})),
+  marks:F.delHires.map(function(h){return {i:h.m-1,label:"+1 delivery"}})
+        .concat(F.repHires.map(function(rm,i){return {i:rm-1,label:"+1 rep"}}))
+        .concat(F.mgrHires.map(function(mm){return {i:mm-1,label:"+1 manager"}})),
   tip:function(r){return [["Phase",r.m<=f1.m?"1 \u00b7 Startup":(r.m<=last2.m?"2 \u00b7 Scale delivery":"3 \u00b7 Scale sales")],
    ["Net new clients",r.starts],["Active clients",Math.round(r.live)],
    ["People hired",r.delTeam+" delivery, "+r.repTeam+" sales"],
    ["Cash / mo",money(r.cash),1],["Net / mo",money(r.net)]]}});
+ moneyChart('[data-chart="money4"]',R,null);
+ loadChart('[data-chart="load4"]',R,"rng4l",
+  F.delHires.map(function(h){return {i:h.m-1,label:"+1 delivery"}}));
+ acqChart('[data-chart="acq4"]',R,"rng4a",true);
+ headChart('[data-chart="head4"]',R,"rng4h",
+  F.repHires.map(function(rm){return {i:rm-1,label:"+1 rep"}})
+   .concat(F.mgrHires.map(function(mm){return {i:mm-1,label:"+1 manager"}})));
+ if($("rng4m"))$("rng4m").textContent="M"+R[0].m+"\u2013M"+last4.m;
+ if($("mix4")){
+  var tot=last4.cash||1;
+  $("mix4").innerHTML=[
+   {k:"Audit fees / mo",v:money(last4.auditRev),s:Math.round(last4.auditRev/tot*100)+"% of cash"},
+   {k:"Upfront build fees / mo",v:money(last4.upR),s:Math.round(last4.upR/tot*100)+"% \u2014 stops if selling stops"},
+   {k:"Recurring / mo (MRR)",v:money(last4.recR),s:Math.round(last4.recR/tot*100)+"% \u2014 the annuity"},
+   {k:"Total cash / mo",v:money(last4.cash),s:"month "+last4.m,tot:1}
+  ].map(function(c){return '<div class="costcell'+(c.tot?" tot":"")+'"><div class="cck2">'+c.k+
+    '</div><div class="ccv2">'+c.v+'</div><div class="ccs2">'+c.s+'</div></div>'}).join("");
+ }
  if($("wall4")){$("wall4").className="wall ok";
   $("wall4").innerHTML="Phase 1 runs to <b>M"+f1.m+"</b>, when delivery capacity maxes. Phase 2 to <b>M"+
    last2.m+"</b>, when your calendar maxes. Phase 3 ends at <b>M"+last4.m+"</b> with <b>"+
@@ -1623,7 +1678,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0033";
+var BUILD_ID="0820-0042";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
