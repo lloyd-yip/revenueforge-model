@@ -375,7 +375,7 @@ td.pause{color:var(--crit)}
 <div class="tabs" role="tablist">
   <button type="button" role="tab" data-p="p1" aria-selected="true"><em>1 &middot; Startup</em><i id="rng1">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p2" aria-selected="false"><em>2 &middot; Scale delivery</em><i id="rng2">&nbsp;</i></button>
-  <button type="button" role="tab" data-p="p3" aria-selected="false"><em>3 &middot; Scale diagnosis</em><i id="rng3">&nbsp;</i></button>
+  <button type="button" role="tab" data-p="p3" aria-selected="false"><em>3 &middot; Scale architects</em><i id="rng3">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p4" aria-selected="false"><em>4 &middot; Full arc</em><i id="rng4">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">7</span></em><i>open questions</i></button>
 </div>
@@ -691,17 +691,17 @@ td.pause{color:var(--crit)}
 </div><!-- /p2 -->
 
 <div id="p3" hidden>
-  <h2 class="ph-h1">Scale diagnosis</h2>
+  <h2 class="ph-h1">Scale architects</h2>
   <p class="ph-sf">Starts where phase 2 cut off, at the month your audit load hit its ceiling. Delivery hires keep
     landing in the background &mdash; the new decision is sales headcount. The phase runs as long as it takes to
     reach the number of reps you set.</p>
   <div class="cols">
     <div>
-      <div class="box"><div class="box-h"><span class="box-t">Diagnostician hires</span>
+      <div class="box"><div class="box-h"><span class="box-t">Revenue Architects</span>
         <span class="box-s">hired before reps</span></div><div class="box-b">
         <div class="mini-s"><div class="mini"><span>How many to hire</span><b id="o_diagCount"></b></div>
           <input type="range" id="diagCount" min="0" max="4" step="1">
-          <p class="note">A senior operator or AI technical architect who runs audits and owns the architecture.
+          <p class="note">A senior operator who runs the audit, owns the architecture, and guides the client through onboarding.
             They land <em>before</em> sales reps, because they raise the same calendar ceiling at a much better
             close rate.</p></div>
         <div class="mini-s"><div class="mini"><span>Their audits / wk</span><b id="o_diagAud"></b></div>
@@ -725,6 +725,9 @@ td.pause{color:var(--crit)}
             architecture is weaker. This is how &ldquo;can they really replace me&rdquo; gets tested.</p></div>
         <div class="compbox" id="diagComp"></div>
       </div></div>
+      <div class="box"><div class="box-h"><span class="box-t">Client success</span>
+        <span class="box-s">set on tab 1</span></div>
+        <div class="box-b" id="csMirror"></div></div>
       <div class="box"><div class="box-h"><span class="box-t">Phase 3 pricing</span>
         <span class="box-s">priced as an established firm</span></div><div class="box-b">
         <div class="mini-s"><div class="mini"><span>Upfront</span><b id="o_upfront3"></b></div>
@@ -741,13 +744,13 @@ td.pause{color:var(--crit)}
         <div class="mini-s"><div class="mini"><span>Solo &mdash; audits / wk</span><b id="o_auditCap2"></b></div>
           <input type="range" id="auditCap2" min="1" max="12" step="1" disabled>
           <p class="note">Set on tab 1. Shown here so the whole hand-off reads in one place.</p></div>
-        <div class="mini-s"><div class="mini"><span>After diagnostician 1</span><b id="o_myAud1"></b></div>
+        <div class="mini-s"><div class="mini"><span>After architect 1</span><b id="o_myAud1"></b></div>
           <input type="range" id="myAud1" min="0" max="12" step="0.5"></div>
-        <div class="mini-s"><div class="mini"><span>After diagnostician 2</span><b id="o_myAud2"></b></div>
+        <div class="mini-s"><div class="mini"><span>After architect 2</span><b id="o_myAud2"></b></div>
           <input type="range" id="myAud2" min="0" max="12" step="0.5">
-          <p class="note">Your hand-off schedule as diagnosticians come on. Keep more audits yourself and you
+          <p class="note">Your hand-off schedule as Revenue Architects come on. Keep more audits yourself and you
             close at a higher rate but stay in the seat; hand them over and you buy your calendar back. At two
-            diagnosticians you are out of audits entirely.</p></div>
+            architects you are out of audits entirely.</p></div>
       </div></div>
     </div>
     <div>
@@ -772,7 +775,7 @@ td.pause{color:var(--crit)}
         <span class="box-s">every cost in the model</span></div>
         <div class="box-b"><div class="costgrid" id="costs3"></div></div></div>
       <div class="box"><div class="box-h"><span class="box-n">05</span>
-        <span class="box-t">Is the next diagnostician worth it?</span></div>
+        <span class="box-t">Is the next Revenue Architect worth it?</span></div>
         <div class="box-b"><div class="compare" id="cmp3"></div>
           <div class="wall" id="wall3"></div></div></div>
       <div class="box"><div class="box-h"><span class="box-n">06</span><span class="box-t">Month by month</span></div>
@@ -1048,7 +1051,7 @@ function fullSim(v){
 
   queue=queue*(1-v.drop/100)+won;
   // a weaker spec makes the build cost more hours, in proportion to how much of the
-  // deal flow this diagnostician architected
+  // deal flow this Revenue Architect architected
   var specDrag=1+(diagShareNow*((v.diagSpec-100)/100));
   var onbPerMoEff=onbPerMo*specDrag;
   var starts=Math.max(0,Math.min(Math.floor(queue),Math.floor(onbPerMoEff>0?free/onbPerMoEff:0)));
@@ -1063,7 +1066,7 @@ function fullSim(v){
   var cash=auditRev+upR+recR;
   var commission=0;
   var mgrTeam=mgrs.filter(function(x){return m>=x}).length;
-  // diagnostician comp: base + a slice of upfront + a capped slice of recurring
+  // Revenue Architect comp: base + a slice of upfront + a capped slice of recurring
   var diagUpComm=starts*curUp*diagShareNow*(v.diagCommUp/100);
   var diagRecComm=0;
   cohorts.forEach(function(c){var age=m-c.start;
@@ -1117,13 +1120,13 @@ function fullSim(v){
   // phase 3 ends only once the system has RE-STABILISED: reps are all hired, delivery
   // has finished catching up to the demand they unlocked, and the queue has drained.
   // phase 3 ends once every planned hire is in AND nothing has been hired for a
-  // while AND the queue has drained -- whatever mix of diagnosticians and reps that took
+  // while AND the queue has drained -- whatever mix of hires that took
   var lastHire=Math.max(
     del.length?del[del.length-1].m-1:-99,
     reps.length?reps[reps.length-1]-1:-99,
     diags.length?diags[diags.length-1]-1:-99);
   // settled = nobody hired for a while and the queue has drained, whatever mix of
-  // diagnosticians and reps it took. Some plans never need the reps at all.
+  // architects it took.
   if(p2End!==null && p3End===null && (m-lastHire)>=v.trigM+6 && queue<1) p3End=m;
   if(p3End!==null && m>p3End+2) break;
  }
@@ -1526,21 +1529,18 @@ function applyPreset(n){
 
 // live value labels next to each slider label
 function tagLabels(){
- var map={hrsWeek:function(v){return Math.round(parseFloat($("hrsWeek").value))},
-          hrsMonth:function(v){return Math.round(v.hrsMonth)},
-          baseHrs:function(v){return Math.round(v.baseHrs)+" hrs"},
-          spread:function(v){return v.spread+" mo"},
-          upkeep:function(v){return Math.round(v.upkeep)+" hrs/mo"},
-          qThresh:function(v){return nm(v.qThresh,1)+" mo"},
-          floor:function(v){return Math.round(v.floor)+"%"},
-          toFloor:function(v){return Math.round(v.toFloor)}};
- Object.keys(map).forEach(function(id){
-  var inp=$(id); if(!inp)return;
+ // generic on purpose: a hardcoded list is how csPer, csCost, m1cap and trigM ended
+ // up rendering with no number beside them.
+ var v=V();
+ Array.prototype.forEach.call(document.querySelectorAll('.lev input[type=range]'),function(inp){
   var lab=inp.parentNode.querySelector("label"); if(!lab)return;
-  var b=lab.querySelector("b"); if(!b){b=document.createElement("b");lab.appendChild(b)}
-  b.textContent=map[id](V());
+  if(lab.querySelector("output"))return;
+  var b=lab.querySelector("b");
+  if(!b){b=document.createElement("b");lab.appendChild(b)}
+  b.textContent=lbl(inp.id,v);
  });
 }
+
 
 /* ---------- phases 2-4 ---------- */
 function tipHTML(t,rows){return "<b>"+t+"</b>"+rows.map(function(r){
@@ -1651,31 +1651,44 @@ var v_={};
 function headChart(sel,rows,rngId,marks){
  if(rngId&&$(rngId))$(rngId).textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
  drawChart(document.querySelector(sel),{
-  y:"team members (delivery, managers, diagnosticians)", rows:rows,
+  y:"team members (delivery, managers, architects)", rows:rows,
   max:Math.max(4,Math.max.apply(null,rows.map(function(r){return r.delTeam+r.diagTeam+r.mgrTeam+r.csTeam}))+1),
   fmt:function(x){return Math.round(x)},
-  series:[{label:"Diagnosticians",color:CV("--warn"),get:function(r){return r.diagTeam}},
+  series:[{label:"Revenue Architects",color:CV("--warn"),get:function(r){return r.diagTeam}},
           {label:"Client success",color:CV("--crit"),get:function(r){return r.csTeam}},
           {label:"Managers",color:CV("--accent-3"),get:function(r){return r.mgrTeam}},
           {label:"Delivery",color:CV("--accent"),get:function(r){return r.delTeam}}],
   marks:marks||[],
-  tip:function(r){return [["Delivery hires",r.delTeam],["Managers",r.mgrTeam],["Diagnosticians",r.diagTeam],
+  tip:function(r){return [["Delivery hires",r.delTeam],["Managers",r.mgrTeam],["Revenue Architects",r.diagTeam],
    ["Client success",r.csTeam],["Total hired",r.delTeam+r.mgrTeam+r.diagTeam+r.csTeam,1],["Net new clients",r.starts],
    ["Active clients",Math.round(r.live)],["Payroll",money(-r.payroll)]]}});
 }
 function compInto(id,r,v){
  var el=$(id); if(!el)return;
- if(!r.diagTeam){el.innerHTML='<p class="note">No diagnosticians hired in this run.</p>';return}
+ if(!r.diagTeam){el.innerHTML='<p class="note">No Revenue Architects hired in this run.</p>';return}
  var per=function(x){return r.diagTeam?x/r.diagTeam:0};
  var tot=per(r.diagCost);
  el.innerHTML=
-  '<div class="complbl">What one diagnostician earns &middot; month '+r.m+'</div>'+
+  '<div class="complbl">What one Revenue Architect earns &middot; month '+r.m+'</div>'+
   '<div class="fstrip"><span>Base</span><b>'+money(per(r.diagBaseCost))+'</b><i></i></div>'+
   '<div class="fstrip"><span>'+v.diagCommUp+'% of upfront</span><b>'+money(per(r.diagUpComm))+'</b><i></i></div>'+
   '<div class="fstrip"><span>'+v.diagCommRec+'% of recurring</span><b>'+money(per(r.diagRecComm))+'</b><i></i></div>'+
   '<div class="fstrip tot"><span>Total / month</span><b>'+money(tot)+'</b><i></i></div>'+
   '<div class="strainnum">Annualised: <b>'+money(tot*12)+'</b> &middot; '+
-   Math.round(r.cash>0?tot*r.diagTeam/r.cash*100:0)+'% of company cash</div>';
+   Math.round(r.cash>0?tot*r.diagTeam/r.cash*100:0)+'% of company cash</div>'+
+  (function(){
+   var recMonths=Math.max(0,Math.min(v.diagRecMo,v.retention-v.billed));
+   var dUp=r.curUp*(v.diagCommUp/100);
+   var dRec=r.curRec*(v.diagCommRec/100)*recMonths;
+   var dealsMo=r.diagTeam?(r.diagAudits*(v.closeRate/100)*(v.diagClose/100))/r.diagTeam:0;
+   var worth=r.curUp+r.curRec*Math.max(0,v.retention-v.billed);
+   return '<div class="complbl" style="margin-top:14px">What they earn per deal they win</div>'+
+    '<div class="fstrip"><span>'+v.diagCommUp+'% of '+money(r.curUp)+' upfront</span><b>'+money(dUp)+'</b><i></i></div>'+
+    '<div class="fstrip"><span>'+v.diagCommRec+'% of '+money(r.curRec)+'/mo for '+recMonths+' mo</span><b>'+money(dRec)+'</b><i></i></div>'+
+    '<div class="fstrip tot"><span>Per deal</span><b>'+money(dUp+dRec)+'</b><i></i></div>'+
+    '<div class="strainnum">Closing <b>'+nm(dealsMo,1)+'</b> deals a month at this pace. Each deal is worth <b>'+
+    money(worth)+'</b> to the company, so they keep <b>'+(worth>0?Math.round((dUp+dRec)/worth*100):0)+'%</b> of it.</div>';
+  })();
 }
 function funnelInto(id,first,last,v){
  var el=$(id); if(!el)return;
@@ -1708,7 +1721,7 @@ function costLine(r){
  var parts=[];
  if(r.delCost>0)parts.push(money(-r.delCost)+" delivery ("+r.delTeam+"\u00d7)");
  if(r.mgrCost>0)parts.push(money(-r.mgrCost)+" managers ("+r.mgrTeam+"\u00d7)");
- if(r.diagCost>0)parts.push(money(-r.diagCost)+" diagnosticians ("+r.diagTeam+"\u00d7)");
+ if(r.diagCost>0)parts.push(money(-r.diagCost)+" architects ("+r.diagTeam+"\u00d7)");
  if(r.csCost>0)parts.push(money(-r.csCost)+" client success ("+r.csTeam+"\u00d7)");
  return parts.length?("after "+parts.join(", ")):"no costs yet";
 }
@@ -1769,9 +1782,15 @@ function renderPhases(){
   "</b>. More delivery capacity now would be capacity you cannot feed. <b>The constraint has moved from delivery to your calendar.</b>";
 
  if($("o_auditCap2")){$("o_auditCap2").textContent=String(v.auditCap);$("auditCap2").value=v.auditCap}
- if($("diagCloseNote"))$("diagCloseNote").innerHTML="You close at "+v.closeRate+"%, so a diagnostician closes at "+
+ if($("diagCloseNote"))$("diagCloseNote").innerHTML="You close at "+v.closeRate+"%, so a Revenue Architect closes at "+
   nm(v.closeRate*v.diagClose/100,1)+"% \u2014 well above a rep, because they are diagnosing rather than selling.";
 
+ if($("csMirror"))$("csMirror").innerHTML=
+   '<div class="mini"><span>One hire per</span><b>'+Math.round(v.csPer)+' clients</b></div>'+
+   '<div class="mini"><span>Their salary</span><b>'+money0(v.csCost)+'/mo</b></div>'+
+   '<div class="mini"><span>On the team now</span><b>'+last3.csTeam+'</b></div>'+
+   '<div class="mini"><span>Costing</span><b>'+money(last3.csCost)+'/mo</b></div>'+
+   '<p class="note">Ratio and salary live in <b>Keeping clients happy</b> on tab 1 &mdash; they apply to every phase.</p>';
  compInto("diagComp",last3,v);
  funnelInto("funnel3",s3[0],last3,v);
  tilesInto("tiles3",[
@@ -1780,7 +1799,7 @@ function renderPhases(){
   {k:"Delivery hires",v:String(last3.delTeam),s:"people hired, plus you and Geri"},
   {k:"Managers",v:String(last3.mgrTeam),s:"one per "+v.mgrPer+" delivery hires"},
   {k:"Client success",v:String(last3.csTeam),s:"one per "+v.csPer+" active clients"},
-  {k:"Diagnosticians",v:String(last3.diagTeam),s:nm(last3.diagWk,0)+" audits/wk at "+nm(v.closeRate*v.diagClose/100,1)+"% close"},
+  {k:"Revenue Architects",v:String(last3.diagTeam),s:nm(last3.diagWk,0)+" audits/wk at "+nm(v.closeRate*v.diagClose/100,1)+"% close"},
   {k:"Active clients",v:String(Math.round(last3.live)),s:Math.round(last3.paying)+" paying monthly"},
   {k:"Upfront fees / mo",v:money(last3.maxStarts*last3.curUp),s:"at full capacity, one-time"},
   {k:"MRR",v:money(last3.recR),s:"recurring fees per month"},
@@ -1788,7 +1807,7 @@ function renderPhases(){
   {k:"Net / mo",v:money(avgOf(s3,3,function(r){return r.net})),s:costLine(last3)}]);
  headChart('[data-chart="head3"]',s3,null,
   (F.mgrHires.map(function(mm){var ix=-1;s3.forEach(function(r,j){if(r.m===mm)ix=j});return {i:ix,label:"+1 manager"}}))
-   .concat(F.diagHires.map(function(dm){var ix=-1;s3.forEach(function(r,j){if(r.m===dm)ix=j});return {i:ix,label:"+1 diagnostician"}})));
+   .concat(F.diagHires.map(function(dm){var ix=-1;s3.forEach(function(r,j){if(r.m===dm)ix=j});return {i:ix,label:"+1 architect"}})));
  moneyChart('[data-chart="money3"]',s3,"rng3m");
  loadChart('[data-chart="load3"]',s3,"rng3l",F.delHires.map(function(hm,i){var ix=-1;
    s3.forEach(function(r,j){if(r.m===hm+1)ix=j}); return {i:ix,label:"+1 delivery"}}));
@@ -1806,7 +1825,7 @@ function renderPhases(){
    {k:"Cash collected / mo",v:money(L.cash),s:"audits + upfront + recurring"},
    {k:"Delivery payroll / mo",v:money(-L.delCost),s:L.delTeam+" hires \u00d7 "+money0(v.hireCost)+"/mo",neg:1},
    {k:"Manager payroll / mo",v:money(-L.mgrCost),s:L.mgrTeam+" \u00d7 "+money0(v.mgrCost)+"/mo \u2014 resets the decay",neg:1},
-   {k:"Diagnostician cost / mo",v:money(-L.diagCost),s:L.diagTeam+" \u00d7 base + commission",neg:1},
+   {k:"Revenue Architect cost / mo",v:money(-L.diagCost),s:L.diagTeam+" \u00d7 base + commission",neg:1},
    {k:"Client success / mo",v:money(-L.csCost),s:L.csTeam+" \u00d7 "+money0(v.csCost)+"/mo \u2014 one per "+v.csPer+" clients",neg:1},
    {k:"Net / mo",v:money(L.net),s:"cash less every cost above",tot:1}
   ].map(function(c){return '<div class="costcell'+(c.neg?" neg":"")+(c.tot?" tot":"")+'">'+
@@ -1818,15 +1837,15 @@ function renderPhases(){
  var bestK=keys.reduce(function(a,b){return byReps[b].net>byReps[a].net?b:a},keys[0]);
  if($("cmp3"))$("cmp3").innerHTML=keys.map(function(k){var r=byReps[k];
   return '<div class="cc'+(k===bestK?" best":"")+'"><div class="cck">'+
-   (k==="0"?"You only":k+" diagnostician"+(k==="1"?"":"s"))+' \u00b7 '+nm(r.myWk,1)+'/wk yours</div>'+
+   (k==="0"?"You only":k+" Revenue Architect"+(k==="1"?"":"s"))+' \u00b7 '+nm(r.myWk,1)+'/wk yours</div>'+
    '<div class="ccv">'+money(r.net)+'</div><div class="ccs">net cash/mo at M'+r.m+
    ' \u00b7 '+r.starts+' starts, '+r.delTeam+' delivery.'+
    (k===bestK?' <b>Best of these.</b>':'')+'</div></div>'}).join("");
  if($("wall3")){
   $("wall3").className="wall"+(bestK===String(last4.diagTeam)?" ok":"");
   $("wall3").innerHTML=(bestK===String(last4.diagTeam)
-   ? "Every diagnostician up to <b>"+last4.diagTeam+"</b> pays for itself at these assumptions."
-   : "Net cash peaks at <b>"+bestK+" diagnostician"+(bestK==="1"?"":"s")+"</b>, not "+last4.diagTeam+
+   ? "Every Revenue Architect up to <b>"+last4.diagTeam+"</b> pays for itself at these assumptions."
+   : "Net cash peaks at <b>"+bestK+" architect"+(bestK==="1"?"":"s")+"</b>, not "+last4.diagTeam+
      ". Past that their commission costs more than the extra volume brings, or the invite ceiling binds first.");}
 
  tilesInto("tiles4",[
@@ -1836,7 +1855,7 @@ function renderPhases(){
   {k:"Cash / mo at end",v:money(avgOf(R,3,function(r){return r.cash})),s:"average of the last 3 months"},
   {k:"Net / mo at end",v:money(avgOf(R,3,function(r){return r.net})),s:costLine(last4)},
   {k:"People hired",v:String(last4.delTeam+last4.mgrTeam+last4.diagTeam+last4.csTeam),
-   s:last4.delTeam+" delivery, "+last4.mgrTeam+" mgr, "+last4.diagTeam+" diagnostic, "+last4.csTeam+" success"},
+   s:last4.delTeam+" delivery, "+last4.mgrTeam+" mgr, "+last4.diagTeam+" architects, "+last4.csTeam+" success"},
   {k:"Active clients",v:String(Math.round(last4.live)),s:Math.round(last4.paying)+" paying monthly"},
   {k:"Net new clients / mo",v:nm(avgOf(R,3,function(r){return r.starts}),1),s:"average of the last 3 months"},
   {k:"Max possible / mo",v:nm(last4.maxStarts,2),s:"ceiling at final capacity"}]);
@@ -1852,9 +1871,9 @@ function renderPhases(){
   marks:F.delHires.map(function(h){return {i:h.m-1,label:"+1 delivery"}})
         
         .concat(F.mgrHires.map(function(mm){return {i:mm-1,label:"+1 manager"}})),
-  tip:function(r){return [["Phase",r.m<=f1.m?"1 \u00b7 Startup":(r.m<=last2.m?"2 \u00b7 Scale delivery":"3 \u00b7 Scale diagnosis")],
+  tip:function(r){return [["Phase",r.m<=f1.m?"1 \u00b7 Startup":(r.m<=last2.m?"2 \u00b7 Scale delivery":"3 \u00b7 Scale architects")],
    ["Net new clients",r.starts],["Active clients",Math.round(r.live)],
-   ["People hired",r.delTeam+" delivery, "+r.diagTeam+" diagnosticians"],
+   ["People hired",r.delTeam+" delivery, "+r.diagTeam+" architects"],
    ["Cash / mo",money(r.cash),1],["Total costs",money(-(r.payroll+r.commission))],
    ["Net / mo",money(r.net)+"  ("+(r.cash>0?Math.round(r.net/r.cash*100):0)+"%)",1]]}});
  moneyChart('[data-chart="money4"]',R,null);
@@ -1905,7 +1924,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0942";
+var BUILD_ID="0820-0953";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
