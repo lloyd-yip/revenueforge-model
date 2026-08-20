@@ -60,7 +60,8 @@ h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin
 .capv{font-family:"IBM Plex Mono",monospace;font-size:27px;font-weight:600;letter-spacing:-.02em;line-height:1}
 .capsub{font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;color:var(--ink-3);margin-top:7px;line-height:1.45}
 .capsub b{color:var(--ink-2);font-family:"IBM Plex Mono",monospace;font-weight:600}
-.effcurve{display:flex;align-items:flex-end;gap:2px;height:46px;margin-top:4px}
+.effcurve{position:relative;display:flex;align-items:flex-end;gap:2px;height:46px;margin-top:4px}
+.effcurve i{cursor:help}
 .effcurve i{flex:1;background:var(--accent);display:block;min-height:2px}
 .effcurve i.floor{background:var(--crit)}
 .efflbl{display:flex;justify-content:space-between;margin-top:4px}
@@ -123,6 +124,8 @@ input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:3
 .tlk{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.11em;
  text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
 .tlv{font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:600;letter-spacing:-.02em}
+.tls{font-family:"Source Serif 4",Georgia,serif;font-size:10.5px;color:var(--ink-3);
+ margin-top:6px;line-height:1.35}
 .chartwrap{display:grid;grid-template-columns:56px minmax(0,1fr) 62px;align-items:stretch}
 .yax{display:flex;flex-direction:column;justify-content:space-between;padding:2px 8px 16px 0;text-align:right}
 .yax span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;color:var(--ink-2)}
@@ -236,7 +239,7 @@ td.pause{color:var(--crit)}
         <div class="capv" id="r_now">&mdash;</div><div class="capsub" id="r_nowsub"></div></div>
       <div class="capcell"><div class="capk">Two-person ceiling</div>
         <div class="capv" id="r_ceil">&mdash;</div><div class="capsub" id="r_ceilsub"></div></div>
-      <div class="capcell"><div class="capk">Efficiency over 12 months</div>
+      <div class="capcell"><div class="capk">Efficiency over 12 months &middot; hover a month</div>
         <div class="effcurve" id="r_eff"></div>
         <div class="efflbl"><span id="r_eff1"></span><span id="r_eff2"></span></div>
         <div class="capsub">Red = process gains exhausted. Past there, only more hours move the number.</div></div>
@@ -328,7 +331,7 @@ td.pause{color:var(--crit)}
 
   <div>
     <div class="box"><div class="box-h"><span class="box-n">04</span><span class="box-t">What it produces</span>
-      <span class="box-s">month 12</span></div>
+      <span class="box-s">month 12 &middot; expenses are only tools &amp; infra so far</span></div>
       <div class="tiles" id="tiles"></div></div>
 
     <div class="box"><div class="box-h"><span class="box-n">05</span><span class="box-t">Money &mdash; 12 months</span>
@@ -541,9 +544,9 @@ function tip(title,pairs){
  return "<b>"+title+"</b>"+pairs.map(function(p){
   return '<span class="tr'+(p[2]?" hi":"")+'"><i>'+p[0]+'</i><em>'+p[1]+'</em></span>'}).join("");
 }
-function wireTips(el){
+function wireTips(el,sel){
  var tip=el.querySelector(".charttip"); if(!tip)return;
- Array.prototype.forEach.call(el.querySelectorAll(".col"),function(c){
+ Array.prototype.forEach.call(el.querySelectorAll(sel||".col"),function(c){
   c.addEventListener("mouseenter",function(){
    if(!c.dataset.tip)return;
    tip.innerHTML=c.dataset.tip; tip.style.display="block";
@@ -654,11 +657,18 @@ function render(){
  $("r_ceil").textContent=nm(sCeil,2);
  $("r_ceilsub").innerHTML="At <b>"+Math.round(v.baseHrs*eEnd)+" hrs</b>/client. <b>"+nm(sCeil/Math.max(sNow,0.001),1)+"&times;</b> today. ~"+nm(sCeil*Math.max(0,v.retention-v.spread),1)+" live clients.";
  var effs=rows.map(function(r){return r.e});
- $("r_eff").innerHTML=effs.map(function(e){
+ $("r_eff").innerHTML=effs.map(function(e,i){
   var atFloor=e<=v.floor/100+0.001;
-  return '<i class="'+(atFloor?"floor":"")+'" style="height:'+(e*46).toFixed(1)+'px"></i>'}).join("");
- $("r_eff1").textContent="M1 — "+Math.round(v.baseHrs)+" hrs";
- $("r_eff2").textContent="M"+Math.min(v.toFloor+1,M)+" — "+Math.round(v.baseHrs*eEnd)+" hrs · floor";
+  var hrs=v.baseHrs*e, per=sustain(v,e);
+  var t=tip("Month "+(i+1),[["Efficiency",Math.round(e*100)+"%"],
+    ["Hours per onboarding",Math.round(hrs)+" hrs"],
+    ["Onboardings / month",nm(per,2),1],
+    ["From",Math.round(v.hrsMonth)+" hrs available"]]);
+  return '<i class="'+(atFloor?"floor":"")+'" data-tip="'+t.replace(/"/g,"&quot;")+
+   '" style="height:'+(e*46).toFixed(1)+'px"></i>'}).join("")+'<div class="charttip"></div>';
+ wireTips($("r_eff"),"i");
+ $("r_eff1").textContent="M1 \u2014 "+Math.round(v.baseHrs)+" hrs";
+ $("r_eff2").textContent="M"+Math.min(v.toFloor+1,M)+" \u2014 "+Math.round(v.baseHrs*eEnd)+" hrs \u00b7 floor";
 
  // target + funnel
  var tgt=parseFloat($("target").value)||0;
@@ -681,10 +691,13 @@ function render(){
 
  // tiles
  $("tiles").innerHTML=[
-  {k:"Cash / mo",v:money(last.cash)},{k:"Profit / mo",v:money(last.profit)},
-  {k:"MRR",v:money(last.recR)},{k:"Live clients",v:nm(last.live,1)},
-  {k:"Cumulative cash",v:money(last.cum)}
- ].map(function(t){return '<div class="tl"><div class="tlk">'+t.k+'</div><div class="tlv">'+t.v+'</div></div>'}).join("");
+  {k:"Cash / mo",v:money(last.cash)},
+  {k:"Cash less costs",v:money(last.profit),s:"tools only \u2014 no salaries or your own pay"},
+  {k:"MRR",v:money(last.recR)},
+  {k:"Live clients",v:Math.round(last.live)},
+  {k:"Cumulative cash",v:money(last.cum),s:"12 months, all sources"}
+ ].map(function(t){return '<div class="tl"><div class="tlk">'+t.k+'</div><div class="tlv">'+t.v+
+   '</div>'+(t.s?'<div class="tls">'+t.s+'</div>':'')+'</div>'}).join("");
 
  // money chart
  var maxCash=Math.max.apply(null,rows.map(function(r){return r.cash})) || 1;
@@ -815,7 +828,7 @@ function applyPreset(n){
  IDS.forEach(function(i){if(p[i]!==undefined)$(i).value=p[i]});
  $("hrsWeek").value=Math.round(p.hrsMonth/WPM);
  $("target").value=sustain(p,1).toFixed(2);
- document.querySelectorAll(".presets button").forEach(function(b){
+ document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
   b.setAttribute("aria-pressed",b.dataset.preset===n?"true":"false")});
  render();
 }
@@ -846,7 +859,7 @@ $("hrsWeek").addEventListener("input",function(){syncHours("week")});
 $("target").addEventListener("input",render);
 $("matchBtn").addEventListener("click",function(){
  $("target").value=sustain(V(),eff(V(),0)).toFixed(2);render()});
-document.querySelectorAll(".presets button").forEach(function(b){
+document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
  b.addEventListener("click",function(){applyPreset(b.dataset.preset)})});
 
 installTips();
