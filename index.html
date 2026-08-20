@@ -1687,7 +1687,15 @@ function compInto(id,r,v){
     '<div class="fstrip"><span>'+v.diagCommRec+'% of '+money(r.curRec)+'/mo for '+recMonths+' mo</span><b>'+money(dRec)+'</b><i></i></div>'+
     '<div class="fstrip tot"><span>Per deal</span><b>'+money(dUp+dRec)+'</b><i></i></div>'+
     '<div class="strainnum">Closing <b>'+nm(dealsMo,1)+'</b> deals a month at this pace. Each deal is worth <b>'+
-    money(worth)+'</b> to the company, so they keep <b>'+(worth>0?Math.round((dUp+dRec)/worth*100):0)+'%</b> of it.</div>';
+    money(worth)+'</b> to the company, so they keep <b>'+(worth>0?Math.round((dUp+dRec)/worth*100):0)+'%</b> of it.</div>'+
+    (recMonths<v.diagRecMo
+     ? '<p class="note" style="color:var(--crit);margin-top:8px"><b>Only '+recMonths+' of your '+v.diagRecMo+
+       ' commission months can ever pay out.</b> Retention is '+v.retention+' months and the billing window takes '+
+       v.billed+' of them, leaving '+recMonths+' paying months. For the full '+v.diagRecMo+
+       '-month incentive to work, retention has to reach <b>'+(v.billed+v.diagRecMo)+' months</b>. Right now you are '+
+       'asking them to care about a year of retention while only paying them for '+recMonths+'.</p>'
+     : '<p class="note" style="margin-top:8px">The full '+v.diagRecMo+'-month window pays out \u2014 retention of '+
+       v.retention+' months covers the billing window plus all '+v.diagRecMo+' commission months.</p>');
   })();
 }
 function funnelInto(id,first,last,v){
@@ -1924,7 +1932,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0955";
+var BUILD_ID="0820-0959";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
