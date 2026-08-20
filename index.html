@@ -286,6 +286,8 @@ td.pause{color:var(--crit)}
 .ccol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative;cursor:crosshair;min-width:0}
 .ccol:hover{background:rgba(127,184,179,.12)}
 .ccol i{display:block}
+.costmark{position:absolute;left:0;right:0;border-top:2px dashed var(--crit);
+ text-decoration:none;pointer-events:none;z-index:4}
 .cgrp{flex:1;display:flex;align-items:flex-end;gap:2px;height:100%}
 .cgrp i{flex:1}
 .cx{display:flex;gap:3px;padding:5px 3px 0}
@@ -324,6 +326,16 @@ td.pause{color:var(--crit)}
  text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
 .ccv2{font-family:"IBM Plex Mono",monospace;font-size:20px;font-weight:600}
 .ccs2{font-family:"Source Serif 4",Georgia,serif;font-size:11px;color:var(--ink-3);margin-top:6px;line-height:1.4}
+.fstrip{display:flex;align-items:baseline;gap:8px;padding:5px 0;border-bottom:1px solid var(--rule)}
+.fstrip span{flex:1;font-size:12.5px;color:var(--ink-2)}
+.fstrip b{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600}
+.fstrip i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--accent);min-width:44px;text-align:right}
+.strainlbl{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-3);margin:12px 0 5px}
+.strainbar{height:16px;background:var(--sunken);border:1px solid var(--rule-strong)}
+.strainbar i{display:block;height:100%;background:var(--accent)}
+.strainbar i.warm{background:var(--warn)} .strainbar i.hot{background:var(--crit)}
+.strainnum{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-2);margin-top:5px}
 .compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;
  background:var(--rule);border:1px solid var(--rule)}
 .cc{background:var(--surface);padding:14px}
@@ -451,6 +463,11 @@ td.pause{color:var(--crit)}
       <div class="mini"><span>Invites / webinar</span><b id="o_invw"></b></div>
       <div class="mini-s"><div class="mini"><span>Webinars / month</span><b id="o_webinars"></b></div><input type="range" id="webinars" min="1" max="8" step="1"></div>
       <div class="mini-s"><div class="mini"><span>Follow-up uplift</span><b id="o_followup"></b></div><input type="range" id="followup" min="0" max="30" step="1"></div>
+      <div class="mini-s"><div class="mini"><span>Most invites / mo you can send</span><b id="o_maxInv"></b></div>
+        <input type="range" id="maxInv" min="50000" max="2000000" step="50000">
+        <p class="note">The ceiling on demand generation &mdash; list size, sender capacity, whatever binds first.
+          Far right = no limit. If required invites exceed this you become <em>demand</em>-constrained rather than
+          delivery-constrained, and capacity sits idle.</p></div>
       <div class="mini-s"><div class="mini"><span>Queue drop-off</span><b id="o_drop"></b></div><input type="range" id="drop" min="0" max="50" step="1"></div>
     </div></div>
 
@@ -604,6 +621,9 @@ td.pause{color:var(--crit)}
         <div class="mini-s"><div class="mini"><span>Trigger: months maxed</span><b id="o_trigM2"></b></div>
           <p class="note">Set on tab 1 &mdash; it decides where phase 1 ends and phase 2 begins.</p></div>
       </div></div>
+      <div class="box"><div class="box-h"><span class="box-t">Funnel strain</span>
+        <span class="box-s">what feeding this needs</span></div>
+        <div class="box-b" id="funnel2"></div></div>
       <div class="box"><div class="box-h"><span class="box-t">Carried from phase 1</span></div>
         <div class="box-b" id="carry2"></div></div>
     </div>
@@ -649,6 +669,9 @@ td.pause{color:var(--crit)}
           <input type="range" id="targetReps" min="1" max="6" step="1">
           <p class="note">The timeline runs as long as it takes to get here.</p></div>
       </div></div>
+      <div class="box"><div class="box-h"><span class="box-t">Funnel strain</span>
+        <span class="box-s">what feeding this needs</span></div>
+        <div class="box-b" id="funnel3"></div></div>
       <div class="box"><div class="box-h"><span class="box-t">Your calendar</span></div><div class="box-b">
         <div class="mini-s"><div class="mini"><span>Solo &mdash; audits / wk</span><b id="o_auditCap2"></b></div>
           <input type="range" id="auditCap2" min="1" max="12" step="1" disabled>
@@ -858,7 +881,7 @@ var P={
    auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,expansion:0,
    auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
    repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0,
-   mgrPer:5,mgrCost:10000},
+   mgrPer:5,mgrCost:10000,maxInv:1500000},
  base:{hrsMonth:200,baseHrs:85,spread:3,upkeep:10,qThresh:2,floor:38,toFloor:9,
    attRate:0.20,auditConv:5,closeRate:35,webinars:4,followup:12,drop:10,
    auditPrice:897,upfront:20000,recurring:3500,billed:3,retention:12,expansion:0,
@@ -872,7 +895,7 @@ var P={
 };
 var IDS=["hrsMonth","baseHrs","spread","upkeep","qThresh","floor","toFloor",
  "attRate","auditConv","closeRate","webinars","followup","drop","auditPrice","upfront",
- "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","repAud","repClose","repRamp","comm","targetReps","myAud1","myAud2","mgrPer","mgrCost"];
+ "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","repAud","repClose","repRamp","comm","targetReps","myAud1","myAud2","mgrPer","mgrCost","maxInv"];
 
 function money(n){var a=Math.abs(n);
  if(a>=1e6)return (n<0?"-":"")+"$"+(a/1e6).toFixed(2)+"M";
@@ -881,6 +904,7 @@ function money(n){var a=Math.abs(n);
 function money0(n){return "$"+Math.round(n).toLocaleString("en-US")}
 function nm(n,d){return Number(n).toFixed(d===undefined?2:d)}
 function ic(n){return Math.round(n).toLocaleString("en-US")}
+var intc=ic;
 function kf(n){return n>=1000?Math.round(n/1000)+"k":String(Math.round(n))}
 
 function V(){var v={};IDS.forEach(function(i){v[i]=parseFloat($(i).value)});return v}
@@ -928,7 +952,10 @@ function fullSim(v){
   var sustain_=sustainCap(v,e,cap);
   var blended=(mine+repWk)>0 ? (mine*myClose+repWk*repCloseR)/(mine+repWk) : myClose;
   var auditsNeeded=blended>0 ? sustain_/blended : 0;
-  var audits=Math.min(audCapMo,auditsNeeded);
+  var perAudit=(v.attRate/100)*(v.auditConv/100)*(1+v.followup/100); // audits per invite sent
+  var auditsFromInvites=v.maxInv*perAudit;
+  var audits=Math.min(audCapMo,auditsNeeded,auditsFromInvites);
+  var inviteBound=(auditsFromInvites<Math.min(audCapMo,auditsNeeded)-0.001);
   var myAudits=audCapMo>0?audits*(mine*WPM/Math.max(audCapMo,0.0001)):audits;
   var repAudits=audits-myAudits;
   var won=myAudits*myClose+repAudits*repCloseR+live*(v.expansion/100);
@@ -955,6 +982,8 @@ function fullSim(v){
    commission:commission,payroll:payroll,net:net,
    delTeam:del.filter(function(h){return m>=h.m}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
    mgrTeam:mgrTeam, mgrCost:mgrTeam*v.mgrCost, delCost:del.filter(function(h){return m>=h.m}).length*v.hireCost,
+   invitesNeeded:perAudit>0?audits/perAudit:0, inviteBound:inviteBound,
+   inviteCeil:v.maxInv, auditsWanted:auditsNeeded,
    myWk:mine, repWk:repWk, auditsWk:audits/WPM, atFloor:e<=v.floor/100+0.001,
    maxStarts:sustainCap(v,e,cap)});
 
@@ -1020,6 +1049,7 @@ function lbl(id,v){switch(id){
  case "myAud2":return nm(v.myAud2,1)+"/wk";
  case "mgrPer":return "every "+v.mgrPer;
  case "mgrCost":return money0(v.mgrCost);
+ case "maxInv":return v.maxInv>=2000000?"no limit":intc(v.maxInv);
 } return String(v[id])}
 
 function tip(title,pairs){
@@ -1392,7 +1422,10 @@ function drawChart(el,cfg){
    var h=se.get(r)/max*170;
    return h<=0&&!cfg.grouped?"":'<i style="height:'+Math.max(h,0).toFixed(1)+'px;background:'+se.color+'"></i>';
   }).join("");
-  return '<div class="ccol" data-i="'+i+'">'+(cfg.grouped?'<div class="cgrp">'+inner+'</div>':inner)+'</div>';
+  var costm="";
+  if(cfg.costGet){var cv=cfg.costGet(r);
+   if(cv>0)costm='<u class="costmark" style="bottom:'+(cv/max*170).toFixed(1)+'px"></u>'}
+  return '<div class="ccol" data-i="'+i+'">'+(cfg.grouped?'<div class="cgrp">'+inner+'</div>':inner)+costm+'</div>';
  }).join("");
  var capline=cfg.capGet?'<div class="cline" style="bottom:'+(cfg.capGet(cfg.rows[n-1])/max*170).toFixed(1)+'px"></div>':"";
  var mk=(cfg.marks||[]).filter(function(k){return k.i>=0&&k.i<n});
@@ -1410,6 +1443,7 @@ function drawChart(el,cfg){
   '</div><div class="cxt">X \u2014 month</div></div></div><div class="clegend">'+
   cfg.series.map(function(se){return '<span><i style="background:'+se.color+'"></i>'+se.label+'</span>'}).join("")+
   (cfg.capLabel?'<span><i style="background:var(--crit)"></i>'+cfg.capLabel+'</span>':"")+
+  (cfg.costLabel?'<span><i style="border-top:2px dashed var(--crit);height:0;margin-bottom:4px"></i>'+cfg.costLabel+'</span>':"")+
   ((cfg.marks||[]).length?'<span><i style="background:var(--warn)"></i>Hire lands</span>':"")+'</div>';
  var tip=el.querySelector(".ctip"), plot=el.querySelector(".cbars");
  Array.prototype.forEach.call(el.querySelectorAll(".ccol"),function(c){
@@ -1433,6 +1467,7 @@ var CV=function(x){return getComputedStyle(document.documentElement).getProperty
 
 function moneyChart(sel,rows,rngId){
  if(rngId&&$(rngId))$(rngId).textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
+ var anyCost=rows.some(function(r){return (r.payroll+r.commission)>0});
  drawChart(document.querySelector(sel),{
   y:"dollars collected in month", rows:rows,
   max:Math.max.apply(null,rows.map(function(r){return r.cash}))*1.12||1,
@@ -1440,9 +1475,14 @@ function moneyChart(sel,rows,rngId){
   series:[{label:"Recurring",color:CV("--accent-2"),get:function(r){return r.recR}},
           {label:"Upfront",color:CV("--accent"),get:function(r){return r.upR}},
           {label:"Audit fees",color:CV("--warn"),get:function(r){return r.auditRev}}],
-  tip:function(r){return [["Audit fees",money(r.auditRev)],["Upfront",money(r.upR)],
-   ["Recurring",money(r.recR)],["Total cash",money(r.cash),1],
-   ["Commission",money(-r.commission)],["Payroll",money(-r.payroll)],["Net",money(r.net),1]]}});
+  costGet:anyCost?function(r){return r.payroll+r.commission}:null,
+  costLabel:anyCost?"Costs out \u2014 bar above the line is margin":null,
+  tip:function(r){var c=r.payroll+r.commission;
+   return [["Audit fees",money(r.auditRev)],["Upfront",money(r.upR)],["Recurring",money(r.recR)],
+   ["Total cash",money(r.cash),1],
+   ["Delivery payroll",money(-r.delCost)],["Manager payroll",money(-r.mgrCost)],
+   ["Commission",money(-r.commission)],["Total costs",money(-c),1],
+   ["Margin",money(r.net)+"  ("+(r.cash>0?Math.round(r.net/r.cash*100):0)+"%)"]]}});
 }
 function loadChart(sel,rows,rngId,marks){
  if(rngId&&$(rngId))$(rngId).textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
@@ -1473,7 +1513,7 @@ function acqChart(sel,rows,rngId,withRep){
    ["\u2014 yours",Math.floor(r.myAudits)],["\u2014 reps",Math.floor(r.repAudits)],
    ["Deals closed",Math.floor(r.won),1],["Net new clients",r.starts],
    ["Queue waiting",Math.floor(r.queue)],
-   ["Invites needed",r.audits>0?kf(r.audits/((v_.auditConv/100)*(1+v_.followup/100))/(v_.attRate/100)):"0"]]}});
+   ["Invites needed",kf(r.invitesNeeded)],["Demand-capped",r.inviteBound?"yes":"no"]]}});
 }
 var v_={};
 function headChart(sel,rows,rngId,marks){
@@ -1489,6 +1529,25 @@ function headChart(sel,rows,rngId,marks){
   tip:function(r){return [["Delivery hires",r.delTeam],["Managers",r.mgrTeam],["Sales reps",r.repTeam],
    ["Total hired",r.delTeam+r.mgrTeam+r.repTeam,1],["Net new clients",r.starts],
    ["Active clients",Math.round(r.live)],["Payroll",money(-r.payroll)]]}});
+}
+function funnelInto(id,first,last,v){
+ var el=$(id); if(!el)return;
+ var att=function(r){var d=(v.auditConv/100)*(1+v.followup/100); return d>0?r.audits/d:0};
+ var strain=last.inviteCeil>0?Math.min(100,last.invitesNeeded/last.inviteCeil*100):0;
+ var grew=function(a,b){return b>a?("+"+Math.round((b/Math.max(a,0.0001)-1)*100)+"%"):"\u2014"};
+ el.innerHTML=
+  '<div class="fstrip"><span>Invites / mo</span><b>'+intc(last.invitesNeeded)+'</b><i>'+grew(first.invitesNeeded,last.invitesNeeded)+'</i></div>'+
+  '<div class="fstrip"><span>&hellip; per webinar</span><b>'+intc(last.invitesNeeded/Math.max(v.webinars,1))+'</b><i></i></div>'+
+  '<div class="fstrip"><span>Quality attendees</span><b>'+intc(att(last))+'</b><i>'+grew(att(first),att(last))+'</i></div>'+
+  '<div class="fstrip"><span>Audits sold</span><b>'+nm(last.audits,1)+'</b><i>'+grew(first.audits,last.audits)+'</i></div>'+
+  '<div class="fstrip"><span>Deals closed</span><b>'+nm(last.won,1)+'</b><i>'+grew(first.won,last.won)+'</i></div>'+
+  '<div class="strainlbl">Invite capacity used</div>'+
+  '<div class="strainbar"><i style="width:'+strain.toFixed(0)+'%" class="'+(strain>90?"hot":(strain>65?"warm":""))+'"></i></div>'+
+  '<div class="strainnum">'+intc(last.invitesNeeded)+' of '+(v.maxInv>=2000000?"unlimited":intc(v.maxInv))+
+   ' \u2014 <b>'+strain.toFixed(0)+'%</b></div>'+
+  (last.inviteBound
+   ? '<p class="note" style="color:var(--crit)"><b>Demand-constrained.</b> You cannot send enough invites to feed delivery, so capacity is sitting idle. Raise the invite ceiling, run more webinars, or improve a conversion rate.</p>'
+   : '<p class="note">Delivery is still the binding constraint &mdash; the funnel can supply what capacity can absorb.</p>');
 }
 function costLine(r){
  var parts=[];
@@ -1516,6 +1575,7 @@ function renderPhases(){
    '<div class="mini"><span>Live clients at start</span><b>'+Math.round(f1.live)+'</b></div>'+
    '<p class="note">Locked at whatever phase 1 ended on. Change anything on tab 1 and every later phase moves.</p>';
 
+ funnelInto("funnel2",s2[0],last2,v);
  tilesInto("tiles2",[
   {k:"Net new clients / mo",v:String(last2.starts),s:"was "+f1.starts+" at end of phase 1"},
   {k:"Max possible / mo",v:nm(last2.maxStarts,2),s:"what this capacity allows"},
@@ -1554,6 +1614,7 @@ function renderPhases(){
  if($("o_auditCap2")){$("o_auditCap2").textContent=String(v.auditCap);$("auditCap2").value=v.auditCap}
  if($("repCloseNote"))$("repCloseNote").innerHTML="You close at "+v.closeRate+"%, so a rep closes at "+
   nm(v.closeRate*v.repClose/100,1)+"%.";
+ funnelInto("funnel3",s3[0],last3,v);
  tilesInto("tiles3",[
   {k:"Net new clients / mo",v:String(last3.starts),s:"onboarded in month "+last3.m},
   {k:"Max possible / mo",v:nm(last3.maxStarts,2),s:"what this capacity allows"},
@@ -1622,13 +1683,16 @@ function renderPhases(){
   series:[{label:"Recurring",color:CV("--accent-2"),get:function(r){return r.recR}},
           {label:"Upfront",color:CV("--accent"),get:function(r){return r.upR}},
           {label:"Audit fees",color:CV("--warn"),get:function(r){return r.auditRev}}],
+  costGet:function(r){return r.payroll+r.commission},
+  costLabel:"Costs out \u2014 bar above the line is margin",
   marks:F.delHires.map(function(h){return {i:h.m-1,label:"+1 delivery"}})
         .concat(F.repHires.map(function(rm,i){return {i:rm-1,label:"+1 rep"}}))
         .concat(F.mgrHires.map(function(mm){return {i:mm-1,label:"+1 manager"}})),
   tip:function(r){return [["Phase",r.m<=f1.m?"1 \u00b7 Startup":(r.m<=last2.m?"2 \u00b7 Scale delivery":"3 \u00b7 Scale sales")],
    ["Net new clients",r.starts],["Active clients",Math.round(r.live)],
    ["People hired",r.delTeam+" delivery, "+r.repTeam+" sales"],
-   ["Cash / mo",money(r.cash),1],["Net / mo",money(r.net)]]}});
+   ["Cash / mo",money(r.cash),1],["Total costs",money(-(r.payroll+r.commission))],
+   ["Net / mo",money(r.net)+"  ("+(r.cash>0?Math.round(r.net/r.cash*100):0)+"%)",1]]}});
  moneyChart('[data-chart="money4"]',R,null);
  loadChart('[data-chart="load4"]',R,"rng4l",
   F.delHires.map(function(h){return {i:h.m-1,label:"+1 delivery"}}));
@@ -1678,7 +1742,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0042";
+var BUILD_ID="0820-0048";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
