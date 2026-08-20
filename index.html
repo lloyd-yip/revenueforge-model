@@ -33,7 +33,11 @@ h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin
 .presets button[aria-pressed="true"]{background:var(--ink);color:var(--ground);font-weight:500}
 .presets button:hover{background:var(--surface-2);color:var(--ink)}
 .presets button[aria-pressed="true"]:hover{background:var(--ink);color:var(--ground)}
-#resetBtn{color:var(--ink-3)}
+#resetBtn,#latestBtn{color:var(--ink-3)}
+#latestBtn.stale{background:var(--warn);color:#fff;border-color:var(--warn)}
+.build{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.1em;
+ text-transform:uppercase;color:var(--ink-3);align-self:center;margin-left:12px;opacity:.7}
+.build.stale{color:var(--warn);opacity:1}
 .saved{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;
  text-transform:uppercase;color:var(--accent);opacity:0;transition:opacity .3s;
  align-self:center;margin-left:10px}
@@ -269,7 +273,8 @@ td.pause{color:var(--crit)}
     <button type="button" data-preset="base" aria-pressed="false">Base</button>
     <button type="button" data-preset="agg" aria-pressed="false">Aggressive</button>
     <button type="button" id="resetBtn" title="Discard saved changes and reload the preset">Reset</button>
-  </div><span class="saved" id="savedTag">saved</span></div>
+    <button type="button" id="latestBtn" title="Force-fetch the newest deployed version, bypassing the browser cache">&#8635; Latest</button>
+  </div><span class="saved" id="savedTag">saved</span><span class="build" id="buildTag"></span></div>
 </div>
 
 <div class="tabs" role="tablist">
@@ -1076,6 +1081,27 @@ function showTab(name){
 }
 $("tab-model").addEventListener("click",function(){showTab("model")});
 $("tab-ideas").addEventListener("click",function(){showTab("ideas")});
+
+var BUILD_ID="0819-2349";
+$("buildTag").textContent="build "+BUILD_ID;
+$("latestBtn").addEventListener("click",function(){
+ location.replace(location.pathname+"?v="+Date.now()+location.hash);
+});
+// quietly check whether a newer build has been deployed
+if(BUILD_ID.indexOf("__")!==0){
+ setTimeout(function(){
+  fetch(location.pathname+"?cb="+Date.now(),{cache:"no-store"}).then(function(r){return r.text()})
+   .then(function(t){
+    var m=t.match(/BUILD_ID="0819-2349"]+)"/);
+    if(m&&m[1]!==BUILD_ID){
+     $("latestBtn").classList.add("stale");
+     $("latestBtn").textContent="\u21bb New version";
+     $("buildTag").classList.add("stale");
+     $("buildTag").textContent="build "+BUILD_ID+" \u00b7 newer available";
+    }
+   }).catch(function(){});
+ },1500);
+}
 
 applyPreset("cons");
 if(restore()){render()}
