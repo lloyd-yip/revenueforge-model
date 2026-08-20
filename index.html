@@ -214,6 +214,11 @@ input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:3
 .datarow.k1 .rv span{color:var(--warn)}
 .datarow.k2 .rv span{color:var(--accent)}
 .datarow.k3 .rv span{color:var(--ink-2);font-weight:500;font-size:10px}
+.datarow.kcap .rv span{font-size:10px;font-weight:700;color:var(--ink-3)}
+.datarow.kcap .rv span.yes{color:var(--crit)}
+.trignote{border-left:3px solid var(--warn);background:var(--warn-soft);padding:11px 14px;margin-top:12px;
+ font-family:"Source Serif 4",Georgia,serif;font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.trignote b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink)}
 .charttip{display:none;position:absolute;bottom:calc(100% + 10px);z-index:40;width:204px;
  background:var(--ink);color:var(--ground);padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.4);
  font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.5;pointer-events:none;
@@ -281,6 +286,8 @@ td.pause{color:var(--crit)}
 .ccol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative;cursor:crosshair;min-width:0}
 .ccol:hover{background:rgba(127,184,179,.12)}
 .ccol i{display:block}
+.cgrp{flex:1;display:flex;align-items:flex-end;gap:2px;height:100%}
+.cgrp i{flex:1}
 .cx{display:flex;gap:3px;padding:5px 3px 0}
 .cx span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:9px;
  font-weight:500;color:var(--ink-2);white-space:nowrap;overflow:hidden;min-width:0}
@@ -356,7 +363,7 @@ td.pause{color:var(--crit)}
         <div class="capv" id="r_now">&mdash;</div><div class="capsub" id="r_nowsub"></div></div>
       <div class="capcell"><div class="capk">Two-person ceiling</div>
         <div class="capv" id="r_ceil">&mdash;</div><div class="capsub" id="r_ceilsub"></div></div>
-      <div class="capcell"><div class="capk">Efficiency over 12 months &middot; hover a month</div>
+      <div class="capcell"><div class="capk">Efficiency &middot; <span id="rngEff"></span> &middot; hover a month</div>
         <div class="effcurve" id="r_eff"></div>
         <div class="efflbl"><span id="r_eff1"></span><span id="r_eff2"></span></div>
         <div class="capsub">Red = process gains exhausted. Past there, only more hours move the number.</div></div>
@@ -453,10 +460,10 @@ td.pause{color:var(--crit)}
 
   <div>
     <div class="box"><div class="box-h"><span class="box-n">04</span><span class="box-t">What it produces</span>
-      <span class="box-s">month 12 &middot; cash in, before any costs</span></div>
+      <span class="box-s"><span id="rngProd"></span> &middot; cash in, before any costs</span></div>
       <div class="tiles" id="tiles"></div></div>
 
-    <div class="box"><div class="box-h"><span class="box-n">05</span><span class="box-t">Money &mdash; 12 months</span>
+    <div class="box"><div class="box-h"><span class="box-n">05</span><span class="box-t">Money &mdash; <span id="rngMoney"></span></span>
       <span class="box-s">cash collected per month &middot; hover any month</span></div>
       <div class="box-b">
         <div class="axttl">Y &mdash; dollars collected in month</div>
@@ -476,7 +483,7 @@ td.pause{color:var(--crit)}
         </div>
       </div></div>
 
-    <div class="box"><div class="box-h"><span class="box-n">06</span><span class="box-t">Delivery load &mdash; 12 months</span>
+    <div class="box"><div class="box-h"><span class="box-n">06</span><span class="box-t">Delivery load &mdash; <span id="rngLoad"></span></span>
       <span class="box-s">hours consumed against hours available &middot; hover any month</span></div>
       <div class="box-b">
         <div class="axttl">Y &mdash; delivery hours consumed</div>
@@ -490,6 +497,9 @@ td.pause{color:var(--crit)}
         <div class="datarow k2"><div class="rk">Clients<br>onboarded</div><div class="rv" id="lRow1"></div></div>
         <div class="datarow k3"><div class="rk">Hours<br>used</div><div class="rv" id="lRow2"></div></div>
         <div class="datarow k3"><div class="rk">Hours<br>free</div><div class="rv" id="lRow3"></div></div>
+        <div class="datarow k3"><div class="rk">Needed to<br>start one</div><div class="rv" id="lRow4"></div></div>
+        <div class="datarow kcap"><div class="rk">At<br>capacity</div><div class="rv" id="lRow5"></div></div>
+        <div class="trignote" id="trigNote"></div>
         <div class="legend">
           <span><i style="background:var(--accent)"></i>Onboarding</span>
           <span><i style="background:var(--accent-2)"></i>Steady-state</span>
@@ -497,7 +507,7 @@ td.pause{color:var(--crit)}
         </div>
       </div></div>
 
-    <div class="box"><div class="box-h"><span class="box-n">07</span><span class="box-t">Acquisition &mdash; 12 months</span>
+    <div class="box"><div class="box-h"><span class="box-n">07</span><span class="box-t">Acquisition &mdash; <span id="rngAcq"></span></span>
       <span class="box-s">throttled to what delivery can absorb &middot; hover any month &middot; whole numbers, rounded down</span></div>
       <div class="box-b">
         <div class="axttl">Y &mdash; audits run and deals closed per month</div>
@@ -583,7 +593,15 @@ td.pause{color:var(--crit)}
         <span class="box-t">Capacity &amp; headcount</span><span class="box-s">hires step the ceiling up &middot; hover any month</span></div>
         <div class="box-b"><div class="chartbox" data-chart="cap2"></div>
           <div class="wall" id="wall2"></div></div></div>
-      <div class="box"><div class="box-h"><span class="box-n">02</span><span class="box-t">Month by month</span></div>
+      <div class="box"><div class="box-h"><span class="box-n">02</span>
+        <span class="box-t">Money &mdash; <span id="rng2m"></span></span>
+        <span class="box-s">cash collected per month &middot; hover any month</span></div>
+        <div class="box-b"><div class="chartbox" data-chart="money2"></div></div></div>
+      <div class="box"><div class="box-h"><span class="box-n">03</span>
+        <span class="box-t">Acquisition &mdash; <span id="rng2a"></span></span>
+        <span class="box-s">audits run and deals closed &middot; hover any month</span></div>
+        <div class="box-b"><div class="chartbox" data-chart="acq2"></div></div></div>
+      <div class="box"><div class="box-h"><span class="box-n">04</span><span class="box-t">Month by month</span></div>
         <div class="tw"><table><thead id="th2"></thead><tbody id="tb2"></tbody></table></div></div>
     </div>
   </div>
@@ -629,10 +647,22 @@ td.pause{color:var(--crit)}
         <span class="box-t">Headcount</span><span class="box-s">hover any month</span></div>
         <div class="box-b"><div class="chartbox" data-chart="head3"></div></div></div>
       <div class="box"><div class="box-h"><span class="box-n">02</span>
+        <span class="box-t">Money &mdash; <span id="rng3m"></span></span>
+        <span class="box-s">cash collected per month &middot; hover any month</span></div>
+        <div class="box-b"><div class="chartbox" data-chart="money3"></div></div></div>
+      <div class="box"><div class="box-h"><span class="box-n">03</span>
+        <span class="box-t">Delivery load &mdash; <span id="rng3l"></span></span>
+        <span class="box-s">hours consumed against hours available &middot; hover any month</span></div>
+        <div class="box-b"><div class="chartbox" data-chart="load3"></div></div></div>
+      <div class="box"><div class="box-h"><span class="box-n">04</span>
+        <span class="box-t">Acquisition &mdash; <span id="rng3a"></span></span>
+        <span class="box-s">your audits, rep audits and deals closed &middot; hover any month</span></div>
+        <div class="box-b"><div class="chartbox" data-chart="acq3"></div></div></div>
+      <div class="box"><div class="box-h"><span class="box-n">05</span>
         <span class="box-t">Is the next rep worth it?</span></div>
         <div class="box-b"><div class="compare" id="cmp3"></div>
           <div class="wall" id="wall3"></div></div></div>
-      <div class="box"><div class="box-h"><span class="box-n">03</span><span class="box-t">Month by month</span></div>
+      <div class="box"><div class="box-h"><span class="box-n">06</span><span class="box-t">Month by month</span></div>
         <div class="tw"><table><thead id="th3"></thead><tbody id="tb3"></tbody></table></div></div>
     </div>
   </div>
@@ -826,7 +856,7 @@ function lifetimeHrs(v,e){
 function sustain(v,e){var L=lifetimeHrs(v,e);return L>0?v.hrsMonth/L:0}
 
 function fullSim(v){
- var MAXM=140, rows=[], cohorts=[], queue=0, del=[], reps=[], maxedRun=0;
+ var MAXM=140, rows=[], cohorts=[], queue=0, del=[], reps=[], maxedRun=0, cum=0;
  var p1End=null, p2End=null, p3End=null;
  for(var m=0;m<MAXM;m++){
   var e=eff(v,m), onbTotal=v.baseHrs*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
@@ -876,19 +906,24 @@ function fullSim(v){
   var cash=auditRev+upR+recR;
   var commission=repAudits*repCloseR*v.upfront*(v.comm/100);
   var payroll=del.filter(function(hm){return m>=hm}).length*v.hireCost;
-  var net=cash-commission-payroll;
+   var net=cash-commission-payroll;
 
-  rows.push({m:m+1,e:e,onbTotal:onbTotal,cap:cap,load:load,free:free,onbHrs:onbHrs,styHrs:styHrs,
+  cum+=cash;
+  rows.push({m:m+1,e:e,onbTotal:onbTotal,onbPerMo:onbPerMo,cap:cap,load:load,free:free,cum:cum,onbHrs:onbHrs,styHrs:styHrs,
    audits:audits,myAudits:myAudits,repAudits:repAudits,won:won,starts:starts,queue:queue,
    live:live,paying:paying,auditRev:auditRev,upR:upR,recR:recR,cash:cash,
    commission:commission,payroll:payroll,net:net,
    delTeam:del.filter(function(hm){return m>=hm}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
-   myWk:mine, repWk:repWk, auditsWk:audits/WPM, atFloor:e<=v.floor/100+0.001});
+   myWk:mine, repWk:repWk, auditsWk:audits/WPM, atFloor:e<=v.floor/100+0.001,
+   maxStarts:sustainCap(v,e,cap)});
 
   // ---- triggers ----
+  // "at capacity" = not enough free hours to START another client, not zero hours left
   var maxed=free<onbPerMo*0.999;
   maxedRun=maxed?maxedRun+1:0;
   var atFloor=e<=v.floor/100+0.001;
+  rows[rows.length-1].maxed=maxed;
+  rows[rows.length-1].maxedRun=maxedRun;
 
   if(maxedRun>=v.trigM && atFloor && queue>0.5){
    if(p1End===null)p1End=m;
@@ -1059,6 +1094,12 @@ function render(){
  $("r_nowsub").innerHTML="<b>"+Math.round(v.baseHrs)+" hrs</b> per client today \u2014 70 technical, 30 human contact.";
  $("r_ceil").textContent=nm(sCeil,2);
  $("r_ceilsub").innerHTML="At <b>"+Math.round(v.baseHrs*eEnd)+" hrs</b>/client. <b>"+nm(sCeil/Math.max(sNow,0.001),1)+"&times;</b> today. ~"+nm(sCeil*Math.max(0,v.retention-v.spread),1)+" live clients.";
+ var _rr=(rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014");
+ ["rngMoney","rngLoad","rngAcq","rngEff"].forEach(function(id){if($(id))$(id).textContent=_rr});
+ if($("rngProd"))$("rngProd").textContent="month "+(rows.length?rows[rows.length-1].m:0);
+ var _rr=(rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014");
+ ["rngMoney","rngLoad","rngAcq","rngEff"].forEach(function(id){if($(id))$(id).textContent=_rr});
+ if($("rngProd"))$("rngProd").textContent="month "+(rows.length?rows[rows.length-1].m:0);
  var effs=rows.map(function(r){return r.e});
  $("r_eff").innerHTML=effs.map(function(e,i){
   var atFloor=e<=v.floor/100+0.001;
@@ -1115,8 +1156,9 @@ function render(){
   {k:"Cash / mo",v:money(last.cash)},
   {k:"MRR",v:money(last.recR),s:"recurring only"},
   {k:"Live clients",v:Math.round(last.live)},
-  {k:"Clients started",v:String(rows.reduce(function(a,r){return a+r.starts},0)),s:"over 12 months"},
-  {k:"Cumulative cash",v:money(last.cum),s:"12 months, all sources"}
+  {k:"Clients started",v:String(rows.reduce(function(a,r){return a+r.starts},0)),
+   s:"over "+rows.length+" months"},
+  {k:"Max starts / mo",v:nm(last.maxStarts,2),s:"what current capacity allows"}
  ].map(function(t){return '<div class="tl"><div class="tlk">'+t.k+'</div><div class="tlv">'+t.v+
    '</div>'+(t.s?'<div class="tls">'+t.s+'</div>':'')+'</div>'}).join("");
 
@@ -1148,6 +1190,16 @@ function render(){
  row($("lRow1"),rows.map(function(r){return String(r.starts)}));
  row($("lRow2"),rows.map(function(r){return Math.round(r.load)}));
  row($("lRow3"),rows.map(function(r){return Math.round(r.free)}));
+ row($("lRow4"),rows.map(function(r){return Math.round(r.onbPerMo)}));
+ $("lRow5").innerHTML=rows.map(function(r){
+  return '<span class="'+(r.maxed?"yes":"")+'">'+(r.maxed?"FULL":"\u00b7")+'</span>'}).join("");
+ var _lr=rows[rows.length-1], _ff=null;
+ rows.forEach(function(r){if(r.maxed&&_ff===null)_ff=r.m});
+ $("trigNote").innerHTML="<b>At capacity</b> means there are not enough free hours to <em>start</em> another client "+
+  "\u2014 not that free hours are zero. A client needs <b>"+Math.round(_lr.onbPerMo)+" hrs</b> in its first month, "+
+  "so anything below that is slack you cannot use."+(_ff!==null?" First full month: <b>M"+_ff+"</b>.":"")+
+  " Phase 1 ends once you have been full for <b>"+v.trigM+"</b> month"+(v.trigM===1?"":"s")+
+  " running <em>and</em> efficiency has bottomed out \u2014 here that lands at <b>M"+_lr.m+"</b>.";
 
  // acquisition chart
  var maxAcq=niceMax(Math.max.apply(null,rows.map(function(r){return r.audits})));
@@ -1290,9 +1342,12 @@ function drawChart(el,cfg){
  if(!el)return; var n=cfg.rows.length; if(!n){el.innerHTML="";return}
  var max=cfg.max||1;
  var bars=cfg.rows.map(function(r,i){
-  return '<div class="ccol" data-i="'+i+'">'+cfg.series.map(function(se){
-   var h=se.get(r)/max*170; return h<=0?"":'<i style="height:'+h.toFixed(1)+'px;background:'+se.color+'"></i>';
-  }).join("")+'</div>'}).join("");
+  var inner=cfg.series.map(function(se){
+   var h=se.get(r)/max*170;
+   return h<=0&&!cfg.grouped?"":'<i style="height:'+Math.max(h,0).toFixed(1)+'px;background:'+se.color+'"></i>';
+  }).join("");
+  return '<div class="ccol" data-i="'+i+'">'+(cfg.grouped?'<div class="cgrp">'+inner+'</div>':inner)+'</div>';
+ }).join("");
  var capline=cfg.capGet?'<div class="cline" style="bottom:'+(cfg.capGet(cfg.rows[n-1])/max*170).toFixed(1)+'px"></div>':"";
  var marks=(cfg.marks||[]).filter(function(k){return k.i>=0&&k.i<n}).map(function(k){
   return '<div class="cmark" style="left:'+((k.i+0.5)/n*100).toFixed(2)+'%"><em>'+k.label+'</em></div>'}).join("");
@@ -1325,8 +1380,55 @@ function tableInto(thId,tbId,cols,rows){
   return "<td>"+c.f(r)+"</td>"}).join("")+"</tr>"}).join("")}
 var CV=function(x){return getComputedStyle(document.documentElement).getPropertyValue(x).trim()};
 
+
+function moneyChart(sel,rows,rngId){
+ if(rngId&&$(rngId))$(rngId).textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
+ drawChart(document.querySelector(sel),{
+  y:"dollars collected in month", rows:rows,
+  max:Math.max.apply(null,rows.map(function(r){return r.cash}))*1.12||1,
+  fmt:function(x){return money(x)},
+  series:[{label:"Recurring",color:CV("--accent-2"),get:function(r){return r.recR}},
+          {label:"Upfront",color:CV("--accent"),get:function(r){return r.upR}},
+          {label:"Audit fees",color:CV("--warn"),get:function(r){return r.auditRev}}],
+  tip:function(r){return [["Audit fees",money(r.auditRev)],["Upfront",money(r.upR)],
+   ["Recurring",money(r.recR)],["Total cash",money(r.cash),1],
+   ["Commission",money(-r.commission)],["Payroll",money(-r.payroll)],["Net",money(r.net),1]]}});
+}
+function loadChart(sel,rows,rngId,marks){
+ if(rngId&&$(rngId))$(rngId).textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
+ drawChart(document.querySelector(sel),{
+  y:"delivery hours consumed", rows:rows,
+  max:Math.max.apply(null,rows.map(function(r){return Math.max(r.cap,r.load)}))*1.15||1,
+  fmt:function(x){return Math.round(x)},
+  series:[{label:"Steady-state",color:CV("--accent-2"),get:function(r){return r.styHrs}},
+          {label:"Onboarding",color:CV("--accent"),get:function(r){return r.onbHrs}}],
+  capGet:function(r){return r.cap}, capLabel:"Hours available", marks:marks||[],
+  tip:function(r){return [["Clients started",r.starts],["Delivery team",r.delTeam],
+   ["Hours used",Math.round(r.load)+" / "+Math.round(r.cap),1],["Hours free",Math.round(r.free)],
+   ["Needed to start one",Math.round(r.onbPerMo)],["At capacity",r.maxed?"yes":"no"],
+   ["Live clients",Math.round(r.live)]]}});
+}
+function acqChart(sel,rows,rngId,withRep){
+ if(rngId&&$(rngId))$(rngId).textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
+ var se=[{label:"Audits run",color:CV("--warn"),get:function(r){return r.audits}},
+         {label:"Deals closed",color:CV("--accent"),get:function(r){return r.won}}];
+ if(withRep)se=[{label:"Your audits",color:CV("--warn"),get:function(r){return r.myAudits}},
+                {label:"Rep audits",color:CV("--accent-3"),get:function(r){return r.repAudits}},
+                {label:"Deals closed",color:CV("--accent"),get:function(r){return r.won}}];
+ drawChart(document.querySelector(sel),{
+  y:"audits run and deals closed per month", rows:rows, grouped:true,
+  max:Math.max.apply(null,rows.map(function(r){return r.audits}))*1.15||1,
+  fmt:function(x){return Math.round(x)}, series:se,
+  tip:function(r){return [["Audits run",Math.floor(r.audits)],
+   ["\u2014 yours",Math.floor(r.myAudits)],["\u2014 reps",Math.floor(r.repAudits)],
+   ["Deals closed",Math.floor(r.won),1],["Clients started",r.starts],
+   ["Queue waiting",Math.floor(r.queue)],
+   ["Invites needed",r.audits>0?kf(r.audits/((v_.auditConv/100)*(1+v_.followup/100))/(v_.attRate/100)):"0"]]}});
+}
+var v_={};
+
 function renderPhases(){
- var v=V(), F=fullSim(v), R=F.rows; if(!R.length)return;
+ var v=V(), F=fullSim(v), R=F.rows; if(!R.length)return; v_=v;
  if($("o_trigM2"))$("o_trigM2").textContent=v.trigM+" mo";
  var s1=R.slice(0,F.p1End+1), s2=R.slice(F.p1End,F.p2End+1), s3=R.slice(F.p2End,F.p3End+1);
  if(s2.length<2)s2=R.slice(F.p1End);
@@ -1362,6 +1464,8 @@ function renderPhases(){
    ["Hours used",Math.round(r.load)+" / "+Math.round(r.cap),1],["Hours free",Math.round(r.free)],
    ["Live clients",Math.round(r.live)],["Your audits / wk",nm(r.auditsWk,1)],
    ["Cash / mo",money(r.cash),1],["Net of payroll",money(r.net)]]}});
+ moneyChart('[data-chart="money2"]',s2,"rng2m");
+ acqChart('[data-chart="acq2"]',s2,"rng2a",false);
  tableInto("th2","tb2",[
   {h:"Mo",f:function(r){return r.m}},{h:"Team",f:function(r){return r.delTeam}},
   {h:"Cap",f:function(r){return Math.round(r.cap)}},{h:"Used",f:function(r){return Math.round(r.load)}},
@@ -1395,6 +1499,10 @@ function renderPhases(){
    ["Your audits / wk",nm(r.myWk,1)],["Rep audits / wk",nm(r.repWk,1)],
    ["Cash / mo",money(r.cash)],["Commission",money(-r.commission)],["Payroll",money(-r.payroll)],
    ["Net cash",money(r.net),1]]}});
+ moneyChart('[data-chart="money3"]',s3,"rng3m");
+ loadChart('[data-chart="load3"]',s3,"rng3l",F.delHires.map(function(hm,i){var ix=-1;
+   s3.forEach(function(r,j){if(r.m===hm+1)ix=j}); return {i:ix,label:"hire "+(i+1)}}));
+ acqChart('[data-chart="acq3"]',s3,"rng3a",true);
  tableInto("th3","tb3",[
   {h:"Mo",f:function(r){return r.m}},{h:"Del",f:function(r){return r.delTeam}},
   {h:"Reps",f:function(r){return r.repTeam}},{h:"You/wk",f:function(r){return nm(r.myWk,1)}},
@@ -1469,7 +1577,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0015";
+var BUILD_ID="0820-0025";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
