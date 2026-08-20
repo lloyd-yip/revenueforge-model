@@ -176,7 +176,7 @@ input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:3
  font-size:10px;letter-spacing:.06em;text-transform:uppercase}
 .parity.good{border-left-color:var(--accent)} .parity.good .verdict{color:var(--accent)}
 .parity.bad{border-left-color:var(--crit)} .parity.bad .verdict{color:var(--crit)}
-.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule)}
 @media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
 .tl{background:var(--surface);padding:13px 12px}
 .tlk{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.11em;
@@ -312,6 +312,15 @@ td.pause{color:var(--crit)}
 .clegend{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px;padding-left:64px}
 .clegend span{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-2)}
 .clegend i{width:10px;height:10px;display:inline-block;margin-right:6px;vertical-align:middle}
+.costgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+ background:var(--rule);border:1px solid var(--rule)}
+.costcell{background:var(--surface);padding:13px 14px}
+.costcell.neg .ccv2{color:var(--crit)}
+.costcell.tot{background:var(--accent-soft)}
+.cck2{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.ccv2{font-family:"IBM Plex Mono",monospace;font-size:20px;font-weight:600}
+.ccs2{font-family:"Source Serif 4",Georgia,serif;font-size:11px;color:var(--ink-3);margin-top:6px;line-height:1.4}
 .compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;
  background:var(--rule);border:1px solid var(--rule)}
 .cc{background:var(--surface);padding:14px}
@@ -658,6 +667,10 @@ td.pause{color:var(--crit)}
         <span class="box-t">Acquisition &mdash; <span id="rng3a"></span></span>
         <span class="box-s">your audits, rep audits and deals closed &middot; hover any month</span></div>
         <div class="box-b"><div class="chartbox" data-chart="acq3"></div></div></div>
+      <div class="box"><div class="box-h"><span class="box-n">04b</span>
+        <span class="box-t">Where the money goes</span>
+        <span class="box-s">every cost in the model</span></div>
+        <div class="box-b"><div class="costgrid" id="costs3"></div></div></div>
       <div class="box"><div class="box-h"><span class="box-n">05</span>
         <span class="box-t">Is the next rep worth it?</span></div>
         <div class="box-b"><div class="compare" id="cmp3"></div>
@@ -1426,6 +1439,12 @@ function acqChart(sel,rows,rngId,withRep){
    ["Invites needed",r.audits>0?kf(r.audits/((v_.auditConv/100)*(1+v_.followup/100))/(v_.attRate/100)):"0"]]}});
 }
 var v_={};
+function costLine(r){
+ var parts=[];
+ if(r.payroll>0)parts.push(money(-r.payroll)+" payroll ("+r.delTeam+"\u00d7)");
+ if(r.commission>0)parts.push(money(-r.commission)+" commission");
+ return parts.length?("after "+parts.join(", ")):"no costs yet";
+}
 
 function renderPhases(){
  var v=V(), F=fullSim(v), R=F.rows; if(!R.length)return; v_=v;
@@ -1449,8 +1468,9 @@ function renderPhases(){
   {k:"Starts / mo",v:String(last2.starts),s:"from "+f1.starts},
   {k:"Delivery team",v:String(last2.delTeam),s:"+ you and Geri"},
   {k:"Live clients",v:String(Math.round(last2.live))},
-  {k:"Cash / mo",v:money(last2.cash)},
-  {k:"Your audits / wk",v:nm(last2.auditsWk,1),s:"ceiling is "+v.auditCap}]);
+  {k:"MRR",v:money(last2.recR),s:"recurring only"},
+  {k:"Cash / mo",v:money(last2.cash),s:nm(last2.auditsWk,1)+" audits/wk, ceiling "+v.auditCap},
+  {k:"Net / mo",v:money(last2.net),s:costLine(last2)}]);
  drawChart(document.querySelector('[data-chart="cap2"]'),{
   y:"delivery hours consumed", rows:s2,
   max:Math.max.apply(null,s2.map(function(r){return Math.max(r.cap,r.load)}))*1.15,
@@ -1484,8 +1504,9 @@ function renderPhases(){
   {k:"Starts / mo",v:String(last3.starts)},
   {k:"Delivery team",v:String(last3.delTeam)},
   {k:"Sales reps",v:String(last3.repTeam)},
+  {k:"MRR",v:money(last3.recR),s:"recurring only"},
   {k:"Cash / mo",v:money(last3.cash)},
-  {k:"Net of costs",v:money(last3.net),s:"after commission and payroll"}]);
+  {k:"Net / mo",v:money(last3.net),s:costLine(last3)}]);
  drawChart(document.querySelector('[data-chart="head3"]'),{
   y:"people on the team", rows:s3,
   max:Math.max(4,Math.max.apply(null,s3.map(function(r){return r.delTeam+r.repTeam}))+1),
@@ -1510,6 +1531,16 @@ function renderPhases(){
   {h:"Live",f:function(r){return Math.round(r.live)}},{h:"Cash",f:function(r){return money(r.cash)}},
   {h:"Comm",f:function(r){return money(-r.commission)}},{h:"Net",f:function(r){return money(r.net)}}],s3);
 
+ if($("costs3")){
+  var L=last3;
+  $("costs3").innerHTML=[
+   {k:"Cash collected",v:money(L.cash),s:"audits + upfront + recurring"},
+   {k:"Delivery payroll",v:money(-L.payroll),s:L.delTeam+" hires \u00d7 "+money0(v.hireCost)+"/mo",neg:1},
+   {k:"Sales commission",v:money(-L.commission),s:v.comm+"% of upfront on rep-closed deals",neg:1},
+   {k:"Net / mo",v:money(L.net),s:"cash less both",tot:1}
+  ].map(function(c){return '<div class="costcell'+(c.neg?" neg":"")+(c.tot?" tot":"")+'">'+
+    '<div class="cck2">'+c.k+'</div><div class="ccv2">'+c.v+'</div><div class="ccs2">'+c.s+'</div></div>'}).join("");
+ }
  var byReps={};
  R.forEach(function(r){byReps[r.repTeam]=r});
  var keys=Object.keys(byReps).sort(function(a,b){return a-b});
@@ -1529,8 +1560,9 @@ function renderPhases(){
 
  tilesInto("tiles4",[
   {k:"Months modelled",v:String(last4.m)},
+  {k:"MRR at end",v:money(last4.recR),s:"recurring only"},
   {k:"Cash / mo at end",v:money(last4.cash)},
-  {k:"Net / mo at end",v:money(last4.net)},
+  {k:"Net / mo at end",v:money(last4.net),s:costLine(last4)},
   {k:"Team",v:String(last4.delTeam+last4.repTeam),s:last4.delTeam+" delivery, "+last4.repTeam+" sales"},
   {k:"Live clients",v:String(Math.round(last4.live))}]);
  drawChart(document.querySelector('[data-chart="arc4"]'),{
@@ -1577,7 +1609,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0025";
+var BUILD_ID="0820-0029";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
