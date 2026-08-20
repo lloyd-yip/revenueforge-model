@@ -1085,7 +1085,7 @@ function showTab(name){
 $("tab-model").addEventListener("click",function(){showTab("model")});
 $("tab-ideas").addEventListener("click",function(){showTab("ideas")});
 
-var BUILD_ID="0819-2353";
+var BUILD_ID="0819-2355";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
@@ -1098,7 +1098,7 @@ $("latestBtn").addEventListener("click",function(){
  fetch(location.pathname+"?cb="+Date.now(),{cache:"no-store"})
   .then(function(r){return r.text()})
   .then(function(t){
-   var m=t.match(/BUILD_ID="0819-2353"]+)"/);
+   var m=t.match(new RegExp("BUILD_"+'ID="([^"]+)"'));
    if(!m||m[1]===BUILD_ID){try{sessionStorage.removeItem(KEY_R)}catch(e){} return}
    var already=false;
    try{already=sessionStorage.getItem(KEY_R)===m[1]}catch(e){}
