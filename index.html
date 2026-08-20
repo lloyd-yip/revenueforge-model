@@ -434,8 +434,13 @@ td.pause{color:var(--crit)}
       <div class="lev"><label for="csCost">Their salary / mo</label>
         <input type="range" id="csCost" min="2000" max="15000" step="500"></div>
       <div class="linknote" style="grid-column:1/-1">A client-success / support engineer &mdash; check-in cadence,
-        monitoring, first-line triage, small config changes. They add no delivery hours and win no deals; they are
-        what makes the retention number honest rather than free. Their payroll shows up in every phase.</div>
+        monitoring, first-line triage, small config changes. No delivery hours, no deals won; they are what makes
+        the retention number honest rather than free. Payroll shows up in every phase.
+        <br><b>Sizing the book:</b> at $84k a year per client you are in high-touch territory, where the industry
+        band is <b>15&ndash;40 accounts</b> per person. Relationship and renewals only &rarr; 25&ndash;40. Add
+        first-line support on live software &rarr; 15&ndash;25. Add hands-on config and troubleshooting &rarr;
+        10&ndash;15. At 20 accounts each client gets about <b>7 hours a month</b> of attention. The right number is
+        really a question about how often the machines break.</div>
     </div>
 
     <div class="grouphdr">Acquisition throttle</div>
@@ -946,7 +951,7 @@ var P={
    mgrPer:5,mgrCost:10000,maxInv:1500000,
    upfront2:30000,recurring2:5000,upfront3:40000,recurring3:7000,
    diagCount:1,diagAud:4,diagClose:90,diagBase:8000,diagCommUp:10,diagCommRec:5,
-   diagRecMo:12,diagSpec:100,auditCovers:15,csPer:25,csCost:6000},
+   diagRecMo:12,diagSpec:100,auditCovers:15,csPer:20,csCost:6000},
  base:{hrsMonth:200,baseHrs:85,spread:3,upkeep:10,qThresh:2,floor:38,toFloor:9,
    attRate:0.20,auditConv:5,closeRate:35,webinars:4,followup:12,drop:10,
    auditPrice:897,upfront:20000,recurring:3500,billed:3,retention:12,expansion:0,
@@ -1900,7 +1905,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0150";
+var BUILD_ID="0820-0942";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
