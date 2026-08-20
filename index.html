@@ -321,17 +321,15 @@ td.pause{color:var(--crit)}
       <div class="mini-s"><div class="mini"><span>Expansion / mo</span><b id="o_expansion"></b></div><input type="range" id="expansion" min="0" max="15" step="1"></div>
     </div></div>
 
-    <div class="box"><div class="box-h"><span class="box-t">Sales &amp; costs</span></div><div class="box-b">
+    <div class="box"><div class="box-h"><span class="box-t">Your sales time</span></div><div class="box-b">
       <div class="mini-s"><div class="mini"><span>Your audit ceiling / wk</span><b id="o_auditCap"></b></div><input type="range" id="auditCap" min="1" max="12" step="1"></div>
       <div class="mini-s"><div class="mini"><span>Hours per audit</span><b id="o_hrsAudit"></b></div><input type="range" id="hrsAudit" min="1" max="8" step="0.5"></div>
-      <div class="mini-s"><div class="mini"><span>Tools &amp; infra / mo</span><b id="o_tools"></b></div><input type="range" id="tools" min="0" max="20000" step="250"></div>
-      <div class="mini-s"><div class="mini"><span>Your share of profit</span><b id="o_split"></b></div><input type="range" id="split" min="0" max="100" step="5"></div>
     </div></div>
   </div>
 
   <div>
     <div class="box"><div class="box-h"><span class="box-n">04</span><span class="box-t">What it produces</span>
-      <span class="box-s">month 12 &middot; expenses are only tools &amp; infra so far</span></div>
+      <span class="box-s">month 12 &middot; cash in, before any costs</span></div>
       <div class="tiles" id="tiles"></div></div>
 
     <div class="box"><div class="box-h"><span class="box-n">05</span><span class="box-t">Money &mdash; 12 months</span>
@@ -420,7 +418,7 @@ td.pause{color:var(--crit)}
       <div class="tw"><table>
         <thead><tr><th>Mo</th><th>Eff</th><th>Hrs/client</th><th>Audits</th><th>Won</th><th>Started</th>
           <th>Queue</th><th>Hrs used</th><th>Hrs free</th><th>Live</th><th>Paying</th>
-          <th>Cash</th><th>Profit</th><th>You</th><th>Geri</th></tr></thead>
+          <th>Cash</th></tr></thead>
         <tbody id="tbody"></tbody></table></div></div>
 
     <p class="foot"><strong>Phase 1 only &mdash; you and Geri, no hires.</strong> Clients are modelled as continuous flow, so
@@ -440,19 +438,19 @@ var P={
  cons:{hrsMonth:160,baseHrs:100,spread:3,upkeep:12,qThresh:1.5,floor:40,toFloor:11,
    attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,drop:10,
    auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,expansion:0,
-   auditCap:5,hrsAudit:3.5,tools:1500,split:60},
+   auditCap:5,hrsAudit:3.5},
  base:{hrsMonth:200,baseHrs:85,spread:3,upkeep:10,qThresh:2,floor:38,toFloor:9,
    attRate:0.20,auditConv:5,closeRate:35,webinars:4,followup:12,drop:10,
    auditPrice:897,upfront:20000,recurring:3500,billed:3,retention:12,expansion:0,
-   auditCap:5,hrsAudit:3.5,tools:2500,split:60},
+   auditCap:5,hrsAudit:3.5},
  agg:{hrsMonth:240,baseHrs:70,spread:2,upkeep:8,qThresh:2.5,floor:35,toFloor:7,
    attRate:0.50,auditConv:10,closeRate:50,webinars:4,followup:15,drop:5,
    auditPrice:897,upfront:25000,recurring:4000,billed:3,retention:24,expansion:0,
-   auditCap:5,hrsAudit:3.5,tools:4000,split:60}
+   auditCap:5,hrsAudit:3.5}
 };
 var IDS=["hrsMonth","baseHrs","spread","upkeep","qThresh","floor","toFloor",
  "attRate","auditConv","closeRate","webinars","followup","drop","auditPrice","upfront",
- "recurring","billed","retention","expansion","auditCap","hrsAudit","tools","split"];
+ "recurring","billed","retention","expansion","auditCap","hrsAudit"];
 
 function money(n){var a=Math.abs(n);
  if(a>=1e6)return (n<0?"-":"")+"$"+(a/1e6).toFixed(2)+"M";
@@ -510,12 +508,12 @@ function sim(v){
   free=Math.max(0,v.hrsMonth-load);
 
   var auditRev=audits*v.auditPrice, upR=starts*v.upfront, recR=paying*v.recurring;
-  var cash=auditRev+upR+recR, costs=v.tools, profit=cash-costs; cum+=profit;
+  var cash=auditRev+upR+recR; cum+=cash;
   var invites=audits>0?audits/((v.auditConv/100)*(1+v.followup/100))/(v.attRate/100):0;
 
   rows.push({m:m+1,e:e,onbTotal:onbTotal,audits:audits,won:won,starts:starts,queue:queue,
    load:load,free:free,onbHrs:onbHrs,steadyHrs:steadyHrs,live:live,paying:paying,
-   auditRev:auditRev,upR:upR,recR:recR,cash:cash,costs:costs,profit:profit,cum:cum,
+   auditRev:auditRev,upR:upR,recR:recR,cash:cash,cum:cum,
    paused:paused,invites:invites});
  }
  return rows;
@@ -536,8 +534,6 @@ function lbl(id,v){switch(id){
  case "expansion":return v.expansion+"%";
  case "auditCap":return String(v.auditCap);
  case "hrsAudit":return nm(v.hrsAudit,1);
- case "tools":return money0(v.tools);
- case "split":return v.split+" / "+(100-v.split);
 } return String(v[id])}
 
 function tip(title,pairs){
@@ -616,8 +612,6 @@ var TIPS={
  expansion:"Share of live clients per month who come back and buy another build. Switched off by your instruction.",
  auditCap:"The most audits a week you are willing to personally run before you want to hand them off.",
  hrsAudit:"Your time per audit \u2014 discovery call, presenting the results, plus prep and report review.",
- tools:"Monthly software and infrastructure spend.",
- split:"How profit divides between you and Geri."
 };
 function installTips(){
  Object.keys(TIPS).forEach(function(id){
@@ -692,9 +686,9 @@ function render(){
  // tiles
  $("tiles").innerHTML=[
   {k:"Cash / mo",v:money(last.cash)},
-  {k:"Cash less costs",v:money(last.profit),s:"tools only \u2014 no salaries or your own pay"},
-  {k:"MRR",v:money(last.recR)},
+  {k:"MRR",v:money(last.recR),s:"recurring only"},
   {k:"Live clients",v:Math.round(last.live)},
+  {k:"Clients started",v:String(rows.reduce(function(a,r){return a+r.starts},0)),s:"over 12 months"},
   {k:"Cumulative cash",v:money(last.cum),s:"12 months, all sources"}
  ].map(function(t){return '<div class="tl"><div class="tlk">'+t.k+'</div><div class="tlv">'+t.v+
    '</div>'+(t.s?'<div class="tls">'+t.s+'</div>':'')+'</div>'}).join("");
@@ -704,8 +698,7 @@ function render(){
  bars($("mBars"),rows.map(function(r){return {parts:[
    {v:r.recR,c:"sC"},{v:r.upR,c:"sB"},{v:r.auditRev,c:"sA"}],
    tip:tip("Month "+r.m,[["Audit fees",money(r.auditRev)],["Upfront",money(r.upR)],
-     ["Recurring",money(r.recR)],["Total cash",money(r.cash),1],
-     ["Profit",money(r.profit)],["Cumulative",money(r.cum)]])
+     ["Recurring",money(r.recR)],["Total cash",money(r.cash),1],["Cumulative",money(r.cum)]])
    }}),maxCash);
  axis($("mY"),maxCash,function(x){return money(x)});
  axis($("mY2"),last.cum,function(x){return money(x)});
@@ -766,8 +759,7 @@ function render(){
   "<td>"+Math.floor(r.won)+"</td><td>"+r.starts+"</td><td>"+Math.floor(r.queue)+"</td>"+
   "<td>"+Math.round(r.load)+"</td><td>"+Math.round(r.free)+"</td>"+
   "<td>"+Math.round(r.live)+"</td><td>"+Math.round(r.paying)+"</td>"+
-  "<td>"+money(r.cash)+"</td><td>"+money(r.profit)+"</td>"+
-  "<td>"+money(r.profit*v.split/100)+"</td><td>"+money(r.profit*(100-v.split)/100)+"</td></tr>"}).join("");
+  "<td>"+money(r.cash)+"</td></tr>"}).join("");
 }
 
 function syncHours(from){
