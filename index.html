@@ -1142,7 +1142,11 @@ function sustainCap(v,e,cap){
 
 /* sim() retired \u2014 every tab now reads fullSim() so the phases always agree. */
 
-function lbl(id,v){switch(id){
+function lbl(id,v){
+ // hrsWeek is derived from hrsMonth and is not in IDS, so v.hrsWeek is undefined
+ if(id==="hrsWeek"){var e=$("hrsWeek");return e?Math.round(parseFloat(e.value))+" hrs":"\u2014"}
+ if(v[id]===undefined&&$(id))return String($(id).value);
+ switch(id){
  case "attRate":return nm(v.attRate,2)+"%";
  case "auditConv":return nm(v.auditConv,2).replace(/0$/,"").replace(/\.$/,"")+"%";
  case "closeRate":return v.closeRate+"%";
@@ -1932,7 +1936,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0959";
+var BUILD_ID="0820-1602";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
