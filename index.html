@@ -410,7 +410,10 @@ td.pause{color:var(--crit)}
 
     <div class="grouphdr">When phase 1 ends</div>
     <div class="levers">
+      <div class="lev"><label for="m1cap">Month-1 hard cap on new clients</label><input type="range" id="m1cap" min="1" max="6" step="1"></div>
       <div class="lev"><label for="trigM">Months at full capacity before hiring</label><input type="range" id="trigM" min="1" max="6" step="1"></div>
+      <div class="linknote" style="grid-column:1/-1">Your one-ideal-client rule: month 1 is capped regardless of what
+        the hours allow, so the first engagement can be the one you build the SOPs from.</div>
       <div class="linknote" style="grid-column:2/-1">Phase 1 ends the month you have been at capacity this many months running <em>and</em> efficiency has already bottomed out. Both must be true &mdash; otherwise you would hire during the window when process improvement was still solving it for free.</div>
     </div>
 
@@ -880,7 +883,7 @@ var P={
    attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,drop:10,
    auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,expansion:0,
    auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
-   repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0,
+   m1cap:1,repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0,
    mgrPer:5,mgrCost:10000,maxInv:1500000},
  base:{hrsMonth:200,baseHrs:85,spread:3,upkeep:10,qThresh:2,floor:38,toFloor:9,
    attRate:0.20,auditConv:5,closeRate:35,webinars:4,followup:12,drop:10,
@@ -895,7 +898,7 @@ var P={
 };
 var IDS=["hrsMonth","baseHrs","spread","upkeep","qThresh","floor","toFloor",
  "attRate","auditConv","closeRate","webinars","followup","drop","auditPrice","upfront",
- "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","repAud","repClose","repRamp","comm","targetReps","myAud1","myAud2","mgrPer","mgrCost","maxInv"];
+ "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","m1cap","repAud","repClose","repRamp","comm","targetReps","myAud1","myAud2","mgrPer","mgrCost","maxInv"];
 
 function money(n){var a=Math.abs(n);
  if(a>=1e6)return (n<0?"-":"")+"$"+(a/1e6).toFixed(2)+"M";
@@ -919,7 +922,7 @@ function lifetimeHrs(v,e){
 function sustain(v,e){var L=lifetimeHrs(v,e);return L>0?v.hrsMonth/L:0}
 
 function fullSim(v){
- var MAXM=140, rows=[], cohorts=[], queue=0, del=[], reps=[], mgrs=[], maxedRun=0, cum=0, decayIdx=0;
+ var MAXM=140, rows=[], cohorts=[], queue=0, del=[], reps=[], mgrs=[], maxedRun=0, calRun=0, cum=0, decayIdx=0;
  var p1End=null, p2End=null, p3End=null;
  for(var m=0;m<MAXM;m++){
   var e=eff(v,m), onbTotal=v.baseHrs*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
@@ -949,9 +952,14 @@ function fullSim(v){
 
   // ---- demand: run only as many audits as capacity can absorb ----
   var myClose=v.closeRate/100, repCloseR=myClose*(v.repClose/100);
+  // Target whatever FREE capacity can absorb right now, not the long-run equilibrium.
+  // Early on there is plenty of slack, so demand should be pushed hard to fill it;
+  // once full, fall back to the replacement rate that keeps the book level.
   var sustain_=sustainCap(v,e,cap);
+  var canFillNow=onbPerMo>0 ? free/onbPerMo : 0;
+  var wantStarts=Math.max(sustain_,canFillNow);
   var blended=(mine+repWk)>0 ? (mine*myClose+repWk*repCloseR)/(mine+repWk) : myClose;
-  var auditsNeeded=blended>0 ? sustain_/blended : 0;
+  var auditsNeeded=blended>0 ? wantStarts/blended : 0;
   var perAudit=(v.attRate/100)*(v.auditConv/100)*(1+v.followup/100); // audits per invite sent
   var auditsFromInvites=v.maxInv*perAudit;
   var audits=Math.min(audCapMo,auditsNeeded,auditsFromInvites);
@@ -962,6 +970,7 @@ function fullSim(v){
 
   queue=queue*(1-v.drop/100)+won;
   var starts=Math.max(0,Math.min(Math.floor(queue),Math.floor(onbPerMo>0?free/onbPerMo:0)));
+  if(m===0)starts=Math.min(starts,v.m1cap);   // one ideal client first, whatever the hours allow
   queue-=starts;
   if(starts>0)cohorts.push({start:m,n:starts,onbPerMo:onbPerMo,up:up});
   onbHrs+=starts*onbPerMo; load+=starts*onbPerMo; live+=starts;
@@ -1002,9 +1011,11 @@ function fullSim(v){
    if(v.mgrPer>0 && del.length%v.mgrPer===0){ mgrs.push(m+1); decayIdx=0; }
   }
   // sales hire when audit demand outruns the calendar
-  if(auditsNeeded>audCapMo*1.02 && reps.length<v.targetReps && p1End!==null){
+  // your calendar only counts as the constraint if it stays overloaded
+  calRun=(auditsNeeded>audCapMo*1.02 && p1End!==null)?calRun+1:0;
+  if(calRun>=v.trigM && reps.length<v.targetReps && p1End!==null){
    if(p2End===null)p2End=m;
-   reps.push(m+1);
+   reps.push(m+1); calRun=0;
   }
   if(p2End!==null && reps.length>=v.targetReps && p3End===null && m>reps[reps.length-1]+8) p3End=m;
   if(p3End!==null && m>p3End+2) break;
@@ -1040,6 +1051,7 @@ function lbl(id,v){switch(id){
  case "decay":return v.decay+"%";
  case "hireCost":return money0(v.hireCost);
  case "trigM":return v.trigM+" mo";
+ case "m1cap":return String(v.m1cap);
  case "repAud":return String(v.repAud);
  case "repClose":return v.repClose+"%";
  case "repRamp":return v.repRamp+" mo";
@@ -1231,6 +1243,7 @@ function render(){
   {k:"Net new clients / mo",v:String(last.starts),s:"onboarded in month "+last.m},
   {k:"Max possible / mo",v:nm(last.maxStarts,2),s:"what this capacity allows"},
   {k:"Active clients",v:String(Math.round(last.live)),s:Math.round(last.paying)+" paying monthly"},
+  {k:"Upfront fees / mo",v:money(last.upR),s:"one-time, from "+last.starts+" new client"+(last.starts===1?"":"s")},
   {k:"MRR",v:money(last.recR),s:"recurring fees per month"},
   {k:"Cash / mo",v:money(last.cash),s:"audits + upfront + recurring"},
   {k:"Clients onboarded",v:String(rows.reduce(function(a,r){return a+r.starts},0)),
@@ -1582,6 +1595,7 @@ function renderPhases(){
   {k:"Delivery hires",v:String(last2.delTeam),s:"people hired, plus you and Geri"},
   {k:"Active clients",v:String(Math.round(last2.live)),s:Math.round(last2.paying)+" paying monthly"},
   {k:"Your audits / wk",v:nm(last2.auditsWk,1),s:"your ceiling is "+v.auditCap},
+  {k:"Upfront fees / mo",v:money(last2.upR),s:"one-time, from "+last2.starts+" new client"+(last2.starts===1?"":"s")},
   {k:"MRR",v:money(last2.recR),s:"recurring fees per month"},
   {k:"Cash / mo",v:money(last2.cash),s:"audits + upfront + recurring"},
   {k:"Net / mo",v:money(last2.net),s:costLine(last2)}]);
@@ -1622,6 +1636,7 @@ function renderPhases(){
   {k:"Managers",v:String(last3.mgrTeam),s:"one per "+v.mgrPer+" delivery hires"},
   {k:"Sales reps",v:String(last3.repTeam),s:"commission only, no base"},
   {k:"Active clients",v:String(Math.round(last3.live)),s:Math.round(last3.paying)+" paying monthly"},
+  {k:"Upfront fees / mo",v:money(last3.upR),s:"one-time, from "+last3.starts+" new client"+(last3.starts===1?"":"s")},
   {k:"MRR",v:money(last3.recR),s:"recurring fees per month"},
   {k:"Cash / mo",v:money(last3.cash),s:"audits + upfront + recurring"},
   {k:"Net / mo",v:money(last3.net),s:costLine(last3)}]);
@@ -1669,6 +1684,7 @@ function renderPhases(){
 
  tilesInto("tiles4",[
   {k:"Months modelled",v:String(last4.m)},
+  {k:"Upfront fees / mo",v:money(last4.upR),s:"one-time, from "+last4.starts+" new client"+(last4.starts===1?"":"s")},
   {k:"MRR at end",v:money(last4.recR),s:"recurring per month"},
   {k:"Cash / mo at end",v:money(last4.cash)},
   {k:"Net / mo at end",v:money(last4.net),s:costLine(last4)},
@@ -1742,7 +1758,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0048";
+var BUILD_ID="0820-0053";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
