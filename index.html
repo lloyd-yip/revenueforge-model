@@ -468,9 +468,10 @@ td.pause{color:var(--crit)}
       <div class="mini-s"><div class="mini"><span>Follow-up uplift</span><b id="o_followup"></b></div><input type="range" id="followup" min="0" max="30" step="1"></div>
       <div class="mini-s"><div class="mini"><span>Most invites / mo you can send</span><b id="o_maxInv"></b></div>
         <input type="range" id="maxInv" min="50000" max="2000000" step="50000">
-        <p class="note">The ceiling on demand generation &mdash; list size, sender capacity, whatever binds first.
-          Far right = no limit. If required invites exceed this you become <em>demand</em>-constrained rather than
-          delivery-constrained, and capacity sits idle.</p></div>
+        <p class="note"><b>1.5M a month is the sane high end</b> &mdash; past that you are risking deliverability
+          and burning the list. Values above it are exploratory only. If required invites exceed this ceiling you
+          become <em>demand</em>-constrained rather than delivery-constrained: sales capacity sits idle and delivery
+          stops needing to grow.</p></div>
       <div class="mini-s"><div class="mini"><span>Queue drop-off</span><b id="o_drop"></b></div><input type="range" id="drop" min="0" max="50" step="1"></div>
     </div></div>
 
@@ -959,9 +960,10 @@ function fullSim(v){
   var blended=(mine+repWk)>0 ? (mine*myClose+repWk*repCloseR)/(mine+repWk) : myClose;
   var auditsNeeded=audCapMo;
   var perAudit=(v.attRate/100)*(v.auditConv/100)*(1+v.followup/100); // audits per invite sent
-  var auditsFromInvites=v.maxInv*perAudit;
+  var INVCAP=(v.maxInv>=2000000)?Infinity:v.maxInv;   // top of the slider = genuinely no limit
+  var auditsFromInvites=INVCAP*perAudit;
   var audits=Math.min(audCapMo,auditsFromInvites);
-  var inviteBound=(auditsFromInvites<audCapMo-0.001);
+  var inviteBound=isFinite(INVCAP)&&(auditsFromInvites<audCapMo-0.001);
   var myAudits=audCapMo>0?audits*(mine*WPM/Math.max(audCapMo,0.0001)):audits;
   var repAudits=audits-myAudits;
   var won=myAudits*myClose+repAudits*repCloseR+live*(v.expansion/100);
@@ -990,7 +992,7 @@ function fullSim(v){
    delTeam:del.filter(function(h){return m>=h.m}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
    mgrTeam:mgrTeam, mgrCost:mgrTeam*v.mgrCost, delCost:del.filter(function(h){return m>=h.m}).length*v.hireCost,
    invitesNeeded:perAudit>0?audits/perAudit:0, inviteBound:inviteBound,
-   inviteCeil:v.maxInv, auditsWanted:auditsNeeded,
+   inviteCeil:INVCAP, auditsWanted:auditsNeeded,
    myWk:mine, repWk:repWk, auditsWk:audits/WPM, atFloor:e<=v.floor/100+0.001,
    maxStarts:sustainCap(v,e,cap)});
 
@@ -1018,7 +1020,11 @@ function fullSim(v){
    if(p2End===null)p2End=m;
    reps.push(m+1); calRun=0;
   }
-  if(p2End!==null && reps.length>=v.targetReps && p3End===null && m>reps[reps.length-1]+8) p3End=m;
+  // phase 3 ends only once the system has RE-STABILISED: reps are all hired, delivery
+  // has finished catching up to the demand they unlocked, and the queue has drained.
+  var lastDel=del.length?del[del.length-1].m-1:-99;
+  if(p2End!==null && reps.length>=v.targetReps && p3End===null
+     && (m-lastDel)>=v.trigM+3 && queue<1 && m>reps[reps.length-1]+3) p3End=m;
   if(p3End!==null && m>p3End+2) break;
  }
  var n=rows.length;
@@ -1547,7 +1553,8 @@ function headChart(sel,rows,rngId,marks){
 function funnelInto(id,first,last,v){
  var el=$(id); if(!el)return;
  var att=function(r){var d=(v.auditConv/100)*(1+v.followup/100); return d>0?r.audits/d:0};
- var strain=last.inviteCeil>0?Math.min(100,last.invitesNeeded/last.inviteCeil*100):0;
+ var unlimited=!isFinite(last.inviteCeil);
+ var strain=unlimited?0:Math.min(100,last.invitesNeeded/last.inviteCeil*100);
  var grew=function(a,b){return b>a?("+"+Math.round((b/Math.max(a,0.0001)-1)*100)+"%"):"\u2014"};
  el.innerHTML=
   '<div class="fstrip"><span>Invites / mo</span><b>'+intc(last.invitesNeeded)+'</b><i>'+grew(first.invitesNeeded,last.invitesNeeded)+'</i></div>'+
@@ -1556,12 +1563,14 @@ function funnelInto(id,first,last,v){
   '<div class="fstrip"><span>Audits sold</span><b>'+nm(last.audits,1)+'</b><i>'+grew(first.audits,last.audits)+'</i></div>'+
   '<div class="fstrip"><span>Deals closed</span><b>'+nm(last.won,1)+'</b><i>'+grew(first.won,last.won)+'</i></div>'+
   '<div class="strainlbl">Invite capacity used</div>'+
-  '<div class="strainbar"><i style="width:'+strain.toFixed(0)+'%" class="'+(strain>90?"hot":(strain>65?"warm":""))+'"></i></div>'+
-  '<div class="strainnum">'+intc(last.invitesNeeded)+' of '+(v.maxInv>=2000000?"unlimited":intc(v.maxInv))+
-   ' \u2014 <b>'+strain.toFixed(0)+'%</b></div>'+
+  '<div class="strainbar"><i style="width:'+(unlimited?0:strain).toFixed(0)+'%" class="'+(strain>90?"hot":(strain>65?"warm":""))+'"></i></div>'+
+  '<div class="strainnum">'+intc(last.invitesNeeded)+' of '+(unlimited?"no limit set":intc(last.inviteCeil))+
+   (unlimited?'':' \u2014 <b>'+strain.toFixed(0)+'%</b>')+'</div>'+
   (last.inviteBound
-   ? '<p class="note" style="color:var(--crit)"><b>Demand-constrained.</b> You cannot send enough invites to feed delivery, so capacity is sitting idle. Raise the invite ceiling, run more webinars, or improve a conversion rate.</p>'
-   : '<p class="note">Delivery is still the binding constraint &mdash; the funnel can supply what capacity can absorb.</p>');
+   ? '<p class="note" style="color:var(--crit)"><b>Invite volume is the constraint.</b> Your calendar could run more audits than '+intc(last.inviteCeil)+' invites can produce, so sales capacity sits idle and delivery never needs to grow. Raise the ceiling, run more webinars, or improve a conversion rate.</p>'
+   : (last.calendarBound
+     ? '<p class="note" style="color:var(--warn)"><b>Your calendar is the constraint.</b> You are selling flat out and still have delivery room you cannot feed. A sales hire is what unlocks the next step.</p>'
+     : '<p class="note"><b>Delivery is the constraint.</b> The funnel can supply more than capacity can absorb &mdash; the queue is what pulls in the next delivery hire.</p>'));
 }
 function avgOf(rows,n,fn){
  var take=rows.slice(-Math.min(n,rows.length));
@@ -1765,7 +1774,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0100";
+var BUILD_ID="0820-0103";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
