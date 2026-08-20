@@ -1,4 +1,4 @@
-<title>RevenueForge - Scale Tabs Mockup</title>
+<title>Commission Structure - Mockup</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 <style>
 :root{--ground:#E7EBEB;--surface:#F7F9F9;--surface-2:#EFF3F3;--sunken:#DCE2E2;
@@ -14,393 +14,166 @@
 html,body{max-width:100%;overflow-x:hidden}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:"Archivo",Arial,sans-serif;
  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1320px;margin:0 auto;padding:0 24px 80px}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 24px 70px}
 .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;
- text-transform:uppercase;color:var(--ink-3);margin:26px 0 14px}
-.tabs{display:flex;border-bottom:1px solid var(--rule);margin-bottom:22px;flex-wrap:wrap}
-.tabs button{display:flex;flex-direction:column;align-items:flex-start;gap:3px;
- padding:11px 18px;border:0;background:transparent;cursor:pointer;
- border-bottom:2px solid transparent;margin-bottom:-1px;text-align:left}
-.tabs button em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:11px;
- letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
-.tabs button i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:9px;
- letter-spacing:.08em;color:var(--ink-3);opacity:.6}
-.tabs button:hover em{color:var(--ink-2)}
-.tabs button[aria-selected="true"] em{color:var(--ink)}
-.tabs button[aria-selected="true"] i{color:var(--accent);opacity:1}
-.tabs button[aria-selected="true"]{border-bottom-color:var(--accent)}
-.tabs .count{margin-left:7px;background:var(--accent);color:var(--ground);font-size:9px;
- padding:1px 6px;border-radius:9px}
-
-/* phase banner */
-.phase{display:flex;align-items:center;gap:0;border:1px solid var(--rule);background:var(--surface);
- margin-bottom:18px;overflow:hidden}
-.ph{flex:1;padding:11px 14px;border-right:1px solid var(--rule);opacity:.4}
-.ph:last-child{border-right:0}
-.ph.on{opacity:1;background:var(--accent-soft)}
-.ph.done{opacity:.55}
-.ph-k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;
- text-transform:uppercase;color:var(--ink-3);margin-bottom:4px}
-.ph-v{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600}
-.ph-s{font-family:"Source Serif 4",Georgia,serif;font-size:11px;color:var(--ink-3);margin-top:3px}
-
-h1{font-size:clamp(24px,3.3vw,32px);font-weight:700;letter-spacing:-.02em;margin:0 0 6px;line-height:1.1}
-.sf{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink-2);margin:0 0 22px;max-width:66ch}
-.cols{display:grid;grid-template-columns:300px minmax(0,1fr);gap:24px;align-items:start}
-@media(max-width:940px){.cols{grid-template-columns:minmax(0,1fr)}}
+ text-transform:uppercase;color:var(--ink-3);margin:0 0 10px}
+h1{font-size:clamp(24px,3.2vw,31px);font-weight:700;letter-spacing:-.02em;margin:0 0 8px;line-height:1.1}
+.sf{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink-2);margin:0 0 24px;max-width:70ch}
 .box{border:1px solid var(--rule);background:var(--surface);margin-bottom:16px}
-.box-h{padding:10px 14px;border-bottom:1px solid var(--rule);background:var(--surface-2);
+.box-h{padding:11px 15px;border-bottom:1px solid var(--rule);background:var(--surface-2);
  display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.box-n{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--accent);font-weight:600}
 .box-t{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;
  text-transform:uppercase;color:var(--ink-2);font-weight:600}
 .box-s{font-family:"Source Serif 4",Georgia,serif;font-size:12px;color:var(--ink-3);margin-left:auto}
-.box-b{padding:14px}
+.box-b{padding:15px}
+.seg{display:flex;border:1px solid var(--rule-strong);background:var(--surface);margin-bottom:16px}
+.seg button{flex:1;font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;
+ text-transform:uppercase;padding:12px 14px;border:0;border-right:1px solid var(--rule);
+ background:transparent;color:var(--ink-2);cursor:pointer}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--ground);font-weight:600}
 .mini{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
 .mini span{font-size:12.5px;color:var(--ink-2)}
 .mini b{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;
- background:var(--sunken);border:1px solid var(--rule);padding:1px 7px;min-width:70px;text-align:right}
+ background:var(--sunken);border:1px solid var(--rule);padding:1px 7px;min-width:74px;text-align:right}
 .mini-s{margin-bottom:12px}
 input[type=range]{width:100%;accent-color:var(--accent);height:16px;margin:0;display:block}
-.note{font-family:"Source Serif 4",Georgia,serif;font-size:11px;color:var(--ink-3);margin-top:5px;line-height:1.45}
-.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
-@media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
-.tl{background:var(--surface);padding:13px 12px}
-.tlk{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.11em;
- text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
-.tlv{font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:600;letter-spacing:-.02em}
-.tls{font-family:"Source Serif 4",Georgia,serif;font-size:10.5px;color:var(--ink-3);margin-top:5px}
-/* chart */
-.chartwrap{display:grid;grid-template-columns:56px minmax(0,1fr);align-items:stretch}
-.yax{display:flex;flex-direction:column;justify-content:space-between;padding:2px 8px 16px 0;text-align:right}
-.yax span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;color:var(--ink-2)}
-.plot{position:relative;border-left:1px solid var(--rule-strong);border-bottom:1px solid var(--rule-strong)}
-.grid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between}
-.grid i{display:block;height:1px;background:var(--rule)}
-.bars{position:relative;display:flex;align-items:flex-end;gap:4px;height:160px;padding:0 4px}
-.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative}
-.col i{display:block}
-.sB{background:var(--accent)} .sC{background:var(--accent-2)} .sH{background:var(--warn)}
-.step{position:absolute;left:0;right:0;border-top:2px dashed var(--crit);z-index:2}
-.steplbl{position:absolute;right:2px;top:-14px;font-family:"IBM Plex Mono",monospace;
- font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--crit)}
-.hiremark{position:absolute;bottom:0;top:0;width:2px;background:var(--warn);z-index:3}
-.hiretag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);
- font-family:"IBM Plex Mono",monospace;font-size:8px;letter-spacing:.08em;
- text-transform:uppercase;color:var(--warn);white-space:nowrap}
-.xax{display:flex;gap:4px;padding:5px 4px 0}
-.xax span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--ink-2)}
-.axttl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
- text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:6px}
-.datarow{display:flex;align-items:center;border-top:1px solid var(--rule)}
-.datarow .rk{width:56px;flex:none;font-family:"IBM Plex Mono",monospace;font-size:8.5px;
- letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-right:6px;text-align:right;line-height:1.2}
-.datarow .rv{flex:1;display:flex;gap:4px;padding:5px 4px}
-.datarow .rv span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600}
-.datarow.k1 .rv span{color:var(--warn)} .datarow.k2 .rv span{color:var(--accent)}
-.datarow.k3 .rv span{color:var(--ink-2);font-weight:500;font-size:10px}
-.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;padding-left:56px}
-.legend span{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-2)}
-.legend i{width:10px;height:10px;display:inline-block;margin-right:6px;vertical-align:middle}
-.wall{border-left:3px solid var(--crit);background:var(--crit-soft);padding:12px 15px;margin-top:14px;
- font-family:"Source Serif 4",Georgia,serif;font-size:13px;color:var(--ink-2);line-height:1.55}
-.wall b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink)}
-.compare{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
-@media(max-width:760px){.compare{grid-template-columns:1fr}}
-.cc{background:var(--surface);padding:14px}
-.cc.best{background:var(--accent-soft)}
-.cck{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;
- text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
-.ccv{font-family:"IBM Plex Mono",monospace;font-size:21px;font-weight:600}
-.ccs{font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;color:var(--ink-3);margin-top:6px;line-height:1.45}
-.cwrap{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:stretch}
-.cy{display:flex;flex-direction:column;justify-content:space-between;padding:2px 9px 18px 0;text-align:right}
-.cy span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;color:var(--ink-2)}
-.cplot{position:relative;border-left:1px solid var(--rule-strong);border-bottom:1px solid var(--rule-strong)}
-.cgrid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between}
-.cgrid i{display:block;height:1px;background:var(--rule)}
-.cbars{position:relative;display:flex;align-items:flex-end;gap:3px;height:170px;padding:0 3px}
-.ccol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative;cursor:crosshair}
-.ccol:hover{background:rgba(127,184,179,.12)}
-.ccol i{display:block}
-.cx{display:flex;gap:3px;padding:5px 3px 0}
-.cx span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:9px;
- font-weight:500;color:var(--ink-2);white-space:nowrap}
-.cxt{text-align:center;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
- text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-top:6px}
-.cyt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
- text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:7px}
-.cline{position:absolute;left:0;right:0;border-top:2px dashed var(--crit);z-index:2;pointer-events:none}
-.cmark{position:absolute;top:0;bottom:0;width:2px;background:var(--warn);z-index:3;pointer-events:none}
-.cmark em{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-style:normal;
- font-family:"IBM Plex Mono",monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;
- color:var(--warn);white-space:nowrap}
-.ctip{display:none;position:absolute;bottom:calc(100% + 10px);z-index:40;width:212px;
- background:var(--ink);color:var(--ground);padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.4);
- font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.5;pointer-events:none;
- font-variant-numeric:tabular-nums}
-.ctip b{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px;
- padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.28);opacity:.85}
-.ctip .tr{display:flex;justify-content:space-between;gap:14px;padding:1.5px 0}
-.ctip .tr.hi{margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.18)}
-.ctip u{text-decoration:none;opacity:.68} .ctip s{text-decoration:none;font-weight:600}
-.clegend{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px;padding-left:64px}
-.clegend span{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-2)}
-.clegend i{width:10px;height:10px;display:inline-block;margin-right:6px;vertical-align:middle}
+.note{font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;color:var(--ink-3);margin-top:5px;line-height:1.45}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:820px){.cols2{grid-template-columns:1fr}}
+.tl2{display:flex;align-items:baseline;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule)}
+.tl2 span{flex:1;font-size:12.5px;color:var(--ink-2)}
+.tl2 b{font-family:"IBM Plex Mono",monospace;font-size:13.5px;font-weight:600}
+.tl2.tot{border-bottom:0;border-top:1px solid var(--rule-strong);margin-top:5px;padding-top:8px}
+.tl2.tot b{font-size:16px;color:var(--accent)}
+.tl2.dim b{color:var(--ink-3)}
+.timeline{display:flex;gap:2px;margin:10px 0 6px}
+.timeline i{flex:1;height:26px;background:var(--sunken);border:1px solid var(--rule);
+ display:flex;align-items:center;justify-content:center;
+ font-family:"IBM Plex Mono",monospace;font-size:8.5px;color:var(--ink-3)}
+.timeline i.onb{background:var(--rule);color:var(--ink-2)}
+.timeline i.pay{background:var(--accent);border-color:var(--accent);color:#fff}
+.timeline i.bonus{background:var(--warn);border-color:var(--warn);color:#fff;font-weight:700}
+.timeline i.gone{background:transparent;border-style:dashed;opacity:.45}
+.tlkey{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:4px}
+.tlkey span{font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--ink-3)}
+.tlkey i{width:9px;height:9px;display:inline-block;margin-right:5px;vertical-align:middle}
+table{border-collapse:collapse;width:100%}
+th,td{padding:8px 10px;text-align:right;font-family:"IBM Plex Mono",monospace;font-size:12px}
+th{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);
+ border-bottom:1px solid var(--rule-strong);background:var(--surface-2)}
+th:first-child,td:first-child{text-align:left;font-family:"Archivo",sans-serif;font-size:12.5px;color:var(--ink-2)}
+tbody tr{border-bottom:1px solid var(--rule)}
+tbody tr.best{background:var(--accent-soft)}
+td.good{color:var(--accent);font-weight:600} td.bad{color:var(--crit)}
+.verdict{border-left:3px solid var(--accent);background:var(--accent-soft);padding:13px 15px;margin-top:15px}
+.verdict h4{margin:0 0 5px;font-size:13px;font-weight:700}
+.verdict p{margin:0 0 9px;font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;color:var(--ink-2);line-height:1.55}
+.verdict p:last-child{margin-bottom:0}
+.verdict.warn{border-left-color:var(--warn);background:var(--warn-soft)}
 .stamp{position:fixed;right:14px;bottom:14px;background:var(--crit);color:#fff;
  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
  text-transform:uppercase;padding:7px 12px;z-index:9}
-.sect{margin:38px 0 14px;padding-top:22px;border-top:2px solid var(--ink);
- font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;
- text-transform:uppercase;color:var(--accent);font-weight:600}
 </style>
 
 <div class="stamp">Mockup &middot; not wired up</div>
 <div class="wrap">
 
-<p class="eyebrow">RevenueForge &middot; Unit Economics</p>
-<div class="tabs" role="tablist">
-  <button role="tab" data-p="p1" aria-selected="false"><em>1 &middot; Startup</em><i>M1 &ndash; M13</i></button>
-  <button role="tab" data-p="p2" aria-selected="true"><em>2 &middot; Scale delivery</em><i>M13 &ndash; M21</i></button>
-  <button role="tab" data-p="p3" aria-selected="false"><em>3 &middot; Scale sales</em><i>M21 &ndash; M38</i></button>
-  <button role="tab" data-p="p4" aria-selected="false"><em>4 &middot; Full arc</em><i>M1 &ndash; M38</i></button>
-  <button role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">7</span></em><i>open questions</i></button>
+<p class="eyebrow">RevenueForge &middot; AI Revenue Architect comp</p>
+<h1>Trickle or milestone?</h1>
+<p class="sf">Two ways to pay the retention half of the commission. Same money to a good architect;
+very different money when a client churns early &mdash; and different behaviour in the months before that.</p>
+
+<div class="seg" role="group">
+  <button aria-pressed="false">Monthly trickle</button>
+  <button aria-pressed="true">Milestone bonuses</button>
+  <button aria-pressed="false">Both &mdash; compare</button>
 </div>
 
-<div id="p1" hidden>
-  <h1>Startup &mdash; months 1 to 13</h1>
-  <p class="sf">This tab already exists and is fully wired &mdash; it's the model you've been using. Nothing changes
-    here except that it now stops at the month the first delivery hire is triggered, rather than running a fixed
-    12 months.</p>
-  <div class="wall" style="border-left-color:var(--accent);background:var(--accent-soft)">
-    Open the live model to see this tab: <b>lloyd-yip.github.io/revenueforge-model/</b>
-  </div>
+<div class="cols2">
+  <div class="box"><div class="box-h"><span class="box-t">Monthly trickle</span>
+    <span class="box-s">what you have now</span></div><div class="box-b">
+    <div class="mini-s"><div class="mini"><span>Commission on upfront</span><b>10%</b></div>
+      <input type="range" min="0" max="25" value="10"></div>
+    <div class="mini-s"><div class="mini"><span>Commission on recurring</span><b>5%</b></div>
+      <input type="range" min="0" max="15" value="5"></div>
+    <div class="mini-s"><div class="mini"><span>Paid for</span><b>12 mo</b></div>
+      <input type="range" min="0" max="36" value="12"></div>
+
+    <div class="tlkey" style="margin-top:14px">
+      <span><i style="background:var(--rule)"></i>Onboarding</span>
+      <span><i style="background:var(--accent)"></i>Commission paid</span>
+      <span><i style="border:1px dashed var(--rule-strong)"></i>Churned</span></div>
+    <div class="timeline">
+      <i class="onb">1</i><i class="onb">2</i><i class="onb">3</i>
+      <i class="pay">4</i><i class="pay">5</i><i class="pay">6</i><i class="pay">7</i>
+      <i class="pay">8</i><i class="pay">9</i><i class="pay">10</i><i class="pay">11</i><i class="pay">12</i>
+      <i class="gone">13</i><i class="gone">14</i><i class="gone">15</i></div>
+
+    <div class="tl2"><span>10% of $40k upfront</span><b>$4,000</b></div>
+    <div class="tl2"><span>5% of $7k &times; 9 months</span><b>$3,150</b></div>
+    <div class="tl2 tot"><span>Per deal that survives</span><b>$7,150</b></div>
+    <div class="tl2 dim"><span>Per deal that churns at month 8</span><b>$5,750</b></div>
+    <p class="note"><b>You still pay $1,750 on a client who left early.</b> Partial failure earns partial commission.</p>
+  </div></div>
+
+  <div class="box"><div class="box-h"><span class="box-t">Milestone bonuses</span>
+    <span class="box-s">proposed</span></div><div class="box-b">
+    <div class="mini-s"><div class="mini"><span>Commission on upfront</span><b>10%</b></div>
+      <input type="range" min="0" max="25" value="10"></div>
+    <div class="mini-s"><div class="mini"><span>Bonus at 6 months retained</span><b>$1,000</b></div>
+      <input type="range" min="0" max="6000" value="1000"></div>
+    <div class="mini-s"><div class="mini"><span>Bonus at 12 months retained</span><b>$2,500</b></div>
+      <input type="range" min="0" max="10000" value="2500"></div>
+
+    <div class="tlkey" style="margin-top:14px">
+      <span><i style="background:var(--rule)"></i>Onboarding</span>
+      <span><i style="background:var(--warn)"></i>Bonus lands</span>
+      <span><i style="border:1px dashed var(--rule-strong)"></i>Churned</span></div>
+    <div class="timeline">
+      <i class="onb">1</i><i class="onb">2</i><i class="onb">3</i>
+      <i>4</i><i>5</i><i>6</i><i>7</i><i>8</i><i class="bonus">9</i>
+      <i>10</i><i>11</i><i>12</i><i>13</i><i>14</i><i class="bonus">15</i></div>
+
+    <div class="tl2"><span>10% of $40k upfront</span><b>$4,000</b></div>
+    <div class="tl2"><span>6 months retained</span><b>$1,000</b></div>
+    <div class="tl2"><span>12 months retained</span><b>$2,500</b></div>
+    <div class="tl2 tot"><span>Per deal that survives</span><b>$7,500</b></div>
+    <div class="tl2 dim"><span>Per deal that churns at month 8</span><b>$4,000</b></div>
+    <p class="note"><b>Nothing beyond the close on a client who left early.</b> The retention half is pass/fail.</p>
+  </div></div>
 </div>
 
-<div id="p5" hidden>
-  <h1>Ideas &amp; open questions</h1>
-  <p class="sf">Also already built and live. Now carries a seventh entry &mdash; the multi-tenant platform work.</p>
-  <div class="wall" style="border-left-color:var(--accent);background:var(--accent-soft)">
-    Open the live model to see this tab: <b>lloyd-yip.github.io/revenueforge-model/</b>
-  </div>
-</div>
+<div class="box"><div class="box-h"><span class="box-t">What it costs you</span>
+  <span class="box-s">assuming 20% churn by month 6, 30% by month 12</span></div>
+  <div class="box-b"><table>
+    <thead><tr><th>Per 10 deals closed</th><th>Trickle</th><th>Milestone</th><th>Difference</th></tr></thead>
+    <tbody>
+      <tr><td>Upfront commission</td><td>$40,000</td><td>$40,000</td><td>&mdash;</td></tr>
+      <tr><td>Retention commission &mdash; survivors</td><td>$22,050</td><td>$24,500</td><td class="bad">+$2,450</td></tr>
+      <tr><td>Retention commission &mdash; churners</td><td>$5,250</td><td class="good">$2,000</td><td class="good">&minus;$3,250</td></tr>
+      <tr class="best"><td><b>Total per 10 deals</b></td><td>$67,300</td><td class="good">$66,500</td><td class="good">&minus;$800</td></tr>
+      <tr><td>Share paid on failed clients</td><td class="bad">7.8%</td><td class="good">3.0%</td><td class="good">&minus;4.8pts</td></tr>
+    </tbody>
+  </table>
 
-<div id="p2">
-
-<h1>Scale delivery &mdash; months 13 to 21</h1>
-<p class="sf">Picks up exactly where phase 1 cut off. Efficiency has bottomed out, so process improvement is
-spent &mdash; the only lever left is people. Delivery hires are added automatically whenever capacity has been
-maxed for two consecutive months, and the phase ends when your own calendar becomes the constraint instead.</p>
-
-<div class="cols">
-  <div>
-    <div class="box"><div class="box-h"><span class="box-t">Delivery hires</span></div><div class="box-b">
-      <div class="mini-s"><div class="mini"><span>Hours per hire / mo</span><b>110</b></div><input type="range" min="40" max="200" value="110"></div>
-      <div class="mini-s"><div class="mini"><span>Effectiveness vs Geri</span><b>70%</b></div><input type="range" min="30" max="100" value="70">
-        <p class="note">Keep conservative &mdash; also absorbs the fact that a new hire is slow at first.</p></div>
-      <div class="mini-s"><div class="mini"><span>Decay per extra hire</span><b>90%</b></div><input type="range" min="60" max="100" value="90">
-        <p class="note">Each hire is 90% as effective as the one before. Stands in for coordination overhead and
-          Geri drifting toward management, without modelling either.</p></div>
-      <div class="mini-s"><div class="mini"><span>Cost per hire / mo</span><b>$8,000</b></div><input type="range" min="2000" max="20000" value="8000"></div>
-      <div class="mini-s"><div class="mini"><span>Trigger: months maxed</span><b>2</b></div><input type="range" min="1" max="6" value="2">
-        <p class="note">Hire only after capacity has been full this many months running <em>and</em> efficiency has
-          already hit its floor.</p></div>
-    </div></div>
-
-    <div class="box"><div class="box-h"><span class="box-t">Carried from phase 1</span></div><div class="box-b">
-      <div class="mini"><span>Onboarding hours</span><b>40 hrs</b></div>
-      <div class="mini"><span>Upkeep / client</span><b>4.8 hrs</b></div>
-      <div class="mini"><span>Your hours / mo</span><b>160</b></div>
-      <div class="mini"><span>Live clients at start</span><b>9</b></div>
-      <p class="note">Locked at whatever phase 1 ended on. Change them on tab 1 and every later phase moves.</p>
-    </div></div>
+  <div class="verdict"><h4>The money is close. The behaviour is not.</h4>
+    <p>Cost is within ~1% at these churn rates &mdash; so pick on incentive design, not savings. What changes is
+      <b>what you are buying</b>: the trickle pays for partial success, the milestone pays only for the outcome
+      you actually want.</p>
+    <p>And it matters here specifically because <b>the architect's influence is front-loaded</b>. They diagnose,
+      architect and hand off &mdash; client success owns the relationship afterwards. So you are not buying ongoing
+      attention, you are buying <b>quality of decision at the point of sale</b>: don't sell bad-fit clients, don't
+      spec builds that fail. Retention is simply how that decision gets verified nine months later.</p>
   </div>
 
-  <div>
-    <div class="tiles">
-      <div class="tl"><div class="tlk">Starts / mo</div><div class="tlv">5.6</div><div class="tls">from 2.9</div></div>
-      <div class="tl"><div class="tlk">Delivery team</div><div class="tlv">2</div><div class="tls">+ you and Geri</div></div>
-      <div class="tl"><div class="tlk">Live clients</div><div class="tlv">17</div></div>
-      <div class="tl"><div class="tlk">Cash / mo</div><div class="tlv">$164k</div></div>
-      <div class="tl"><div class="tlk">Your audits / wk</div><div class="tlv" style="color:var(--crit)">5.2</div><div class="tls">ceiling is 5</div></div>
-    </div>
-
-    <div class="box" style="margin-top:16px"><div class="box-h"><span class="box-n">01</span>
-      <span class="box-t">Capacity &amp; headcount</span><span class="box-s">hires step the ceiling up</span></div>
-      <div class="box-b">
-        <div class="chartbox" data-chart="cap2"></div>
-        <div class="wall">Phase ends at <b>M21</b>. Two delivery hires take you to <b>5.6 starts/month</b> &mdash;
-          but that needs <b>5.2 audits a week</b> and your ceiling is <b>5</b>. A third delivery hire would add
-          capacity you cannot feed. <b>The constraint has moved from delivery to your calendar.</b></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div><!-- /p2 -->
-
-<div id="p3" hidden>
-<h1>Scale sales &mdash; months 21 to 38</h1>
-<p class="sf">Starts where phase 2 cut off. Delivery hires keep landing automatically in the background &mdash; the
-new decision here is sales headcount. The phase runs as long as it takes to reach the number of full-time reps
-you set on the left.</p>
-
-<div class="cols">
-  <div>
-    <div class="box"><div class="box-h"><span class="box-t">Sales hires</span></div><div class="box-b">
-      <div class="mini-s"><div class="mini"><span>Rep audits / wk at full tilt</span><b>8</b></div><input type="range" min="3" max="15" value="8"></div>
-      <div class="mini-s"><div class="mini"><span>Rep close rate vs you</span><b>70%</b></div><input type="range" min="30" max="100" value="70">
-        <p class="note">You close at 25%, so a rep closes at 17.5%.</p></div>
-      <div class="mini-s"><div class="mini"><span>Ramp to full calendar</span><b>3 mo</b></div><input type="range" min="0" max="6" value="3">
-        <p class="note">Half calendar until they've proven it.</p></div>
-      <div class="mini-s"><div class="mini"><span>Commission on upfront</span><b>10%</b></div><input type="range" min="0" max="25" value="10"></div>
-      <div class="mini-s"><div class="mini"><span>Project out to</span><b>2 reps</b></div><input type="range" min="1" max="6" value="2">
-        <p class="note">The timeline runs as long as it takes to get here. This lever sets the horizon.</p></div>
-    </div></div>
-
-    <div class="box"><div class="box-h"><span class="box-t">Your calendar</span></div><div class="box-b">
-      <div class="mini-s"><div class="mini"><span>My audits / wk &mdash; solo</span><b>5</b></div><input type="range" min="1" max="12" value="5"></div>
-      <div class="mini-s"><div class="mini"><span>&hellip; after rep 1</span><b>2.5</b></div><input type="range" min="0" max="12" value="2"></div>
-      <div class="mini-s"><div class="mini"><span>&hellip; after rep 2</span><b>0</b></div><input type="range" min="0" max="12" value="0">
-        <p class="note">Hand-off schedule. Drag any of these to keep more calls yourself &mdash; the model will show
-          what that costs you in time and buys you in close rate.</p></div>
-    </div></div>
-  </div>
-
-  <div>
-    <div class="box"><div class="box-h"><span class="box-n">02</span>
-      <span class="box-t">Is the second rep worth it?</span>
-      <span class="box-s">the question you actually asked</span></div>
-      <div class="box-b">
-        <div class="compare">
-          <div class="cc"><div class="cck">You only &middot; 5 audits/wk</div><div class="ccv">$212k</div>
-            <div class="ccs">cash/mo. No commission. Highest close rate, but your calendar is full and delivery is starved.</div></div>
-          <div class="cc best"><div class="cck">1 rep + you at 2.5/wk</div><div class="ccv">$341k</div>
-            <div class="ccs">cash/mo after commission. You keep the best-fit calls, rep takes volume. <b>Best of the three.</b></div></div>
-          <div class="cc"><div class="cck">2 reps, you at 0</div><div class="ccv">$327k</div>
-            <div class="ccs">cash/mo after commission. More volume, but at a lower close rate and double commission &mdash;
-              and it buys back your time rather than more money.</div></div>
-        </div>
-        <div class="wall" style="border-left-color:var(--warn);background:var(--warn-soft)">
-          Your hypothesis holds at these assumptions: <b>two reps is worse than one rep plus you</b>.
-          The second rep converts your time into cash at a worse rate than you do. That makes the second hire a
-          <b>lifestyle decision, not a revenue one</b> &mdash; which is a perfectly good reason to make it, but worth
-          knowing that's what you're buying.
-        </div>
-      </div>
-    </div>
-
-    <div class="box"><div class="box-h"><span class="box-n">03</span><span class="box-t">Headcount over the arc</span></div>
-      <div class="box-b">
-        <div class="chartbox" data-chart="head3"></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div><!-- /p3 -->
-
-<div id="p4" hidden>
-<h1>Full arc &mdash; months 1 to 38</h1>
-<p class="sf">Every phase on one axis, never cut. Each hire marked, and the phase boundaries are the moments the
-binding constraint changed.</p>
-<div class="box"><div class="box-b">
-        <div class="chartbox" data-chart="arc4"></div>
-  </div>
-  <div class="wall" style="border-left-color:var(--accent);background:var(--accent-soft)">
-    The whole arc on one axis, with every hire marked. Phase boundaries are the moments the binding constraint
-    changed &mdash; <b>M13</b> delivery capacity, <b>M21</b> your calendar. Same three line series as the other tabs,
-    just never cut.
+  <div class="verdict warn"><h4>The risk to design around</h4>
+    <p>Milestones create cliffs. An architect watching a client wobble at month 11 has real incentive to do
+      something desperate &mdash; discount, over-promise, hide a problem &mdash; to get them over the line. And the
+      moment the 12-month bonus lands, their interest drops to zero.</p>
+    <p><b>Two milestones instead of one</b> is the mitigation: an earlier win at 6 months, so it is never a single
+      distant cliff. If you want, a third at 24 months keeps them caring past the first year.</p>
   </div>
 </div></div>
-</div><!-- /p4 -->
 
 </div>
-
-<script>
-var M2=[13,14,15,16,17,18,19,20,21];
-var D2={cap:[160,160,160,237,237,237,306,306,306],
- onb:[116,117,118,168,170,172,214,216,218], sty:[42,42,42,62,64,65,84,86,88],
- starts:[2.9,2.9,2.9,4.4,4.4,4.4,5.6,5.6,5.6], aud:[2.7,2.7,2.7,4.0,4.0,4.0,5.2,5.2,5.2],
- team:[0,0,1,1,1,2,2,2,2], live:[9,10,10,11,13,14,15,16,17],
- cash:[108,112,116,130,142,150,158,161,164], inv:[357,357,357,540,540,540,690,690,690],
- marks:{2:"hire 1",5:"hire 2"}};
-var M3=[21,23,25,27,29,31,33,35,38];
-var D3={del:[2,3,3,4,5,5,6,6,7], rep:[0,0,1,1,1,1,2,2,2],
- starts:[5.6,6.8,7.4,8.4,9.6,9.9,11.2,11.6,12.4], aud:[5.2,5.0,4.0,3.2,2.5,2.5,0,0,0],
- repaud:[0,0,4,6,8,8,16,16,16], cash:[164,196,232,268,296,312,336,341,352],
- comm:[0,0,12,16,20,20,34,34,36], live:[17,21,24,27,31,33,37,39,42],
- marks:{2:"rep 1",6:"rep 2"}};
-var M4=[1,4,7,10,13,16,19,22,25,28,31,34,38];
-var D4={cash:[24,31,44,58,86,130,150,164,232,268,312,341,352],
- starts:[1.0,1.3,1.7,2.3,2.9,4.4,5.6,5.6,7.4,8.4,9.9,11.6,12.4],
- team:[0,0,0,0,0,1,2,2,3,4,5,6,7], live:[1,3,5,7,9,11,15,17,24,27,33,39,42],
- marks:{5:"delivery hires",8:"rep 1",11:"rep 2"}};
-
-function tipHTML(t,rows){return "<b>"+t+"</b>"+rows.map(function(r){
- return '<span class="tr'+(r[2]?" hi":"")+'"><u>'+r[0]+'</u><s>'+r[1]+'</s></span>'}).join("")}
-function drawChart(el,cfg){
- var n=cfg.months.length,max=cfg.max;
- var bars=cfg.months.map(function(m,i){
-  return '<div class="ccol" data-i="'+i+'">'+cfg.series.map(function(se){
-   var h=se.data[i]/max*170; return h<=0?"":'<i style="height:'+h.toFixed(1)+'px;background:'+se.color+'"></i>';
-  }).join("")+'</div>'}).join("");
- var cap=cfg.capData?'<div class="cline" style="bottom:'+(cfg.capData[n-1]/max*170).toFixed(1)+'px"></div>':"";
- var marks=Object.keys(cfg.marks||{}).map(function(k){
-  return '<div class="cmark" style="left:'+(((+k)+0.5)/n*100).toFixed(2)+'%"><em>'+cfg.marks[k]+'</em></div>'}).join("");
- el.innerHTML='<div class="cyt">Y &mdash; '+cfg.y+'</div><div class="cwrap"><div class="cy">'+
-  [1,.667,.333,0].map(function(f){return "<span>"+cfg.fmt(max*f)+"</span>"}).join("")+
-  '</div><div><div class="cplot"><div class="cgrid"><i></i><i></i><i></i><i></i></div><div class="cbars">'+
-  cap+marks+bars+'<div class="ctip"></div></div></div><div class="cx">'+
-  cfg.months.map(function(m){return "<span>M"+m+"</span>"}).join("")+
-  '</div><div class="cxt">X &mdash; month</div></div></div><div class="clegend">'+
-  cfg.series.map(function(se){return '<span><i style="background:'+se.color+'"></i>'+se.label+'</span>'}).join("")+
-  (cfg.capLabel?'<span><i style="background:var(--crit)"></i>'+cfg.capLabel+'</span>':"")+
-  (Object.keys(cfg.marks||{}).length?'<span><i style="background:var(--warn)"></i>Hire lands</span>':"")+'</div>';
- var tip=el.querySelector(".ctip"),plot=el.querySelector(".cbars");
- Array.prototype.forEach.call(el.querySelectorAll(".ccol"),function(c){
-  c.addEventListener("mouseenter",function(){
-   var i=+c.dataset.i; tip.innerHTML=tipHTML("Month "+cfg.months[i],cfg.tip(i)); tip.style.display="block";
-   var r=c.getBoundingClientRect(),pr=plot.getBoundingClientRect();
-   tip.style.left=Math.max(2,Math.min(pr.width-216,r.left-pr.left+r.width/2-106))+"px";});
-  c.addEventListener("mouseleave",function(){tip.style.display="none"});});
-}
-var C=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()};
-function drawAll(){var e;
- if(e=document.querySelector('[data-chart="cap2"]'))drawChart(e,{y:"delivery hours consumed",months:M2,max:320,
-  fmt:function(x){return Math.round(x)},
-  series:[{label:"Steady-state",color:C("--accent-2"),data:D2.sty},{label:"Onboarding",color:C("--accent"),data:D2.onb}],
-  capData:D2.cap,capLabel:"Hours available",marks:D2.marks,
-  tip:function(i){return [["Clients started",D2.starts[i]],["Delivery team",D2.team[i]],
-   ["Hours used",(D2.onb[i]+D2.sty[i])+" / "+D2.cap[i],1],["Hours free",D2.cap[i]-D2.onb[i]-D2.sty[i]],
-   ["Live clients",D2.live[i]],["Your audits / wk",D2.aud[i]],["Invites needed",D2.inv[i]+"k"],
-   ["Cash / mo","$"+D2.cash[i]+"k",1]]}});
- if(e=document.querySelector('[data-chart="head3"]'))drawChart(e,{y:"people on the team",months:M3,max:9,
-  fmt:function(x){return x.toFixed(0)},
-  series:[{label:"Sales reps",color:C("--warn"),data:D3.rep},{label:"Delivery",color:C("--accent"),data:D3.del}],
-  marks:D3.marks,
-  tip:function(i){return [["Delivery team",D3.del[i]],["Sales reps",D3.rep[i]],
-   ["Clients started",D3.starts[i],1],["Live clients",D3.live[i]],["Your audits / wk",D3.aud[i]],
-   ["Rep audits / wk",D3.repaud[i]],["Cash / mo","$"+D3.cash[i]+"k"],["Commission","-$"+D3.comm[i]+"k"],
-   ["Net cash","$"+(D3.cash[i]-D3.comm[i])+"k",1]]}});
- if(e=document.querySelector('[data-chart="arc4"]'))drawChart(e,{y:"cash collected / month",months:M4,max:400,
-  fmt:function(x){return "$"+Math.round(x)+"k"},
-  series:[{label:"Cash / mo",color:C("--accent"),data:D4.cash}],marks:D4.marks,
-  tip:function(i){return [["Cash / mo","$"+D4.cash[i]+"k"],["Clients started",D4.starts[i]],
-   ["Live clients",D4.live[i]],["Team size",D4.team[i]],
-   ["Phase",M4[i]<13?"1 - Startup":(M4[i]<21?"2 - Scale delivery":"3 - Scale sales"),1]]}});
-}
-(function(){
- var tabs=document.querySelectorAll('.tabs button');
- function show(id){
-  ["p1","p2","p3","p4","p5"].forEach(function(p){
-   var el=document.getElementById(p); if(el)el.hidden=(p!==id);
-  });
-  tabs.forEach(function(b){b.setAttribute("aria-selected",b.dataset.p===id?"true":"false")});
-  window.scrollTo(0,0);
- }
- tabs.forEach(function(b){b.addEventListener("click",function(){show(b.dataset.p);drawAll()})});
- drawAll();
- if(window.matchMedia)window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",drawAll);
-})();
-</script>
