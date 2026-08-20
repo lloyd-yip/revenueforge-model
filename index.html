@@ -724,13 +724,14 @@ td.pause{color:var(--crit)}
       <div class="box"><div class="box-h"><span class="box-t">Your calendar</span></div><div class="box-b">
         <div class="mini-s"><div class="mini"><span>Solo &mdash; audits / wk</span><b id="o_auditCap2"></b></div>
           <input type="range" id="auditCap2" min="1" max="12" step="1" disabled>
-          <p class="note">Set on tab 1. Shown here so the hand-off reads in one place.</p></div>
-        <div class="mini-s"><div class="mini"><span>After rep 1</span><b id="o_myAud1"></b></div>
+          <p class="note">Set on tab 1. Shown here so the whole hand-off reads in one place.</p></div>
+        <div class="mini-s"><div class="mini"><span>After diagnostician 1</span><b id="o_myAud1"></b></div>
           <input type="range" id="myAud1" min="0" max="12" step="0.5"></div>
-        <div class="mini-s"><div class="mini"><span>After rep 2</span><b id="o_myAud2"></b></div>
+        <div class="mini-s"><div class="mini"><span>After diagnostician 2</span><b id="o_myAud2"></b></div>
           <input type="range" id="myAud2" min="0" max="12" step="0.5">
-          <p class="note">Your hand-off schedule. Keep more calls yourself and you close at a higher rate but
-            spend the time.</p></div>
+          <p class="note">Your hand-off schedule as diagnosticians come on. Keep more audits yourself and you
+            close at a higher rate but stay in the seat; hand them over and you buy your calendar back. At two
+            diagnosticians you are out of audits entirely.</p></div>
       </div></div>
     </div>
     <div>
@@ -1878,7 +1879,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0138";
+var BUILD_ID="0820-0141";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
