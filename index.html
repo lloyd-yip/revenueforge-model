@@ -336,6 +336,11 @@ td.pause{color:var(--crit)}
 .strainbar i{display:block;height:100%;background:var(--accent)}
 .strainbar i.warm{background:var(--warn)} .strainbar i.hot{background:var(--crit)}
 .strainnum{font-family:"IBM Plex Mono",monospace;font-size:10.5px;color:var(--ink-2);margin-top:5px}
+.compbox{margin-top:14px;padding:12px 13px;background:var(--surface-2);border-left:3px solid var(--accent)}
+.complbl{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.fstrip.tot{border-bottom:0;border-top:1px solid var(--rule-strong);margin-top:4px;padding-top:7px}
+.fstrip.tot b{font-size:15px;color:var(--accent)}
 .compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;
  background:var(--rule);border:1px solid var(--rule)}
 .cc{background:var(--surface);padding:14px}
@@ -370,7 +375,7 @@ td.pause{color:var(--crit)}
 <div class="tabs" role="tablist">
   <button type="button" role="tab" data-p="p1" aria-selected="true"><em>1 &middot; Startup</em><i id="rng1">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p2" aria-selected="false"><em>2 &middot; Scale delivery</em><i id="rng2">&nbsp;</i></button>
-  <button type="button" role="tab" data-p="p3" aria-selected="false"><em>3 &middot; Scale sales</em><i id="rng3">&nbsp;</i></button>
+  <button type="button" role="tab" data-p="p3" aria-selected="false"><em>3 &middot; Scale diagnosis</em><i id="rng3">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p4" aria-selected="false"><em>4 &middot; Full arc</em><i id="rng4">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">7</span></em><i>open questions</i></button>
 </div>
@@ -406,6 +411,11 @@ td.pause{color:var(--crit)}
         <div class="linknote">70 technical + 30 human contact, at today's efficiency.</div></div>
       <div class="lev"><label for="spread">Onboarding spread</label><input type="range" id="spread" min="1" max="9" step="1"></div>
       <div class="lev"><label for="upkeep">Steady-state upkeep</label><input type="range" id="upkeep" min="0" max="60" step="1"></div>
+      <div class="lev"><label for="auditCovers">Architecture the audit covers</label>
+        <input type="range" id="auditCovers" min="0" max="60" step="5"></div>
+      <div class="linknote" style="grid-column:1/-1">Hours of the build already done and paid for during the audit.
+        The audit is the diagnosis <em>and</em> the architecture, so a build starts with a validated spec rather
+        than from scratch.</div>
     </div>
 
     <div class="grouphdr">When phase 1 ends</div>
@@ -665,7 +675,7 @@ td.pause{color:var(--crit)}
 </div><!-- /p2 -->
 
 <div id="p3" hidden>
-  <h2 class="ph-h1">Scale sales</h2>
+  <h2 class="ph-h1">Scale diagnosis</h2>
   <p class="ph-sf">Starts where phase 2 cut off, at the month your audit load hit its ceiling. Delivery hires keep
     landing in the background &mdash; the new decision is sales headcount. The phase runs as long as it takes to
     reach the number of reps you set.</p>
@@ -683,24 +693,21 @@ td.pause{color:var(--crit)}
         <div class="mini-s"><div class="mini"><span>Close rate vs you</span><b id="o_diagClose"></b></div>
           <input type="range" id="diagClose" min="40" max="110" step="5">
           <p class="note" id="diagCloseNote"></p></div>
-        <div class="mini-s"><div class="mini"><span>Salary / mo</span><b id="o_diagCost"></b></div>
-          <input type="range" id="diagCost" min="6000" max="35000" step="1000">
-          <p class="note">Pay properly &mdash; this person carries the diagnosis, which is the product.</p></div>
-      </div></div>
-      <div class="box"><div class="box-h"><span class="box-t">Sales hires</span></div><div class="box-b">
-        <div class="mini-s"><div class="mini"><span>Rep audits / wk full tilt</span><b id="o_repAud"></b></div>
-          <input type="range" id="repAud" min="3" max="15" step="1"></div>
-        <div class="mini-s"><div class="mini"><span>Rep close rate vs you</span><b id="o_repClose"></b></div>
-          <input type="range" id="repClose" min="30" max="120" step="5">
-          <p class="note" id="repCloseNote"></p></div>
-        <div class="mini-s"><div class="mini"><span>Ramp to full calendar</span><b id="o_repRamp"></b></div>
-          <input type="range" id="repRamp" min="0" max="6" step="1">
-          <p class="note">Half a calendar until they have proven it.</p></div>
-        <div class="mini-s"><div class="mini"><span>Commission on upfront</span><b id="o_comm"></b></div>
-          <input type="range" id="comm" min="0" max="25" step="1"></div>
-        <div class="mini-s"><div class="mini"><span>Project out to</span><b id="o_targetReps"></b></div>
-          <input type="range" id="targetReps" min="1" max="6" step="1">
-          <p class="note">The timeline runs as long as it takes to get here.</p></div>
+        <div class="mini-s"><div class="mini"><span>Base / mo</span><b id="o_diagBase"></b></div>
+          <input type="range" id="diagBase" min="0" max="30000" step="500"></div>
+        <div class="mini-s"><div class="mini"><span>Commission on upfront</span><b id="o_diagCommUp"></b></div>
+          <input type="range" id="diagCommUp" min="0" max="25" step="1"></div>
+        <div class="mini-s"><div class="mini"><span>Commission on recurring</span><b id="o_diagCommRec"></b></div>
+          <input type="range" id="diagCommRec" min="0" max="15" step="1"></div>
+        <div class="mini-s"><div class="mini"><span>&hellip; paid for</span><b id="o_diagRecMo"></b></div>
+          <input type="range" id="diagRecMo" min="0" max="36" step="1">
+          <p class="note">Capped rather than permanent &mdash; it buys you their attention through the sticky
+            period without carrying a liability a buyer would discount you for.</p></div>
+        <div class="mini-s"><div class="mini"><span>Their spec quality vs yours</span><b id="o_diagSpec"></b></div>
+          <input type="range" id="diagSpec" min="90" max="140" step="5">
+          <p class="note">100% = specs as good as yours. Above that, their builds cost more hours because the
+            architecture is weaker. This is how &ldquo;can they really replace me&rdquo; gets tested.</p></div>
+        <div class="compbox" id="diagComp"></div>
       </div></div>
       <div class="box"><div class="box-h"><span class="box-t">Phase 3 pricing</span>
         <span class="box-s">priced as an established firm</span></div><div class="box-b">
@@ -708,7 +715,8 @@ td.pause{color:var(--crit)}
           <input type="range" id="upfront3" min="5000" max="120000" step="1000"></div>
         <div class="mini-s"><div class="mini"><span>Recurring / mo</span><b id="o_recurring3"></b></div>
           <input type="range" id="recurring3" min="0" max="20000" step="250">
-          <p class="note">Applies to clients signed <em>during phase 3</em>.</p></div>
+          <p class="note">Applies to clients signed <em>during phase 3</em>. Earlier clients keep what they
+            signed at.</p></div>
       </div></div>
       <div class="box"><div class="box-h"><span class="box-t">Funnel strain</span>
         <span class="box-s">what feeding this needs</span></div>
@@ -747,7 +755,7 @@ td.pause{color:var(--crit)}
         <span class="box-s">every cost in the model</span></div>
         <div class="box-b"><div class="costgrid" id="costs3"></div></div></div>
       <div class="box"><div class="box-h"><span class="box-n">05</span>
-        <span class="box-t">Is the next rep worth it?</span></div>
+        <span class="box-t">Is the next diagnostician worth it?</span></div>
         <div class="box-b"><div class="compare" id="cmp3"></div>
           <div class="wall" id="wall3"></div></div></div>
       <div class="box"><div class="box-h"><span class="box-n">06</span><span class="box-t">Month by month</span></div>
@@ -921,24 +929,26 @@ var P={
    attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,drop:10,
    auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,expansion:0,
    auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
-   m1cap:1,repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0,
+   m1cap:1,
+   myAud1:2.5,myAud2:0,
    mgrPer:5,mgrCost:10000,maxInv:1500000,
    upfront2:30000,recurring2:5000,upfront3:40000,recurring3:7000,
-   diagCount:1,diagAud:4,diagClose:90,diagCost:15000},
+   diagCount:1,diagAud:4,diagClose:90,diagBase:8000,diagCommUp:10,diagCommRec:5,
+   diagRecMo:12,diagSpec:100,auditCovers:15},
  base:{hrsMonth:200,baseHrs:85,spread:3,upkeep:10,qThresh:2,floor:38,toFloor:9,
    attRate:0.20,auditConv:5,closeRate:35,webinars:4,followup:12,drop:10,
    auditPrice:897,upfront:20000,recurring:3500,billed:3,retention:12,expansion:0,
    auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
-   repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0},
+   myAud1:2.5,myAud2:0},
  agg:{hrsMonth:240,baseHrs:70,spread:2,upkeep:8,qThresh:2.5,floor:35,toFloor:7,
    attRate:0.50,auditConv:10,closeRate:50,webinars:4,followup:15,drop:5,
    auditPrice:897,upfront:25000,recurring:4000,billed:3,retention:24,expansion:0,
    auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
-   repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0}
+   myAud1:2.5,myAud2:0}
 };
 var IDS=["hrsMonth","baseHrs","spread","upkeep","qThresh","floor","toFloor",
  "attRate","auditConv","closeRate","webinars","followup","drop","auditPrice","upfront",
- "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","m1cap","repAud","repClose","repRamp","comm","targetReps","myAud1","myAud2","mgrPer","mgrCost","maxInv","upfront2","recurring2","upfront3","recurring3","diagCount","diagAud","diagClose","diagCost"];
+ "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","m1cap","myAud1","myAud2","mgrPer","mgrCost","maxInv","upfront2","recurring2","upfront3","recurring3","diagCount","diagAud","diagClose","diagBase","diagCommUp","diagCommRec","diagRecMo","diagSpec","auditCovers"];
 
 function money(n){var a=Math.abs(n);
  if(a>=1e6)return (n<0?"-":"")+"$"+(a/1e6).toFixed(2)+"M";
@@ -967,7 +977,7 @@ function fullSim(v){
  var MAXM=140, rows=[], cohorts=[], queue=0, del=[], reps=[], mgrs=[], diags=[], maxedRun=0, calRun=0, cum=0, decayIdx=0;
  var p1End=null, p2End=null, p3End=null;
  for(var m=0;m<MAXM;m++){
-  var e=eff(v,m), onbTotal=v.baseHrs*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
+  var e=eff(v,m), onbTotal=Math.max(5,(v.baseHrs-v.auditCovers))*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
   // pricing rises by phase; a client is locked to what it signed at unless re-pricing is on
   var phaseNow=(p1End===null)?1:((p2End===null)?2:3);
   var curUp=phaseNow===1?v.upfront:(phaseNow===2?v.upfront2:v.upfront3);
@@ -991,23 +1001,24 @@ function fullSim(v){
 
   // ---- audit capacity: mine (steps down per rep) + reps (ramped) ----
   var mine=v.auditCap;
-  if(reps.length>=1)mine=v.myAud1;
-  if(reps.length>=2)mine=v.myAud2;
+  if(diags.length>=1)mine=v.myAud1;
+  if(diags.length>=2)mine=v.myAud2;
   var repWk=0;
-  reps.forEach(function(rm){ if(m>=rm) repWk += v.repAud*((m-rm)<v.repRamp?0.5:1) });
   var diagTeam=diags.filter(function(x){return m>=x}).length;
+  var diagShareNow=0;   // set once audit capacity is known, used by spec drag and comp
   var diagWk=diagTeam*v.diagAud;
   var audCapMo=(mine+diagWk+repWk)*WPM;
+  diagShareNow=audCapMo>0?(diagWk*WPM/audCapMo):0;
 
   // ---- demand: run only as many audits as capacity can absorb ----
-  var myClose=v.closeRate/100, repCloseR=myClose*(v.repClose/100);
+  var myClose=v.closeRate/100, repCloseR=0;
   // Demand is never the constraint: sell as hard as the calendar and the list allow.
   // The queue-depth throttle below is what stops this becoming overselling, and a
   // backed-up queue is exactly what justifies the next delivery hire.
   var sustain_=sustainCap(v,e,cap);
   var diagCloseR=myClose*(v.diagClose/100);
-  var totWk=mine+diagWk+repWk;
-  var blended=totWk>0 ? (mine*myClose+diagWk*diagCloseR+repWk*repCloseR)/totWk : myClose;
+  var totWk=mine+diagWk;
+  var blended=totWk>0 ? (mine*myClose+diagWk*diagCloseR)/totWk : myClose;
   var auditsNeeded=audCapMo;
   var perAudit=(v.attRate/100)*(v.auditConv/100)*(1+v.followup/100); // audits per invite sent
   var INVCAP=(v.maxInv>=2000000)?Infinity:v.maxInv;   // top of the slider = genuinely no limit
@@ -1016,22 +1027,33 @@ function fullSim(v){
   var inviteBound=isFinite(INVCAP)&&(auditsFromInvites<audCapMo-0.001);
   var share=function(w){return audCapMo>0?audits*(w*WPM/Math.max(audCapMo,0.0001)):0};
   var myAudits=share(mine), diagAudits=share(diagWk), repAudits=audits-myAudits-diagAudits;
-  var won=myAudits*myClose+diagAudits*diagCloseR+repAudits*repCloseR+live*(v.expansion/100);
+  var won=myAudits*myClose+diagAudits*diagCloseR+live*(v.expansion/100);
 
   queue=queue*(1-v.drop/100)+won;
-  var starts=Math.max(0,Math.min(Math.floor(queue),Math.floor(onbPerMo>0?free/onbPerMo:0)));
+  // a weaker spec makes the build cost more hours, in proportion to how much of the
+  // deal flow this diagnostician architected
+  var specDrag=1+(diagShareNow*((v.diagSpec-100)/100));
+  var onbPerMoEff=onbPerMo*specDrag;
+  var starts=Math.max(0,Math.min(Math.floor(queue),Math.floor(onbPerMoEff>0?free/onbPerMoEff:0)));
   if(m===0)starts=Math.min(starts,v.m1cap);   // one ideal client first, whatever the hours allow
   queue-=starts;
-  if(starts>0)cohorts.push({start:m,n:starts,onbPerMo:onbPerMo,up:up,upf:curUp,rec:curRec});
-  onbHrs+=starts*onbPerMo; load+=starts*onbPerMo; live+=starts;
+  if(starts>0)cohorts.push({start:m,n:starts,onbPerMo:onbPerMoEff,up:up,upf:curUp,rec:curRec,diagShare:diagShareNow});
+  onbHrs+=starts*onbPerMoEff; load+=starts*onbPerMoEff; live+=starts;
   free=Math.max(0,cap-load);
 
   // ---- money ----
   var auditRev=audits*v.auditPrice, upR=starts*curUp, recR=recCash;
   var cash=auditRev+upR+recR;
-  var commission=repAudits*repCloseR*curUp*(v.comm/100);
+  var commission=0;
   var mgrTeam=mgrs.filter(function(x){return m>=x}).length;
-  var payroll=del.filter(function(h){return m>=h.m}).length*v.hireCost + mgrTeam*v.mgrCost + diagTeam*v.diagCost;
+  // diagnostician comp: base + a slice of upfront + a capped slice of recurring
+  var diagUpComm=starts*curUp*diagShareNow*(v.diagCommUp/100);
+  var diagRecComm=0;
+  cohorts.forEach(function(c){var age=m-c.start;
+   if(age>=v.billed && age<Math.min(v.retention,v.billed+v.diagRecMo))
+    diagRecComm+=c.n*(v.reprice?curRec:(c.rec||v.recurring))*(c.diagShare||0)*(v.diagCommRec/100);});
+  var diagComp=diagTeam*v.diagBase+diagUpComm+diagRecComm;
+  var payroll=del.filter(function(h){return m>=h.m}).length*v.hireCost + mgrTeam*v.mgrCost + diagComp;
    var net=cash-commission-payroll;
 
   cum+=cash;
@@ -1040,7 +1062,8 @@ function fullSim(v){
    live:live,paying:paying,auditRev:auditRev,upR:upR,recR:recR,cash:cash,
    commission:commission,payroll:payroll,net:net,
    delTeam:del.filter(function(h){return m>=h.m}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
-   mgrTeam:mgrTeam, mgrCost:mgrTeam*v.mgrCost, diagTeam:diagTeam, diagCost:diagTeam*v.diagCost,
+   mgrTeam:mgrTeam, mgrCost:mgrTeam*v.mgrCost, diagTeam:diagTeam, diagCost:diagComp,
+   diagBaseCost:diagTeam*v.diagBase, diagUpComm:diagUpComm, diagRecComm:diagRecComm,
    diagWk:diagWk, diagAudits:diagAudits, delCost:del.filter(function(h){return m>=h.m}).length*v.hireCost,
    invitesNeeded:perAudit>0?audits/perAudit:0, inviteBound:inviteBound,
    inviteCeil:INVCAP, auditsWanted:auditsNeeded,
@@ -1067,10 +1090,9 @@ function fullSim(v){
   // delivery room you cannot feed
   var calendarBound=(audits>=audCapMo*0.999)&&(free>onbPerMo)&&(queue<1);
   calRun=(calendarBound && p1End!==null)?calRun+1:0;
-  if(calRun>=v.trigM && p1End!==null && (diags.length<v.diagCount || reps.length<v.targetReps)){
+  if(calRun>=v.trigM && p1End!==null && diags.length<v.diagCount){
    if(p2End===null)p2End=m;
-   if(diags.length<v.diagCount){ diags.push(m+1); } else { reps.push(m+1); }
-   calRun=0;
+   diags.push(m+1); calRun=0;
   }
   // phase 3 ends only once the system has RE-STABILISED: reps are all hired, delivery
   // has finished catching up to the demand they unlocked, and the queue has drained.
@@ -1090,7 +1112,8 @@ function fullSim(v){
          p3End:p3End===null?n-1:p3End, delHires:del, repHires:reps};
 }
 function sustainCap(v,e,cap){
- var L=v.baseHrs*e+v.upkeep*e*Math.max(0,v.retention-v.spread);
+ var base=Math.max(5,v.baseHrs-(v.auditCovers||0));   // the audit already covered some of it
+ var L=base*e+v.upkeep*e*Math.max(0,v.retention-v.spread);
  return L>0?cap/L:0;
 }
 
@@ -1117,11 +1140,6 @@ function lbl(id,v){switch(id){
  case "hireCost":return money0(v.hireCost);
  case "trigM":return v.trigM+" mo";
  case "m1cap":return String(v.m1cap);
- case "repAud":return String(v.repAud);
- case "repClose":return v.repClose+"%";
- case "repRamp":return v.repRamp+" mo";
- case "comm":return v.comm+"%";
- case "targetReps":return v.targetReps+" rep"+(v.targetReps>1?"s":"");
  case "myAud1":return nm(v.myAud1,1)+"/wk";
  case "myAud2":return nm(v.myAud2,1)+"/wk";
  case "mgrPer":return "every "+v.mgrPer;
@@ -1134,7 +1152,12 @@ function lbl(id,v){switch(id){
  case "diagCount":return v.diagCount===0?"none":String(v.diagCount);
  case "diagAud":return String(v.diagAud);
  case "diagClose":return v.diagClose+"%";
- case "diagCost":return money0(v.diagCost);
+ case "diagBase":return money0(v.diagBase);
+ case "diagCommUp":return v.diagCommUp+"%";
+ case "diagCommRec":return v.diagCommRec+"%";
+ case "diagRecMo":return v.diagRecMo+" mo";
+ case "diagSpec":return v.diagSpec+"%";
+ case "auditCovers":return Math.round(v.auditCovers)+" hrs";
 } return String(v[id])}
 
 function tip(title,pairs){
@@ -1316,7 +1339,7 @@ function render(){
   {k:"Net new clients / mo",v:nm(avgOf(rows,3,function(r){return r.starts}),1),s:"average of the last 3 months"},
   {k:"Max possible / mo",v:nm(last.maxStarts,2),s:"ceiling at this capacity"},
   {k:"Active clients",v:String(Math.round(last.live)),s:Math.round(last.paying)+" paying monthly"},
-  {k:"Upfront fees / mo",v:money(last.maxStarts*v.upfront),s:"at full capacity, one-time"},
+  {k:"Upfront fees / mo",v:money(last.maxStarts*last.curUp),s:"at full capacity, one-time"},
   {k:"MRR",v:money(last.recR),s:"recurring fees per month"},
   {k:"Cash / mo",v:money(avgOf(rows,3,function(r){return r.cash})),s:"average of the last 3 months"},
   {k:"Clients onboarded",v:String(rows.reduce(function(a,r){return a+r.starts},0)),
@@ -1567,7 +1590,7 @@ function moneyChart(sel,rows,rngId){
    return [["Audit fees",money(r.auditRev)],["Upfront",money(r.upR)],["Recurring",money(r.recR)],
    ["Total cash",money(r.cash),1],
    ["Delivery payroll",money(-r.delCost)],["Manager payroll",money(-r.mgrCost)],
-   ["Commission",money(-r.commission)],["Total costs",money(-c),1],
+   ["Total costs",money(-c),1],
    ["Margin",money(r.net)+"  ("+(r.cash>0?Math.round(r.net/r.cash*100):0)+"%)"]]}});
 }
 function loadChart(sel,rows,rngId,marks){
@@ -1589,14 +1612,14 @@ function acqChart(sel,rows,rngId,withRep){
  var se=[{label:"Audits run",color:CV("--warn"),get:function(r){return r.audits}},
          {label:"Deals closed",color:CV("--accent"),get:function(r){return r.won}}];
  if(withRep)se=[{label:"Your audits",color:CV("--warn"),get:function(r){return r.myAudits}},
-                {label:"Rep audits",color:CV("--accent-3"),get:function(r){return r.repAudits}},
+                
                 {label:"Deals closed",color:CV("--accent"),get:function(r){return r.won}}];
  drawChart(document.querySelector(sel),{
   y:"audits run and deals closed per month", rows:rows, grouped:true,
   max:Math.max.apply(null,rows.map(function(r){return r.audits}))*1.15||1,
   fmt:function(x){return Math.round(x)}, series:se,
   tip:function(r){return [["Audits run",Math.floor(r.audits)],
-   ["\u2014 yours",Math.floor(r.myAudits)],["\u2014 reps",Math.floor(r.repAudits)],
+   ["\u2014 yours",Math.floor(r.myAudits)],
    ["Deals closed",Math.floor(r.won),1],["Net new clients",r.starts],
    ["Queue waiting",Math.floor(r.queue)],
    ["Invites needed",kf(r.invitesNeeded)],["Demand-capped",r.inviteBound?"yes":"no"]]}});
@@ -1605,16 +1628,30 @@ var v_={};
 function headChart(sel,rows,rngId,marks){
  if(rngId&&$(rngId))$(rngId).textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
  drawChart(document.querySelector(sel),{
-  y:"team members (delivery, managers, sales)", rows:rows,
+  y:"team members (delivery, managers, diagnosticians)", rows:rows,
   max:Math.max(4,Math.max.apply(null,rows.map(function(r){return r.delTeam+r.repTeam+r.mgrTeam}))+1),
   fmt:function(x){return Math.round(x)},
-  series:[{label:"Sales reps",color:CV("--warn"),get:function(r){return r.repTeam}},
+  series:[{label:"Diagnosticians",color:CV("--warn"),get:function(r){return r.diagTeam}},
           {label:"Managers",color:CV("--accent-3"),get:function(r){return r.mgrTeam}},
           {label:"Delivery",color:CV("--accent"),get:function(r){return r.delTeam}}],
   marks:marks||[],
-  tip:function(r){return [["Delivery hires",r.delTeam],["Managers",r.mgrTeam],["Sales reps",r.repTeam],
+  tip:function(r){return [["Delivery hires",r.delTeam],["Managers",r.mgrTeam],["Diagnosticians",r.diagTeam],
    ["Total hired",r.delTeam+r.mgrTeam+r.repTeam,1],["Net new clients",r.starts],
    ["Active clients",Math.round(r.live)],["Payroll",money(-r.payroll)]]}});
+}
+function compInto(id,r,v){
+ var el=$(id); if(!el)return;
+ if(!r.diagTeam){el.innerHTML='<p class="note">No diagnosticians hired in this run.</p>';return}
+ var per=function(x){return r.diagTeam?x/r.diagTeam:0};
+ var tot=per(r.diagCost);
+ el.innerHTML=
+  '<div class="complbl">What one diagnostician earns &middot; month '+r.m+'</div>'+
+  '<div class="fstrip"><span>Base</span><b>'+money(per(r.diagBaseCost))+'</b><i></i></div>'+
+  '<div class="fstrip"><span>'+v.diagCommUp+'% of upfront</span><b>'+money(per(r.diagUpComm))+'</b><i></i></div>'+
+  '<div class="fstrip"><span>'+v.diagCommRec+'% of recurring</span><b>'+money(per(r.diagRecComm))+'</b><i></i></div>'+
+  '<div class="fstrip tot"><span>Total / month</span><b>'+money(tot)+'</b><i></i></div>'+
+  '<div class="strainnum">Annualised: <b>'+money(tot*12)+'</b> &middot; '+
+   Math.round(r.cash>0?tot*r.diagTeam/r.cash*100:0)+'% of company cash</div>';
 }
 function funnelInto(id,first,last,v){
  var el=$(id); if(!el)return;
@@ -1648,7 +1685,6 @@ function costLine(r){
  if(r.delCost>0)parts.push(money(-r.delCost)+" delivery ("+r.delTeam+"\u00d7)");
  if(r.mgrCost>0)parts.push(money(-r.mgrCost)+" managers ("+r.mgrTeam+"\u00d7)");
  if(r.diagCost>0)parts.push(money(-r.diagCost)+" diagnosticians ("+r.diagTeam+"\u00d7)");
- if(r.commission>0)parts.push(money(-r.commission)+" commission");
  return parts.length?("after "+parts.join(", ")):"no costs yet";
 }
 
@@ -1677,7 +1713,7 @@ function renderPhases(){
   {k:"Delivery hires",v:String(last2.delTeam),s:"people hired, plus you and Geri"},
   {k:"Active clients",v:String(Math.round(last2.live)),s:Math.round(last2.paying)+" paying monthly"},
   {k:"Your audits / wk",v:nm(last2.auditsWk,1),s:"your ceiling is "+v.auditCap},
-  {k:"Upfront fees / mo",v:money(last2.maxStarts*v.upfront),s:"at full capacity, one-time"},
+  {k:"Upfront fees / mo",v:money(last2.maxStarts*last2.curUp),s:"at full capacity, one-time"},
   {k:"MRR",v:money(last2.recR),s:"recurring fees per month"},
   {k:"Cash / mo",v:money(avgOf(s2,3,function(r){return r.cash})),s:"average of the last 3 months"},
   {k:"Net / mo",v:money(avgOf(s2,3,function(r){return r.net})),s:costLine(last2)}]);
@@ -1710,8 +1746,8 @@ function renderPhases(){
  if($("o_auditCap2")){$("o_auditCap2").textContent=String(v.auditCap);$("auditCap2").value=v.auditCap}
  if($("diagCloseNote"))$("diagCloseNote").innerHTML="You close at "+v.closeRate+"%, so a diagnostician closes at "+
   nm(v.closeRate*v.diagClose/100,1)+"% \u2014 well above a rep, because they are diagnosing rather than selling.";
- if($("repCloseNote"))$("repCloseNote").innerHTML="You close at "+v.closeRate+"%, so a rep closes at "+
-  nm(v.closeRate*v.repClose/100,1)+"%.";
+
+ compInto("diagComp",last3,v);
  funnelInto("funnel3",s3[0],last3,v);
  tilesInto("tiles3",[
   {k:"Net new clients / mo",v:nm(avgOf(s3,3,function(r){return r.starts}),1),s:"average of the last 3 months"},
@@ -1719,15 +1755,14 @@ function renderPhases(){
   {k:"Delivery hires",v:String(last3.delTeam),s:"people hired, plus you and Geri"},
   {k:"Managers",v:String(last3.mgrTeam),s:"one per "+v.mgrPer+" delivery hires"},
   {k:"Diagnosticians",v:String(last3.diagTeam),s:nm(last3.diagWk,0)+" audits/wk at "+nm(v.closeRate*v.diagClose/100,1)+"% close"},
-  {k:"Sales reps",v:String(last3.repTeam),s:"commission only, no base"},
   {k:"Active clients",v:String(Math.round(last3.live)),s:Math.round(last3.paying)+" paying monthly"},
-  {k:"Upfront fees / mo",v:money(last3.maxStarts*v.upfront),s:"at full capacity, one-time"},
+  {k:"Upfront fees / mo",v:money(last3.maxStarts*last3.curUp),s:"at full capacity, one-time"},
   {k:"MRR",v:money(last3.recR),s:"recurring fees per month"},
   {k:"Cash / mo",v:money(avgOf(s3,3,function(r){return r.cash})),s:"average of the last 3 months"},
   {k:"Net / mo",v:money(avgOf(s3,3,function(r){return r.net})),s:costLine(last3)}]);
  headChart('[data-chart="head3"]',s3,null,
-  F.repHires.map(function(rm){var ix=-1;s3.forEach(function(r,j){if(r.m===rm)ix=j});return {i:ix,label:"+1 rep"}})
-   .concat(F.mgrHires.map(function(mm){var ix=-1;s3.forEach(function(r,j){if(r.m===mm)ix=j});return {i:ix,label:"+1 manager"}})));
+  (F.mgrHires.map(function(mm){var ix=-1;s3.forEach(function(r,j){if(r.m===mm)ix=j});return {i:ix,label:"+1 manager"}}))
+   .concat(F.diagHires.map(function(dm){var ix=-1;s3.forEach(function(r,j){if(r.m===dm)ix=j});return {i:ix,label:"+1 diagnostician"}})));
  moneyChart('[data-chart="money3"]',s3,"rng3m");
  loadChart('[data-chart="load3"]',s3,"rng3l",F.delHires.map(function(hm,i){var ix=-1;
    s3.forEach(function(r,j){if(r.m===hm+1)ix=j}); return {i:ix,label:"+1 delivery"}}));
@@ -1745,32 +1780,31 @@ function renderPhases(){
    {k:"Cash collected / mo",v:money(L.cash),s:"audits + upfront + recurring"},
    {k:"Delivery payroll / mo",v:money(-L.delCost),s:L.delTeam+" hires \u00d7 "+money0(v.hireCost)+"/mo",neg:1},
    {k:"Manager payroll / mo",v:money(-L.mgrCost),s:L.mgrTeam+" \u00d7 "+money0(v.mgrCost)+"/mo \u2014 resets the decay",neg:1},
-   {k:"Diagnostician payroll / mo",v:money(-L.diagCost),s:L.diagTeam+" \u00d7 "+money0(v.diagCost)+"/mo \u2014 raises your audit ceiling",neg:1},
-   {k:"Sales commission / mo",v:money(-L.commission),s:v.comm+"% of upfront on rep-closed deals",neg:1},
+   {k:"Diagnostician cost / mo",v:money(-L.diagCost),s:L.diagTeam+" \u00d7 base + commission",neg:1},
    {k:"Net / mo",v:money(L.net),s:"cash less both",tot:1}
   ].map(function(c){return '<div class="costcell'+(c.neg?" neg":"")+(c.tot?" tot":"")+'">'+
     '<div class="cck2">'+c.k+'</div><div class="ccv2">'+c.v+'</div><div class="ccs2">'+c.s+'</div></div>'}).join("");
  }
  var byReps={};
- R.forEach(function(r){byReps[r.repTeam]=r});
+ R.forEach(function(r){byReps[r.diagTeam]=r});
  var keys=Object.keys(byReps).sort(function(a,b){return a-b});
  var bestK=keys.reduce(function(a,b){return byReps[b].net>byReps[a].net?b:a},keys[0]);
  if($("cmp3"))$("cmp3").innerHTML=keys.map(function(k){var r=byReps[k];
   return '<div class="cc'+(k===bestK?" best":"")+'"><div class="cck">'+
-   (k==="0"?"You only":k+" rep"+(k==="1"?"":"s"))+' \u00b7 '+nm(r.myWk,1)+'/wk yours</div>'+
+   (k==="0"?"You only":k+" diagnostician"+(k==="1"?"":"s"))+' \u00b7 '+nm(r.myWk,1)+'/wk yours</div>'+
    '<div class="ccv">'+money(r.net)+'</div><div class="ccs">net cash/mo at M'+r.m+
    ' \u00b7 '+r.starts+' starts, '+r.delTeam+' delivery.'+
    (k===bestK?' <b>Best of these.</b>':'')+'</div></div>'}).join("");
  if($("wall3")){
-  $("wall3").className="wall"+(bestK===String(last4.repTeam)?" ok":"");
-  $("wall3").innerHTML=(bestK===String(last4.repTeam)
-   ? "Every rep up to <b>"+last4.repTeam+"</b> pays for itself at these assumptions."
-   : "Net cash peaks at <b>"+bestK+" rep"+(bestK==="1"?"":"s")+"</b>, not "+last4.repTeam+
-     ". Past that, commission and a lower close rate cost more than the extra volume brings \u2014 which makes the next hire a <b>time decision, not a revenue one</b>.");}
+  $("wall3").className="wall"+(bestK===String(last4.diagTeam)?" ok":"");
+  $("wall3").innerHTML=(bestK===String(last4.diagTeam)
+   ? "Every diagnostician up to <b>"+last4.diagTeam+"</b> pays for itself at these assumptions."
+   : "Net cash peaks at <b>"+bestK+" diagnostician"+(bestK==="1"?"":"s")+"</b>, not "+last4.diagTeam+
+     ". Past that their commission costs more than the extra volume brings, or the invite ceiling binds first.");}
 
  tilesInto("tiles4",[
   {k:"Months modelled",v:String(last4.m)},
-  {k:"Upfront fees / mo",v:money(last4.maxStarts*v.upfront),s:"at full capacity, one-time"},
+  {k:"Upfront fees / mo",v:money(last4.maxStarts*last4.curUp),s:"at full capacity, one-time"},
   {k:"MRR at end",v:money(last4.recR),s:"recurring per month"},
   {k:"Cash / mo at end",v:money(avgOf(R,3,function(r){return r.cash})),s:"average of the last 3 months"},
   {k:"Net / mo at end",v:money(avgOf(R,3,function(r){return r.net})),s:costLine(last4)},
@@ -1789,11 +1823,11 @@ function renderPhases(){
   costGet:function(r){return r.payroll+r.commission},
   costLabel:"Costs out \u2014 bar above the line is margin",
   marks:F.delHires.map(function(h){return {i:h.m-1,label:"+1 delivery"}})
-        .concat(F.repHires.map(function(rm,i){return {i:rm-1,label:"+1 rep"}}))
+        
         .concat(F.mgrHires.map(function(mm){return {i:mm-1,label:"+1 manager"}})),
-  tip:function(r){return [["Phase",r.m<=f1.m?"1 \u00b7 Startup":(r.m<=last2.m?"2 \u00b7 Scale delivery":"3 \u00b7 Scale sales")],
+  tip:function(r){return [["Phase",r.m<=f1.m?"1 \u00b7 Startup":(r.m<=last2.m?"2 \u00b7 Scale delivery":"3 \u00b7 Scale diagnosis")],
    ["Net new clients",r.starts],["Active clients",Math.round(r.live)],
-   ["People hired",r.delTeam+" delivery, "+r.repTeam+" sales"],
+   ["People hired",r.delTeam+" delivery, "+r.diagTeam+" diagnosticians"],
    ["Cash / mo",money(r.cash),1],["Total costs",money(-(r.payroll+r.commission))],
    ["Net / mo",money(r.net)+"  ("+(r.cash>0?Math.round(r.net/r.cash*100):0)+"%)",1]]}});
  moneyChart('[data-chart="money4"]',R,null);
@@ -1801,8 +1835,7 @@ function renderPhases(){
   F.delHires.map(function(h){return {i:h.m-1,label:"+1 delivery"}}));
  acqChart('[data-chart="acq4"]',R,"rng4a",true);
  headChart('[data-chart="head4"]',R,"rng4h",
-  F.repHires.map(function(rm){return {i:rm-1,label:"+1 rep"}})
-   .concat(F.mgrHires.map(function(mm){return {i:mm-1,label:"+1 manager"}})));
+  (F.mgrHires.map(function(mm){return {i:mm-1,label:"+1 manager"}})));
  if($("rng4m"))$("rng4m").textContent="M"+R[0].m+"\u2013M"+last4.m;
  if($("mix4")){
   var tot=last4.cash||1;
@@ -1845,7 +1878,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0121";
+var BUILD_ID="0820-0138";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
