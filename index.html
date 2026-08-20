@@ -952,18 +952,16 @@ function fullSim(v){
 
   // ---- demand: run only as many audits as capacity can absorb ----
   var myClose=v.closeRate/100, repCloseR=myClose*(v.repClose/100);
-  // Target whatever FREE capacity can absorb right now, not the long-run equilibrium.
-  // Early on there is plenty of slack, so demand should be pushed hard to fill it;
-  // once full, fall back to the replacement rate that keeps the book level.
+  // Demand is never the constraint: sell as hard as the calendar and the list allow.
+  // The queue-depth throttle below is what stops this becoming overselling, and a
+  // backed-up queue is exactly what justifies the next delivery hire.
   var sustain_=sustainCap(v,e,cap);
-  var canFillNow=onbPerMo>0 ? free/onbPerMo : 0;
-  var wantStarts=Math.max(sustain_,canFillNow);
   var blended=(mine+repWk)>0 ? (mine*myClose+repWk*repCloseR)/(mine+repWk) : myClose;
-  var auditsNeeded=blended>0 ? wantStarts/blended : 0;
+  var auditsNeeded=audCapMo;
   var perAudit=(v.attRate/100)*(v.auditConv/100)*(1+v.followup/100); // audits per invite sent
   var auditsFromInvites=v.maxInv*perAudit;
-  var audits=Math.min(audCapMo,auditsNeeded,auditsFromInvites);
-  var inviteBound=(auditsFromInvites<Math.min(audCapMo,auditsNeeded)-0.001);
+  var audits=Math.min(audCapMo,auditsFromInvites);
+  var inviteBound=(auditsFromInvites<audCapMo-0.001);
   var myAudits=audCapMo>0?audits*(mine*WPM/Math.max(audCapMo,0.0001)):audits;
   var repAudits=audits-myAudits;
   var won=myAudits*myClose+repAudits*repCloseR+live*(v.expansion/100);
@@ -1003,6 +1001,7 @@ function fullSim(v){
   var atFloor=e<=v.floor/100+0.001;
   rows[rows.length-1].maxed=maxed;
   rows[rows.length-1].maxedRun=maxedRun;
+  rows[rows.length-1].calendarBound=calendarBound;
 
   if(maxedRun>=v.trigM && atFloor && queue>0.5){
    if(p1End===null)p1End=m;
@@ -1011,8 +1010,10 @@ function fullSim(v){
    if(v.mgrPer>0 && del.length%v.mgrPer===0){ mgrs.push(m+1); decayIdx=0; }
   }
   // sales hire when audit demand outruns the calendar
-  // your calendar only counts as the constraint if it stays overloaded
-  calRun=(auditsNeeded>audCapMo*1.02 && p1End!==null)?calRun+1:0;
+  // your calendar is the constraint when you are selling flat out AND still have
+  // delivery room you cannot feed
+  var calendarBound=(audits>=audCapMo*0.999)&&(free>onbPerMo)&&(queue<1);
+  calRun=(calendarBound && p1End!==null)?calRun+1:0;
   if(calRun>=v.trigM && reps.length<v.targetReps && p1End!==null){
    if(p2End===null)p2End=m;
    reps.push(m+1); calRun=0;
@@ -1758,7 +1759,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-0053";
+var BUILD_ID="0820-0055";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
