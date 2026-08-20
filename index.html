@@ -1,0 +1,866 @@
+<title>RevenueForge Capacity Model</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{--ground:#E7EBEB;--surface:#F7F9F9;--surface-2:#EFF3F3;--sunken:#DCE2E2;
+ --ink:#10171A;--ink-2:#3C4A4D;--ink-3:#697A7D;--rule:#C4CFCF;--rule-strong:#A4B2B2;
+ --accent:#12605C;--accent-2:#2E8A84;--accent-3:#7FB8B3;--accent-soft:#D2E2E0;
+ --warn:#9E650F;--warn-soft:#EFE1C4;--crit:#95331F;--crit-soft:#EFD8D1;}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
+ --ground:#0B1112;--surface:#131B1C;--surface-2:#182122;--sunken:#080D0E;
+ --ink:#E5ECEB;--ink-2:#A7B6B5;--ink-3:#768685;--rule:#243233;--rule-strong:#38494A;
+ --accent:#4FB6AE;--accent-2:#2E7F79;--accent-3:#1E5551;--accent-soft:#153634;
+ --warn:#D6A241;--warn-soft:#372B12;--crit:#D46E5A;--crit-soft:#381B15;}}
+:root[data-theme="dark"]{--ground:#0B1112;--surface:#131B1C;--surface-2:#182122;--sunken:#080D0E;
+ --ink:#E5ECEB;--ink-2:#A7B6B5;--ink-3:#768685;--rule:#243233;--rule-strong:#38494A;
+ --accent:#4FB6AE;--accent-2:#2E7F79;--accent-3:#1E5551;--accent-soft:#153634;
+ --warn:#D6A241;--warn-soft:#372B12;--crit:#D46E5A;--crit-soft:#381B15;}
+*{box-sizing:border-box}
+html,body{max-width:100%;overflow-x:hidden}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:"Archivo",Arial,sans-serif;
+ font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1320px;margin:0 auto;padding:0 24px 70px}
+.masthead{border-bottom:2px solid var(--ink);padding:30px 0 16px;display:flex;
+ justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;
+ text-transform:uppercase;color:var(--ink-3);margin:0 0 8px}
+h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin:0 0 6px;line-height:1.06}
+.sf{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink-2);margin:0;max-width:62ch}
+.presets{display:flex;border:1px solid var(--rule-strong);background:var(--surface)}
+.presets button{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+ text-transform:uppercase;padding:9px 14px;border:0;border-right:1px solid var(--rule);
+ background:transparent;color:var(--ink-2);cursor:pointer}
+.presets button:last-child{border-right:0}
+.presets button[aria-pressed="true"]{background:var(--ink);color:var(--ground);font-weight:500}
+.presets button:hover{background:var(--surface-2);color:var(--ink)}
+.presets button[aria-pressed="true"]:hover{background:var(--ink);color:var(--ground)}
+#resetBtn{color:var(--ink-3)}
+.saved{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--accent);opacity:0;transition:opacity .3s;
+ align-self:center;margin-left:10px}
+.saved.on{opacity:1}
+.presets button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.seq{display:flex;align-items:center;gap:9px;margin:22px 0 8px;flex-wrap:wrap}
+.seq i{width:22px;height:1px;background:var(--rule-strong);display:block}
+.seq span{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;
+ text-transform:uppercase;color:var(--ink-3)}
+.box{border:1px solid var(--rule);background:var(--surface);margin-bottom:16px}
+.box-h{padding:10px 14px;border-bottom:1px solid var(--rule);background:var(--surface-2);
+ display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.box-n{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--accent);font-weight:600}
+.box-t{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;
+ text-transform:uppercase;color:var(--ink-2);font-weight:600}
+.box-s{font-family:"Source Serif 4",Georgia,serif;font-size:12px;color:var(--ink-3);margin-left:auto}
+.box-b{padding:14px}
+.capgrid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:1px;background:var(--rule);
+ border:1px solid var(--rule);margin-bottom:16px}
+@media(max-width:940px){.capgrid{grid-template-columns:1fr}}
+.capcell{background:var(--surface);padding:13px 14px}
+.capk{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
+.capv{font-family:"IBM Plex Mono",monospace;font-size:27px;font-weight:600;letter-spacing:-.02em;line-height:1}
+.capsub{font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;color:var(--ink-3);margin-top:7px;line-height:1.45}
+.capsub b{color:var(--ink-2);font-family:"IBM Plex Mono",monospace;font-weight:600}
+.effcurve{display:flex;align-items:flex-end;gap:2px;height:46px;margin-top:4px}
+.effcurve i{flex:1;background:var(--accent);display:block;min-height:2px}
+.effcurve i.floor{background:var(--crit)}
+.efflbl{display:flex;justify-content:space-between;margin-top:4px}
+.efflbl span{font-family:"IBM Plex Mono",monospace;font-size:9.5px;color:var(--ink-3)}
+.grouphdr{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;
+ text-transform:uppercase;color:var(--accent);font-weight:600;margin:4px 0 9px;
+ padding-bottom:5px;border-bottom:1px solid var(--rule)}
+.levers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 22px;margin-bottom:16px}
+@media(max-width:940px){.levers{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.levers{grid-template-columns:1fr}}
+.lev label{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
+ font-size:12.5px;color:var(--ink-2);margin-bottom:3px}
+.lev label b{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
+ background:var(--sunken);border:1px solid var(--rule);padding:1px 7px}
+input[type=range]{width:100%;accent-color:var(--accent);height:16px;margin:0;display:block}
+input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.linknote{grid-column:1/-1;font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;
+ color:var(--ink-3);line-height:1.45;margin-top:-2px}
+.tgt{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.tgt input{font-family:"IBM Plex Mono",monospace;font-size:26px;font-weight:600;
+ background:var(--surface-2);border:1px solid var(--rule-strong);color:var(--ink);
+ padding:7px 14px;width:130px;text-align:right}
+.tgt-l{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-3);line-height:1.5}
+.btn{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+ padding:9px 14px;border:1px solid var(--ink);background:var(--ink);color:var(--ground);cursor:pointer}
+.btn:hover{background:var(--accent);border-color:var(--accent)}
+.btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chain{background:var(--accent-soft);border-left:3px solid var(--accent);padding:11px 14px;
+ font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);line-height:1.7}
+.chain.over{background:var(--crit-soft);border-left-color:var(--crit)}
+.chain b{color:var(--ink);font-weight:600}
+.cols{display:grid;grid-template-columns:300px minmax(0,1fr);gap:24px;align-items:start}
+@media(max-width:940px){.cols{grid-template-columns:minmax(0,1fr)}}
+.fn{display:flex;flex-direction:column;align-items:center}
+.fbar{position:relative;background:var(--sunken);border:1px solid var(--rule);
+ padding:9px 13px;display:flex;justify-content:space-between;align-items:baseline;
+ gap:12px;width:100%;overflow:hidden}
+.fbar .fill{position:absolute;left:0;top:0;bottom:0;background:var(--accent);transition:width .25s ease}
+.fbar.b2 .fill{background:var(--accent-2)} .fbar.b3 .fill{background:var(--crit)}
+.fbar .fk,.fbar .fv{position:relative;z-index:1;color:var(--ink)}
+.fbar .fk{color:var(--ink-2)}
+.fk{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
+.fv{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600;white-space:nowrap}
+.fstep{width:100%;padding:9px 0 10px}
+.fstep .fl{font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;color:var(--ink-3);
+ display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px;gap:8px}
+.fstep .fp{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink)}
+.gate{background:var(--crit-soft);border-top:1px solid var(--crit);border-bottom:1px solid var(--crit);
+ width:100%;padding:7px 10px;text-align:center;font-family:"IBM Plex Mono",monospace;
+ font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--crit);font-weight:600}
+.mini{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+.mini span{font-size:12.5px;color:var(--ink-2)}
+.mini b{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;
+ background:var(--sunken);border:1px solid var(--rule);padding:1px 7px;min-width:72px;text-align:right}
+.mini-s{margin-bottom:12px}
+.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+@media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tl{background:var(--surface);padding:13px 12px}
+.tlk{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.11em;
+ text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
+.tlv{font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:600;letter-spacing:-.02em}
+.chartwrap{display:grid;grid-template-columns:56px minmax(0,1fr) 62px;align-items:stretch}
+.yax{display:flex;flex-direction:column;justify-content:space-between;padding:2px 8px 16px 0;text-align:right}
+.yax span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;color:var(--ink-2)}
+.yax.r{text-align:left;padding:2px 0 16px 8px}
+.plot{position:relative;border-left:1px solid var(--rule-strong);border-bottom:1px solid var(--rule-strong)}
+.grid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between}
+.grid i{display:block;height:1px;background:var(--rule)}
+.bars{position:relative;display:flex;align-items:flex-end;gap:4px;height:170px;padding:0 4px}
+.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative}
+.col i{display:block}
+.sA{background:var(--warn)} .sB{background:var(--accent)} .sC{background:var(--accent-2)}
+.capline{position:absolute;left:0;right:0;border-top:2px dashed var(--crit);z-index:2}
+.caplbl{position:absolute;right:2px;top:-15px;font-family:"IBM Plex Mono",monospace;
+ font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--crit)}
+.xax{display:flex;gap:4px;padding:5px 4px 0}
+.xax span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;color:var(--ink-2)}
+.axttl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:6px}
+.axttl.x{text-align:center;margin:6px 0 0}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;padding-left:56px}
+.legend span{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-2)}
+.legend i{width:10px;height:10px;display:inline-block;margin-right:6px;vertical-align:middle}
+.datarow{display:flex;align-items:center;margin-right:62px;border-top:1px solid var(--rule)}
+.datarow .rk{width:56px;flex:none;font-family:"IBM Plex Mono",monospace;font-size:8.5px;
+ letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-right:6px;text-align:right;line-height:1.2}
+.datarow .rv{flex:1;display:flex;gap:4px;padding:5px 4px}
+.datarow .rv span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600}
+.datarow.k1 .rv span{color:var(--warn)}
+.datarow.k2 .rv span{color:var(--accent)}
+.datarow.k3 .rv span{color:var(--ink-2);font-weight:500;font-size:10px}
+.charttip{display:none;position:absolute;bottom:calc(100% + 10px);z-index:40;width:204px;
+ background:var(--ink);color:var(--ground);padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.4);
+ font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.5;pointer-events:none;
+ font-variant-numeric:tabular-nums}
+.charttip b{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+ margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.28);opacity:.85}
+.charttip .tr{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:1.5px 0}
+.charttip .tr.hi{margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.18)}
+.charttip i{font-style:normal;opacity:.68;white-space:nowrap}
+.charttip em{font-style:normal;font-weight:600;white-space:nowrap}
+.grp{flex:1;display:flex;align-items:flex-end;gap:2px;height:100%}
+.grp i{flex:1;display:block}
+.gA{background:var(--warn)} .gB{background:var(--accent)}
+.pausetag{position:absolute;bottom:2px;left:50%;transform:translateX(-50%) rotate(-90deg);
+ transform-origin:center;font-family:"IBM Plex Mono",monospace;font-size:7.5px;
+ letter-spacing:.1em;text-transform:uppercase;color:var(--crit);white-space:nowrap}
+.salegrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+@media(max-width:760px){.salegrid{grid-template-columns:1fr}}
+.salecell{background:var(--surface);padding:13px 14px}
+.meter{height:20px;background:var(--sunken);border:1px solid var(--rule-strong);position:relative;margin-top:6px}
+.meter i{display:block;height:100%;background:var(--accent)}
+.gapnote{border-left:3px solid var(--crit);background:var(--crit-soft);padding:11px 14px;margin-top:14px;
+ font-family:"Source Serif 4",Georgia,serif;font-size:12.5px;color:var(--ink-2);line-height:1.55}
+.gapnote b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink)}
+table{border-collapse:collapse;width:100%;min-width:880px}
+th,td{padding:6px 9px;text-align:right;font-family:"IBM Plex Mono",monospace;font-size:11px;
+ white-space:nowrap;font-variant-numeric:tabular-nums}
+th{font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+ border-bottom:1px solid var(--rule-strong);background:var(--surface-2);position:sticky;top:0}
+th:first-child,td:first-child{text-align:left}
+tbody tr{border-bottom:1px solid var(--rule)}
+tbody tr:nth-child(even){background:var(--surface-2)}
+td.pause{color:var(--crit)}
+.tw{overflow-x:auto}
+.foot{font-family:"Source Serif 4",Georgia,serif;font-size:13px;color:var(--ink-3);
+ margin:24px 0 0;line-height:1.6;max-width:80ch}
+.foot strong{color:var(--ink-2)}
+
+/* ---- hover explanations ---- */
+.q{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;
+ border:1px solid var(--rule-strong);border-radius:50%;font-family:"IBM Plex Mono",monospace;
+ font-size:9px;line-height:1;color:var(--ink-3);margin-left:6px;cursor:help;flex:none;
+ position:relative;vertical-align:middle;background:var(--surface)}
+.q:hover,.q:focus{border-color:var(--accent);color:var(--accent);outline:none}
+.q .tipbox{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);
+ z-index:60;width:250px;background:var(--ink);color:var(--ground);padding:9px 11px;
+ font-family:"Source Serif 4",Georgia,serif;font-size:12px;line-height:1.5;text-align:left;
+ opacity:0;visibility:hidden;transition:opacity .12s;pointer-events:none;
+ box-shadow:0 3px 12px rgba(0,0,0,.35);font-weight:400;letter-spacing:0;text-transform:none}
+.q .tipbox::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);
+ border:5px solid transparent;border-top-color:var(--ink)}
+.q:hover .tipbox,.q:focus .tipbox{opacity:1;visibility:visible}
+.q.flip .tipbox{bottom:auto;top:calc(100% + 8px)}
+.q.flip .tipbox::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--ink)}
+.tiphint{font-family:"Source Serif 4",Georgia,serif;font-size:12.5px;color:var(--ink-3);margin-left:auto}
+</style>
+
+<div class="wrap">
+
+<div class="masthead">
+  <div><p class="eyebrow">RevenueForge &middot; Unit Economics &middot; Phase 1 &mdash; you + Geri</p>
+  <h1>What can this business actually hold?</h1>
+  <p class="sf">Capacity is not a constant. It rises as the factory gets better, and everything downstream follows it.</p></div>
+  <div style="display:flex;align-items:center">
+  <div class="presets" role="group" aria-label="Assumption stance">
+    <button type="button" data-preset="cons" aria-pressed="true">Conservative</button>
+    <button type="button" data-preset="base" aria-pressed="false">Base</button>
+    <button type="button" data-preset="agg" aria-pressed="false">Aggressive</button>
+    <button type="button" id="resetBtn" title="Discard saved changes and reload the preset">Reset</button>
+  </div><span class="saved" id="savedTag">saved</span></div>
+</div>
+
+<div class="seq"><span>Capacity</span><i></i><span>sets the target</span><i></i><span>which sets the funnel</span></div>
+
+<div class="box">
+  <div class="box-h"><span class="box-n">01</span><span class="box-t">Delivery capacity</span>
+    <span class="box-s">hours are fixed &mdash; efficiency is what improves &middot; <b style="font-family:inherit">hover any&nbsp;?&nbsp;for an explanation</b></span></div>
+  <div class="box-b">
+    <div class="capgrid">
+      <div class="capcell"><div class="capk">Starts / month &mdash; now</div>
+        <div class="capv" id="r_now">&mdash;</div><div class="capsub" id="r_nowsub"></div></div>
+      <div class="capcell"><div class="capk">Two-person ceiling</div>
+        <div class="capv" id="r_ceil">&mdash;</div><div class="capsub" id="r_ceilsub"></div></div>
+      <div class="capcell"><div class="capk">Efficiency over 12 months</div>
+        <div class="effcurve" id="r_eff"></div>
+        <div class="efflbl"><span id="r_eff1"></span><span id="r_eff2"></span></div>
+        <div class="capsub">Red = process gains exhausted. Past there, only more hours move the number.</div></div>
+    </div>
+
+    <div class="grouphdr">Time we have</div>
+    <div class="levers">
+      <div class="lev"><label for="hrsWeek">Delivery hours / week</label><input type="range" id="hrsWeek" min="10" max="140" step="1"></div>
+      <div class="lev"><label for="hrsMonth">Delivery hours / month</label><input type="range" id="hrsMonth" min="43" max="606" step="1"></div>
+      <div class="linknote">Linked &mdash; move either, the other follows (&times;4.33). Delivery time only, not sales or admin.</div>
+    </div>
+
+    <div class="grouphdr">What one client costs</div>
+    <div class="levers">
+      <div class="lev"><label for="baseHrs">Total hours to onboard</label><input type="range" id="baseHrs" min="20" max="300" step="5">
+        <div class="linknote">70 technical + 30 human contact, at today's efficiency.</div></div>
+      <div class="lev"><label for="spread">Onboarding spread</label><input type="range" id="spread" min="1" max="9" step="1"></div>
+      <div class="lev"><label for="upkeep">Steady-state upkeep</label><input type="range" id="upkeep" min="0" max="60" step="1"></div>
+    </div>
+
+    <div class="grouphdr">Acquisition throttle</div>
+    <div class="levers">
+      <div class="lev"><label for="qThresh">Pause selling when queue exceeds</label><input type="range" id="qThresh" min="0.5" max="6" step="0.5"></div>
+      <div class="linknote" style="grid-column:2/-1">Months of onboarding capacity already committed to closed deals. Above this, stop running audits rather than sell something you cannot deliver.</div>
+    </div>
+
+    <div class="grouphdr">How cheap it can get</div>
+    <div class="levers">
+      <div class="lev"><label for="floor">Efficiency floor</label><input type="range" id="floor" min="15" max="100" step="1">
+        <div class="linknote">At 40%: 20 technical hrs, 20 hrs of meetings. The meetings are the wall.</div></div>
+      <div class="lev"><label for="toFloor">Months to reach floor</label><input type="range" id="toFloor" min="3" max="36" step="1"></div>
+    </div>
+  </div>
+</div>
+
+<div class="box">
+  <div class="box-h"><span class="box-n">02</span><span class="box-t">Target</span>
+    <span class="box-s">what you're aiming to start each month</span></div>
+  <div class="box-b">
+    <div class="tgt"><input type="number" id="target" min="0.05" max="30" step="0.01">
+      <div class="tgt-l">target client<br>starts / month</div>
+      <button type="button" class="btn" id="matchBtn">Match capacity</button></div>
+    <div class="chain" id="chain"></div>
+  </div>
+</div>
+
+<div class="cols">
+  <div>
+    <div class="box"><div class="box-h"><span class="box-n">03</span><span class="box-t">The funnel</span>
+      <span class="box-s">derived</span></div>
+      <div class="box-b"><div class="fn">
+        <div class="fbar" id="f_inv"><span class="fill"></span><span class="fk">Invites / month</span><span class="fv" id="v_inv"></span></div>
+        <div class="fstep"><div class="fl"><span>invite &rarr; attendee</span><span class="fp" id="o_attRate"></span></div>
+          <input type="range" id="attRate" min="0.05" max="0.60" step="0.01"></div>
+        <div class="fbar" id="f_att"><span class="fill"></span><span class="fk">Attendees</span><span class="fv" id="v_att"></span></div>
+        <div class="fstep"><div class="fl"><span>attendee &rarr; audit</span><span class="fp" id="o_auditConv"></span></div>
+          <input type="range" id="auditConv" min="0.5" max="20" step="0.25"></div>
+        <div class="fbar b2" id="f_aud"><span class="fill"></span><span class="fk">Audits</span><span class="fv" id="v_aud"></span></div>
+        <div class="fstep"><div class="fl"><span>audit &rarr; build</span><span class="fp" id="o_closeRate"></span></div>
+          <input type="range" id="closeRate" min="5" max="70" step="1"></div>
+        <div class="fbar b2" id="f_won"><span class="fill"></span><span class="fk">Deals won</span><span class="fv" id="v_won"></span></div>
+        <div class="gate" id="f_gate">capacity gate</div>
+        <div class="fbar b3" id="f_start"><span class="fill"></span><span class="fk">Started</span><span class="fv" id="v_start"></span></div>
+      </div></div></div>
+
+    <div class="box"><div class="box-h"><span class="box-t">Demand volume</span></div><div class="box-b">
+      <div class="mini"><span>Invites / webinar</span><b id="o_invw"></b></div>
+      <div class="mini-s"><div class="mini"><span>Webinars / month</span><b id="o_webinars"></b></div><input type="range" id="webinars" min="1" max="8" step="1"></div>
+      <div class="mini-s"><div class="mini"><span>Follow-up uplift</span><b id="o_followup"></b></div><input type="range" id="followup" min="0" max="30" step="1"></div>
+      <div class="mini-s"><div class="mini"><span>Queue drop-off</span><b id="o_drop"></b></div><input type="range" id="drop" min="0" max="50" step="1"></div>
+    </div></div>
+
+    <div class="box"><div class="box-h"><span class="box-t">Deal economics</span></div><div class="box-b">
+      <div class="mini-s"><div class="mini"><span>Audit price</span><b id="o_auditPrice"></b></div><input type="range" id="auditPrice" min="297" max="2500" step="50"></div>
+      <div class="mini-s"><div class="mini"><span>Upfront</span><b id="o_upfront"></b></div><input type="range" id="upfront" min="5000" max="60000" step="1000"></div>
+      <div class="mini-s"><div class="mini"><span>Recurring / mo</span><b id="o_recurring"></b></div><input type="range" id="recurring" min="0" max="10000" step="250"></div>
+      <div class="mini-s"><div class="mini"><span>Billing window</span><b id="o_billed"></b></div><input type="range" id="billed" min="1" max="9" step="1"></div>
+      <div class="mini-s"><div class="mini"><span>Retention</span><b id="o_retention"></b></div><input type="range" id="retention" min="3" max="48" step="1"></div>
+      <div class="mini-s"><div class="mini"><span>Expansion / mo</span><b id="o_expansion"></b></div><input type="range" id="expansion" min="0" max="15" step="1"></div>
+    </div></div>
+
+    <div class="box"><div class="box-h"><span class="box-t">Sales &amp; costs</span></div><div class="box-b">
+      <div class="mini-s"><div class="mini"><span>Your audit ceiling / wk</span><b id="o_auditCap"></b></div><input type="range" id="auditCap" min="1" max="12" step="1"></div>
+      <div class="mini-s"><div class="mini"><span>Hours per audit</span><b id="o_hrsAudit"></b></div><input type="range" id="hrsAudit" min="1" max="8" step="0.5"></div>
+      <div class="mini-s"><div class="mini"><span>Tools &amp; infra / mo</span><b id="o_tools"></b></div><input type="range" id="tools" min="0" max="20000" step="250"></div>
+      <div class="mini-s"><div class="mini"><span>Your share of profit</span><b id="o_split"></b></div><input type="range" id="split" min="0" max="100" step="5"></div>
+    </div></div>
+  </div>
+
+  <div>
+    <div class="box"><div class="box-h"><span class="box-n">04</span><span class="box-t">What it produces</span>
+      <span class="box-s">month 12</span></div>
+      <div class="tiles" id="tiles"></div></div>
+
+    <div class="box"><div class="box-h"><span class="box-n">05</span><span class="box-t">Money &mdash; 12 months</span>
+      <span class="box-s">cash collected per month &middot; hover any month</span></div>
+      <div class="box-b">
+        <div class="axttl">Y &mdash; dollars collected in month</div>
+        <div class="chartwrap">
+          <div class="yax" id="mY"></div>
+          <div><div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div>
+            <div class="bars" id="mBars"></div></div>
+            <div class="xax" id="mX"></div><div class="axttl x">X &mdash; month</div></div>
+          <div class="yax r" id="mY2"></div>
+        </div>
+        <div class="datarow k3"><div class="rk">Cash<br>collected</div><div class="rv" id="mRow"></div></div>
+        <div class="legend">
+          <span><i style="background:var(--warn)"></i>Audit fees</span>
+          <span><i style="background:var(--accent)"></i>Upfront</span>
+          <span><i style="background:var(--accent-2)"></i>Recurring</span>
+          <span><i style="background:var(--ink-3)"></i>Right axis: cumulative cash</span>
+        </div>
+      </div></div>
+
+    <div class="box"><div class="box-h"><span class="box-n">06</span><span class="box-t">Delivery load &mdash; 12 months</span>
+      <span class="box-s">hours consumed against hours available &middot; hover any month</span></div>
+      <div class="box-b">
+        <div class="axttl">Y &mdash; delivery hours consumed</div>
+        <div class="chartwrap">
+          <div class="yax" id="lY"></div>
+          <div><div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div>
+            <div class="bars" id="lBars"></div></div>
+            <div class="xax" id="lX"></div><div class="axttl x">X &mdash; month</div></div>
+          <div class="yax r"><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="datarow k2"><div class="rk">Clients<br>onboarded</div><div class="rv" id="lRow1"></div></div>
+        <div class="datarow k3"><div class="rk">Hours<br>used</div><div class="rv" id="lRow2"></div></div>
+        <div class="datarow k3"><div class="rk">Hours<br>free</div><div class="rv" id="lRow3"></div></div>
+        <div class="legend">
+          <span><i style="background:var(--accent)"></i>Onboarding</span>
+          <span><i style="background:var(--accent-2)"></i>Steady-state</span>
+          <span><i style="background:var(--crit)"></i>Hours available</span>
+        </div>
+      </div></div>
+
+    <div class="box"><div class="box-h"><span class="box-n">07</span><span class="box-t">Acquisition &mdash; 12 months</span>
+      <span class="box-s">throttled to what delivery can absorb &middot; hover any month &middot; whole numbers, rounded down</span></div>
+      <div class="box-b">
+        <div class="axttl">Y &mdash; audits run and deals closed per month</div>
+        <div class="chartwrap">
+          <div class="yax" id="aY"></div>
+          <div><div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div>
+            <div class="bars" id="aBars"></div></div>
+            <div class="xax" id="aX"></div><div class="axttl x">X &mdash; month</div></div>
+          <div class="yax r"><span></span><span></span><span></span><span></span></div>
+        </div>
+        <div class="datarow k1"><div class="rk">Audits<br>run</div><div class="rv" id="aRow1"></div></div>
+        <div class="datarow k2"><div class="rk">Deals<br>closed</div><div class="rv" id="aRow2"></div></div>
+        <div class="datarow k3"><div class="rk">Invites<br>needed</div><div class="rv" id="aRow3"></div></div>
+        <div class="legend">
+          <span><i style="background:var(--warn)"></i>Audits run</span>
+          <span><i style="background:var(--accent)"></i>Deals closed</span>
+          <span><i style="background:var(--crit)"></i>Acquisition paused</span>
+        </div>
+        <div class="gapnote" style="border-left-color:var(--warn);background:var(--warn-soft)">
+          Acquisition is <b>throttled by the delivery queue</b>, not by free hours &mdash; at equilibrium free hours sit near zero,
+          so a free-hours trigger would switch selling off forever. Selling pauses when closed-but-unstarted deals exceed
+          <b id="g_thresh"></b> months of onboarding capacity, or when there is no room to start anyone.
+        </div>
+      </div></div>
+
+    <div class="box"><div class="box-h"><span class="box-n">08</span><span class="box-t">Your calendar</span>
+      <span class="box-s">when does the audit load become the constraint?</span></div>
+      <div class="box-b">
+        <div class="salegrid">
+          <div class="salecell"><div class="capk">Audits / week &mdash; month 12</div><div class="capv" id="s_aw"></div>
+            <div class="meter"><i id="s_meter"></i></div>
+            <div class="capsub" id="s_awsub"></div></div>
+          <div class="salecell"><div class="capk">Your sales hours / month</div><div class="capv" id="s_hrs"></div>
+            <div class="capsub" id="s_hrssub"></div></div>
+          <div class="salecell"><div class="capk">Rep viable at</div><div class="capv" id="s_rep" style="color:var(--crit)"></div>
+            <div class="capsub">10% of upfront. They need this many deals a month to clear $10k on commission alone.</div></div>
+        </div>
+        <div class="gapnote" id="s_gap"></div>
+      </div></div>
+
+    <div class="box"><div class="box-h"><span class="box-n">09</span><span class="box-t">Month by month</span></div>
+      <div class="tw"><table>
+        <thead><tr><th>Mo</th><th>Eff</th><th>Hrs/client</th><th>Audits</th><th>Won</th><th>Started</th>
+          <th>Queue</th><th>Hrs used</th><th>Hrs free</th><th>Live</th><th>Paying</th>
+          <th>Cash</th><th>Profit</th><th>You</th><th>Geri</th></tr></thead>
+        <tbody id="tbody"></tbody></table></div></div>
+
+    <p class="foot"><strong>Phase 1 only &mdash; you and Geri, no hires.</strong> Clients are modelled as continuous flow, so
+      &ldquo;1.18 starts&rdquo; means roughly six clients every five months. Expansion revenue is off and retention sits at your
+      conservative floor, so this understates the business on purpose. The hiring extension is the next build.</p>
+  </div>
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+var $=function(i){return document.getElementById(i)};
+var M=12, WPM=4.33;
+
+var P={
+ cons:{hrsMonth:160,baseHrs:100,spread:3,upkeep:12,qThresh:1.5,floor:40,toFloor:11,
+   attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,drop:10,
+   auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,expansion:0,
+   auditCap:5,hrsAudit:3.5,tools:1500,split:60},
+ base:{hrsMonth:200,baseHrs:85,spread:3,upkeep:10,qThresh:2,floor:38,toFloor:9,
+   attRate:0.20,auditConv:5,closeRate:35,webinars:4,followup:12,drop:10,
+   auditPrice:897,upfront:20000,recurring:3500,billed:3,retention:12,expansion:0,
+   auditCap:5,hrsAudit:3.5,tools:2500,split:60},
+ agg:{hrsMonth:240,baseHrs:70,spread:2,upkeep:8,qThresh:2.5,floor:35,toFloor:7,
+   attRate:0.50,auditConv:10,closeRate:50,webinars:4,followup:15,drop:5,
+   auditPrice:897,upfront:25000,recurring:4000,billed:3,retention:24,expansion:0,
+   auditCap:5,hrsAudit:3.5,tools:4000,split:60}
+};
+var IDS=["hrsMonth","baseHrs","spread","upkeep","qThresh","floor","toFloor",
+ "attRate","auditConv","closeRate","webinars","followup","drop","auditPrice","upfront",
+ "recurring","billed","retention","expansion","auditCap","hrsAudit","tools","split"];
+
+function money(n){var a=Math.abs(n);
+ if(a>=1e6)return (n<0?"-":"")+"$"+(a/1e6).toFixed(2)+"M";
+ if(a>=1e3)return (n<0?"-":"")+"$"+Math.round(a/1e3)+"k";
+ return (n<0?"-":"")+"$"+Math.round(a)}
+function money0(n){return "$"+Math.round(n).toLocaleString("en-US")}
+function nm(n,d){return Number(n).toFixed(d===undefined?2:d)}
+function ic(n){return Math.round(n).toLocaleString("en-US")}
+function kf(n){return n>=1000?Math.round(n/1000)+"k":String(Math.round(n))}
+
+function V(){var v={};IDS.forEach(function(i){v[i]=parseFloat($(i).value)});return v}
+
+function eff(v,m){
+ var t=Math.min(1,m/Math.max(v.toFloor,1));
+ return 1-(1-v.floor/100)*t;
+}
+function lifetimeHrs(v,e){
+ return v.baseHrs*e + v.upkeep*e*Math.max(0,v.retention-v.spread);
+}
+function sustain(v,e){var L=lifetimeHrs(v,e);return L>0?v.hrsMonth/L:0}
+
+function sim(v){
+ var rows=[],cohorts=[],queue=0,cum=0;
+ for(var m=0;m<M;m++){
+  var e=eff(v,m), onbTotal=v.baseHrs*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
+  var load=0,live=0,paying=0,onbCount=0,onbHrs=0,steadyHrs=0;
+  cohorts.forEach(function(c){
+   var age=m-c.start;
+   if(age<v.spread){onbHrs+=c.n*c.onbPerMo;onbCount+=c.n;live+=c.n}
+   else if(age<v.retention){steadyHrs+=c.n*c.up;live+=c.n;if(age>=v.billed)paying+=c.n}
+  });
+  load=onbHrs+steadyHrs;
+  var free=Math.max(0,v.hrsMonth-load);
+
+  // acquisition throttle
+  var qMonths=v.hrsMonth>0?(queue*onbTotal)/v.hrsMonth:99;
+  var roomToStart=free>=onbPerMo*0.999;
+  var paused=(qMonths>v.qThresh)||!roomToStart;
+
+  var audits=0;
+  if(!paused){
+   var want=sustain(v,e);
+   audits=want/Math.max(v.closeRate/100,0.001);
+   audits=Math.min(audits,v.auditCap*WPM);
+  }
+  var won=audits*(v.closeRate/100)+live*(v.expansion/100);
+  queue=queue*(1-v.drop/100)+won;
+
+  // clients are whole people: you cannot start 0.6 of an onboarding, and you
+  // cannot bank spare hours. Leftover capacity in a month is simply lost.
+  var starts=Math.max(0,Math.min(Math.floor(queue),Math.floor(onbPerMo>0?free/onbPerMo:0)));
+  queue-=starts;
+  if(starts>0)cohorts.push({start:m,n:starts,onbPerMo:onbPerMo,up:up});
+  onbHrs+=starts*onbPerMo;load+=starts*onbPerMo;onbCount+=starts;live+=starts;
+  free=Math.max(0,v.hrsMonth-load);
+
+  var auditRev=audits*v.auditPrice, upR=starts*v.upfront, recR=paying*v.recurring;
+  var cash=auditRev+upR+recR, costs=v.tools, profit=cash-costs; cum+=profit;
+  var invites=audits>0?audits/((v.auditConv/100)*(1+v.followup/100))/(v.attRate/100):0;
+
+  rows.push({m:m+1,e:e,onbTotal:onbTotal,audits:audits,won:won,starts:starts,queue:queue,
+   load:load,free:free,onbHrs:onbHrs,steadyHrs:steadyHrs,live:live,paying:paying,
+   auditRev:auditRev,upR:upR,recR:recR,cash:cash,costs:costs,profit:profit,cum:cum,
+   paused:paused,invites:invites});
+ }
+ return rows;
+}
+
+function lbl(id,v){switch(id){
+ case "attRate":return nm(v.attRate,2)+"%";
+ case "auditConv":return nm(v.auditConv,2).replace(/0$/,"").replace(/\.$/,"")+"%";
+ case "closeRate":return v.closeRate+"%";
+ case "webinars":return v.webinars+"/mo";
+ case "followup":return "+"+v.followup+"%";
+ case "drop":return v.drop+"%";
+ case "auditPrice":return money0(v.auditPrice);
+ case "upfront":return money0(v.upfront);
+ case "recurring":return money0(v.recurring);
+ case "billed":return v.billed+" mo";
+ case "retention":return v.retention+" mo";
+ case "expansion":return v.expansion+"%";
+ case "auditCap":return String(v.auditCap);
+ case "hrsAudit":return nm(v.hrsAudit,1);
+ case "tools":return money0(v.tools);
+ case "split":return v.split+" / "+(100-v.split);
+} return String(v[id])}
+
+function tip(title,pairs){
+ return "<b>"+title+"</b>"+pairs.map(function(p){
+  return '<span class="tr'+(p[2]?" hi":"")+'"><i>'+p[0]+'</i><em>'+p[1]+'</em></span>'}).join("");
+}
+function wireTips(el){
+ var tip=el.querySelector(".charttip"); if(!tip)return;
+ Array.prototype.forEach.call(el.querySelectorAll(".col"),function(c){
+  c.addEventListener("mouseenter",function(){
+   if(!c.dataset.tip)return;
+   tip.innerHTML=c.dataset.tip; tip.style.display="block";
+   var r=c.getBoundingClientRect(), pr=el.getBoundingClientRect();
+   tip.style.left=Math.max(4,Math.min(pr.width-176,r.left-pr.left+r.width/2-86))+"px";
+  });
+  c.addEventListener("mouseleave",function(){tip.style.display="none"});
+ });
+}
+function bars(el,series,max,extra){
+ el.innerHTML=series.map(function(col){
+  var inner=col.parts.map(function(p){
+   var h=max>0?p.v/max*170:0; if(h<=0)return "";
+   return '<i class="'+p.c+'" style="height:'+h.toFixed(1)+'px"></i>';
+  }).join("");
+  return '<div class="col" data-tip="'+(col.tip||"").replace(/"/g,"&quot;")+'">'+inner+
+   (col.tag?'<span class="pausetag">'+col.tag+'</span>':'')+'</div>';
+ }).join("")+(extra||"")+'<div class="charttip"></div>';
+ wireTips(el);
+}
+function grpBars(el,series,max){
+ el.innerHTML=series.map(function(col){
+  var g=col.parts.map(function(p){
+   var h=max>0?p.v/max*170:0;
+   return '<i class="'+p.c+'" style="height:'+Math.max(h,0).toFixed(1)+'px"></i>';
+  }).join("");
+  return '<div class="col" data-tip="'+(col.tip||"").replace(/"/g,"&quot;")+'"><div class="grp">'+g+'</div>'+
+   (col.tag?'<span class="pausetag">'+col.tag+'</span>':'')+'</div>';
+ }).join("")+'<div class="charttip"></div>';
+ wireTips(el);
+}
+function axis(el,max,fmt){
+ el.innerHTML=[1,0.667,0.333,0].map(function(f){return "<span>"+fmt(max*f)+"</span>"}).join("");
+}
+function niceMax(v){
+ if(v<=0)return 4;
+ var e=Math.pow(10,Math.floor(Math.log10(v))), n=v/e;
+ var m=n<=1?1:n<=1.5?1.5:n<=2?2:n<=3?3:n<=4?4:n<=5?5:n<=6?6:n<=8?8:10;
+ var top=m*e;
+ return Math.max(3,Math.ceil(top/3)*3);   // divisible by 3 so all four ticks are whole
+}
+function xaxis(el){el.innerHTML=Array.from({length:M},function(_,i){return "<span>M"+(i+1)+"</span>"}).join("")}
+function row(el,vals){el.innerHTML=vals.map(function(x){return "<span>"+x+"</span>"}).join("")}
+
+
+var TIPS={
+ hrsWeek:"Hours a week you and Geri together spend actually delivering \u2014 building, integrating, training clients. Not sales calls, not admin.",
+ hrsMonth:"The same number expressed monthly (\u00d74.33). Move either slider and the other follows.",
+ baseHrs:"Total human hours to take one new client from signed to live, at today\u2019s efficiency. Roughly 70 hrs of technical work plus 30 hrs of calls and training.",
+ spread:"How many months that onboarding work is spread across. Three means the hours land over the client\u2019s first three months, not all in week one.",
+ upkeep:"Hours a month a finished client keeps consuming forever \u2014 monitoring, small fixes, the odd question. This is what eventually eats your capacity.",
+ qThresh:"How big a backlog of sold-but-not-started clients you will tolerate before you stop selling. 1.5 means you let a month and a half of work queue up, then pause acquisition.",
+ floor:"The cheapest a client can ever get to onboard, as a share of today\u2019s cost. 40% of 100 hrs = 40 hrs. Below this, better systems stop helping \u2014 what is left is meetings.",
+ toFloor:"How many months of practice it takes to get down to that floor.",
+ target:"How many new clients you want to start each month. Everything in the funnel is worked backwards from this number.",
+ attRate:"Of everyone you invite, the share who show up to the webinar and stay 10+ minutes. QS runs 0.10% \u2014 250,000 invites for 250 real attendees.",
+ auditConv:"Of those attendees, the share who buy the $897 audit. QS converts 10\u201320% on a FREE call, so a paid offer has to be discounted well below that.",
+ closeRate:"Of the people who buy an audit, the share who then buy a build. They have already paid and spent two hours with you, so this is the warmest number in the funnel.",
+ webinars:"How many webinars you run per month.",
+ followup:"Extra audits sold by post-webinar email automation, as a percentage on top of the live number.",
+ drop:"Each month, the share of queued buyers who get tired of waiting for a delivery slot and walk away.",
+ auditPrice:"What you charge for the Revenue Audit.",
+ upfront:"The build fee, paid up front.",
+ recurring:"The monthly fee, which only starts after the billing window closes.",
+ billed:"How many months the upfront fee covers. Nothing monthly is billed during it. This is separate from how long the build actually takes.",
+ retention:"How many months a client stays in total, from signing to leaving. Six is your deliberate floor \u2014 reality is likely far longer.",
+ expansion:"Share of live clients per month who come back and buy another build. Switched off by your instruction.",
+ auditCap:"The most audits a week you are willing to personally run before you want to hand them off.",
+ hrsAudit:"Your time per audit \u2014 discovery call, presenting the results, plus prep and report review.",
+ tools:"Monthly software and infrastructure spend.",
+ split:"How profit divides between you and Geri."
+};
+function installTips(){
+ Object.keys(TIPS).forEach(function(id){
+  var inp=$(id); if(!inp)return;
+  var host=null, par=inp.parentNode;
+  host=par.querySelector("label")||par.querySelector(".mini span")||par.querySelector(".fl span")
+       ||(par.classList.contains("tgt")?par.querySelector(".tgt-l"):null);
+  if(!host||host.querySelector(".q"))return;
+  var q=document.createElement("span");
+  q.className="q"; q.setAttribute("tabindex","0");
+  q.setAttribute("aria-label",TIPS[id]);
+  q.textContent="?";
+  var box=document.createElement("span");
+  box.className="tipbox"; box.textContent=TIPS[id];
+  q.appendChild(box);
+  if(host.tagName==="LABEL"){host.insertBefore(q,host.firstChild.nextSibling)}
+  else{host.appendChild(q)}
+  q.addEventListener("mouseenter",function(){
+   var r=q.getBoundingClientRect();
+   q.classList.toggle("flip", r.top<160);
+  });
+ });
+}
+
+function render(){
+ var v=V();
+ IDS.forEach(function(i){var o=$("o_"+i);if(o)o.textContent=lbl(i,v)});
+ $("o_invw").textContent="";
+
+ var rows=sim(v), last=rows[M-1];
+ var eNow=eff(v,0), eEnd=v.floor/100;
+ var sNow=sustain(v,eNow), sCeil=sustain(v,eEnd);
+
+ // capacity readouts
+ $("r_now").textContent=nm(sNow,2);
+ $("r_nowsub").innerHTML="<b>"+Math.round(v.baseHrs)+" hrs</b> per client today \u2014 70 technical, 30 human contact.";
+ $("r_ceil").textContent=nm(sCeil,2);
+ $("r_ceilsub").innerHTML="At <b>"+Math.round(v.baseHrs*eEnd)+" hrs</b>/client. <b>"+nm(sCeil/Math.max(sNow,0.001),1)+"&times;</b> today. ~"+nm(sCeil*Math.max(0,v.retention-v.spread),1)+" live clients.";
+ var effs=rows.map(function(r){return r.e});
+ $("r_eff").innerHTML=effs.map(function(e){
+  var atFloor=e<=v.floor/100+0.001;
+  return '<i class="'+(atFloor?"floor":"")+'" style="height:'+(e*46).toFixed(1)+'px"></i>'}).join("");
+ $("r_eff1").textContent="M1 — "+Math.round(v.baseHrs)+" hrs";
+ $("r_eff2").textContent="M"+Math.min(v.toFloor+1,M)+" — "+Math.round(v.baseHrs*eEnd)+" hrs · floor";
+
+ // target + funnel
+ var tgt=parseFloat($("target").value)||0;
+ var aud=tgt/Math.max(v.closeRate/100,0.001);
+ var att=aud/((v.auditConv/100)*(1+v.followup/100));
+ var inv=att/Math.max(v.attRate/100,0.0001);
+ $("v_inv").textContent=ic(inv); $("v_att").textContent=ic(att);
+ $("v_aud").textContent=nm(aud,1)+"  ("+money(aud*v.auditPrice)+")";
+ $("v_won").textContent=nm(tgt,2); $("v_start").textContent=nm(Math.min(tgt,sNow),2)+" / mo";
+ $("o_invw").textContent=ic(inv/Math.max(v.webinars,1));
+ var wf=function(x){return (100*Math.min(1,Math.log10(Math.max(x,0)+1)/Math.log10(inv+1))).toFixed(1)+"%"};
+ var setFill=function(id,x){var e=$(id).querySelector(".fill"); if(e)e.style.width=wf(x)};
+ setFill("f_inv",inv); setFill("f_att",att); setFill("f_aud",aud);
+ setFill("f_won",tgt); setFill("f_start",Math.min(tgt,sNow));
+ var over=tgt>sNow*1.02;
+ $("chain").className="chain"+(over?" over":"");
+ $("chain").innerHTML=(over?"&#9888; Above capacity &mdash; ":"&#10003; At capacity &mdash; ")+
+  "ceiling today is <b>"+nm(sNow,2)+"</b> / mo, rising to <b>"+nm(sCeil,2)+"</b> by month "+Math.min(v.toFloor+1,M)+".<br>"+
+  "Requires <b>"+nm(aud,1)+" audits</b> &rarr; <b>"+ic(att)+" attendees</b> &rarr; <b>"+ic(inv)+" invites</b> / month (<b>"+ic(inv/Math.max(v.webinars,1))+"</b> per webinar).";
+
+ // tiles
+ $("tiles").innerHTML=[
+  {k:"Cash / mo",v:money(last.cash)},{k:"Profit / mo",v:money(last.profit)},
+  {k:"MRR",v:money(last.recR)},{k:"Live clients",v:nm(last.live,1)},
+  {k:"Cumulative cash",v:money(last.cum)}
+ ].map(function(t){return '<div class="tl"><div class="tlk">'+t.k+'</div><div class="tlv">'+t.v+'</div></div>'}).join("");
+
+ // money chart
+ var maxCash=Math.max.apply(null,rows.map(function(r){return r.cash})) || 1;
+ bars($("mBars"),rows.map(function(r){return {parts:[
+   {v:r.recR,c:"sC"},{v:r.upR,c:"sB"},{v:r.auditRev,c:"sA"}],
+   tip:tip("Month "+r.m,[["Audit fees",money(r.auditRev)],["Upfront",money(r.upR)],
+     ["Recurring",money(r.recR)],["Total cash",money(r.cash),1],
+     ["Profit",money(r.profit)],["Cumulative",money(r.cum)]])
+   }}),maxCash);
+ axis($("mY"),maxCash,function(x){return money(x)});
+ axis($("mY2"),last.cum,function(x){return money(x)});
+ xaxis($("mX"));
+ row($("mRow"),rows.map(function(r){return money(r.cash)}));
+
+ // load chart
+ var maxLoad=Math.max(v.hrsMonth*1.25,Math.max.apply(null,rows.map(function(r){return r.load})));
+ bars($("lBars"),rows.map(function(r){return {parts:[
+   {v:r.steadyHrs,c:"sC"},{v:r.onbHrs,c:"sB"}],
+   tip:tip("Month "+r.m,[["Clients onboarded",r.starts],
+     ["Onboarding",Math.round(r.onbHrs)+" hrs"],["Steady-state",Math.round(r.steadyHrs)+" hrs"],
+     ["Hours used",Math.round(r.load)+" / "+Math.round(v.hrsMonth),1],
+     ["Hours free",Math.round(r.free)],["Live clients",Math.round(r.live)],
+     ["Queue waiting",Math.floor(r.queue)]])
+   }}),maxLoad,
+   '<div class="capline" style="bottom:'+(v.hrsMonth/maxLoad*170).toFixed(1)+'px"><span class="caplbl">hours available '+Math.round(v.hrsMonth)+'</span></div>');
+ axis($("lY"),maxLoad,function(x){return Math.round(x)});
+ xaxis($("lX"));
+ row($("lRow1"),rows.map(function(r){return String(r.starts)}));
+ row($("lRow2"),rows.map(function(r){return Math.round(r.load)}));
+ row($("lRow3"),rows.map(function(r){return Math.round(r.free)}));
+
+ // acquisition chart
+ var maxAcq=niceMax(Math.max.apply(null,rows.map(function(r){return r.audits})));
+ grpBars($("aBars"),rows.map(function(r){return {
+   parts:[{v:r.audits,c:"gA"},{v:r.won,c:"gB"}],
+   tag:r.paused?"paused":"",
+   tip:tip("Month "+r.m,[["Audits run",Math.floor(r.audits)],
+     ["Deals closed",Math.floor(r.won)],["Invites needed",r.invites>0?kf(r.invites):"0"],
+     ["Clients started",r.starts,1],["Cash collected",money(r.cash)]]
+     .concat(r.paused?[["Status","paused"]]:[]))
+   }}),maxAcq);
+ axis($("aY"),maxAcq,function(x){return String(Math.round(x))});
+ xaxis($("aX"));
+ row($("aRow1"),rows.map(function(r){return String(Math.floor(r.audits))}));
+ row($("aRow2"),rows.map(function(r){return String(Math.floor(r.won))}));
+ row($("aRow3"),rows.map(function(r){return r.invites>0?kf(r.invites):"0"}));
+ $("g_thresh").textContent=nm(v.qThresh,1);
+
+ // calendar
+ var awk=last.audits/WPM;
+ $("s_aw").textContent=nm(awk,1);
+ $("s_meter").style.width=Math.min(100,awk/Math.max(v.auditCap,1)*100).toFixed(0)+"%";
+ $("s_awsub").innerHTML="Your ceiling is <b>"+v.auditCap+"</b>/wk. "+(awk>v.auditCap*0.9?"You are at your limit.":"Delivery runs out long before your calendar does.");
+ $("s_hrs").textContent=Math.round(last.audits*v.hrsAudit);
+ $("s_hrssub").innerHTML=nm(last.audits,1)+" audits at "+nm(v.hrsAudit,1)+" hrs each.";
+ var repNeed=10000/(v.upfront*0.10);
+ $("s_rep").textContent=nm(repNeed,1);
+ $("s_gap").innerHTML="You reach <b>"+nm(sCeil,2)+"</b> starts/month on your own. A rep needs <b>"+nm(repNeed,1)+
+  "</b> to clear $10k on commission alone &mdash; that is <b>"+nm(repNeed/Math.max(sCeil,0.01),1)+
+  "&times;</b> further. <b>Hire delivery before sales.</b> A closer hired now would sit on a capped calendar and leave.";
+
+ // table
+ $("tbody").innerHTML=rows.map(function(r){return "<tr>"+
+  "<td>"+r.m+"</td><td>"+Math.round(r.e*100)+"%</td><td>"+Math.round(r.onbTotal)+"</td>"+
+  '<td class="'+(r.paused?"pause":"")+'">'+nm(r.audits,1)+"</td>"+
+  "<td>"+Math.floor(r.won)+"</td><td>"+r.starts+"</td><td>"+Math.floor(r.queue)+"</td>"+
+  "<td>"+Math.round(r.load)+"</td><td>"+Math.round(r.free)+"</td>"+
+  "<td>"+Math.round(r.live)+"</td><td>"+Math.round(r.paying)+"</td>"+
+  "<td>"+money(r.cash)+"</td><td>"+money(r.profit)+"</td>"+
+  "<td>"+money(r.profit*v.split/100)+"</td><td>"+money(r.profit*(100-v.split)/100)+"</td></tr>"}).join("");
+}
+
+function syncHours(from){
+ if(from==="week"){$("hrsMonth").value=Math.round(parseFloat($("hrsWeek").value)*WPM)}
+ else{$("hrsWeek").value=Math.round(parseFloat($("hrsMonth").value)/WPM)}
+ $("o_hrsWeek")&&($("o_hrsWeek").textContent="");
+ render();
+}
+function labels(){
+ var v=V();
+ $("hrsWeek").previousElementSibling;
+}
+var KEY="revenueforge-model-v1", saveTimer=null;
+function getState(){
+ var o={};IDS.forEach(function(i){o[i]=$(i).value});o.target=$("target").value;
+ o._p=document.querySelector('.presets button[aria-pressed="true"]');
+ o._p=o._p?o._p.dataset.preset:"cons";
+ return o;
+}
+function applyState(o){
+ if(!o)return false;
+ var any=false;
+ IDS.forEach(function(i){if(o[i]!==undefined&&$(i)){$(i).value=o[i];any=true}});
+ if(o.target!==undefined)$("target").value=o.target;
+ $("hrsWeek").value=Math.round(parseFloat($("hrsMonth").value)/WPM);
+ document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
+  b.setAttribute("aria-pressed",b.dataset.preset===o._p?"true":"false")});
+ return any;
+}
+function encode(o){
+ return Object.keys(o).map(function(k){return k+"="+encodeURIComponent(o[k])}).join("&");
+}
+function decode(str){
+ if(!str)return null;
+ var o={};str.split("&").forEach(function(kv){
+  var i=kv.indexOf("=");if(i<0)return;
+  o[kv.slice(0,i)]=decodeURIComponent(kv.slice(i+1));
+ });
+ return Object.keys(o).length?o:null;
+}
+function persist(){
+ var o=getState(), str=encode(o);
+ try{localStorage.setItem(KEY,str)}catch(e){}
+ try{history.replaceState(null,"","#"+str)}catch(e){}
+ var t=$("savedTag");
+ if(t){t.classList.add("on");clearTimeout(saveTimer);
+  saveTimer=setTimeout(function(){t.classList.remove("on")},900)}
+}
+function restore(){
+ var fromHash=decode(location.hash.replace(/^#/,""));
+ if(fromHash&&applyState(fromHash))return true;
+ var saved=null;
+ try{saved=localStorage.getItem(KEY)}catch(e){}
+ return applyState(decode(saved));
+}
+function applyPreset(n){
+ var p=P[n];
+ IDS.forEach(function(i){if(p[i]!==undefined)$(i).value=p[i]});
+ $("hrsWeek").value=Math.round(p.hrsMonth/WPM);
+ $("target").value=sustain(p,1).toFixed(2);
+ document.querySelectorAll(".presets button").forEach(function(b){
+  b.setAttribute("aria-pressed",b.dataset.preset===n?"true":"false")});
+ render();
+}
+
+// live value labels next to each slider label
+function tagLabels(){
+ var map={hrsWeek:function(v){return Math.round(parseFloat($("hrsWeek").value))},
+          hrsMonth:function(v){return Math.round(v.hrsMonth)},
+          baseHrs:function(v){return Math.round(v.baseHrs)+" hrs"},
+          spread:function(v){return v.spread+" mo"},
+          upkeep:function(v){return Math.round(v.upkeep)+" hrs/mo"},
+          qThresh:function(v){return nm(v.qThresh,1)+" mo"},
+          floor:function(v){return Math.round(v.floor)+"%"},
+          toFloor:function(v){return Math.round(v.toFloor)}};
+ Object.keys(map).forEach(function(id){
+  var inp=$(id); if(!inp)return;
+  var lab=inp.parentNode.querySelector("label"); if(!lab)return;
+  var b=lab.querySelector("b"); if(!b){b=document.createElement("b");lab.appendChild(b)}
+  b.textContent=map[id](V());
+ });
+}
+var _r=render;
+render=function(){_r();tagLabels()};
+
+IDS.forEach(function(i){$(i).addEventListener("input",function(){
+  if(i==="hrsMonth"){syncHours("month");return} render()})});
+$("hrsWeek").addEventListener("input",function(){syncHours("week")});
+$("target").addEventListener("input",render);
+$("matchBtn").addEventListener("click",function(){
+ $("target").value=sustain(V(),eff(V(),0)).toFixed(2);render()});
+document.querySelectorAll(".presets button").forEach(function(b){
+ b.addEventListener("click",function(){applyPreset(b.dataset.preset)})});
+
+installTips();
+applyPreset("cons");
+if(restore()){render()}
+IDS.forEach(function(i){$(i).addEventListener("change",persist)});
+$("hrsWeek").addEventListener("change",persist);
+$("target").addEventListener("change",persist);
+document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
+ b.addEventListener("click",persist)});
+$("resetBtn").addEventListener("click",function(){
+ try{localStorage.removeItem(KEY)}catch(e){}
+ try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}
+ applyPreset("cons");
+});
+})();
+</script>
