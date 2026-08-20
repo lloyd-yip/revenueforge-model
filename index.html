@@ -118,6 +118,13 @@ input[type=range]:focus-visible{outline:2px solid var(--accent);outline-offset:3
 .mini b{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;
  background:var(--sunken);border:1px solid var(--rule);padding:1px 7px;min-width:72px;text-align:right}
 .mini-s{margin-bottom:12px}
+.parity{margin-top:7px;padding:8px 9px;background:var(--surface-2);border-left:2px solid var(--accent);
+ font-family:"Source Serif 4",Georgia,serif;font-size:11px;color:var(--ink-3);line-height:1.5}
+.parity b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink-2)}
+.parity .verdict{display:block;margin-top:4px;font-family:"IBM Plex Mono",monospace;
+ font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.parity.good{border-left-color:var(--accent)} .parity.good .verdict{color:var(--accent)}
+.parity.bad{border-left-color:var(--crit)} .parity.bad .verdict{color:var(--crit)}
 .tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
 @media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
 .tl{background:var(--surface);padding:13px 12px}
@@ -315,7 +322,8 @@ td.pause{color:var(--crit)}
     <div class="box"><div class="box-h"><span class="box-t">Deal economics</span></div><div class="box-b">
       <div class="mini-s"><div class="mini"><span>Audit price</span><b id="o_auditPrice"></b></div><input type="range" id="auditPrice" min="297" max="2500" step="50"></div>
       <div class="mini-s"><div class="mini"><span>Upfront</span><b id="o_upfront"></b></div><input type="range" id="upfront" min="5000" max="60000" step="1000"></div>
-      <div class="mini-s"><div class="mini"><span>Recurring / mo</span><b id="o_recurring"></b></div><input type="range" id="recurring" min="0" max="10000" step="250"></div>
+      <div class="mini-s"><div class="mini"><span>Recurring / mo</span><b id="o_recurring"></b></div><input type="range" id="recurring" min="0" max="10000" step="250">
+        <div class="parity" id="parity"></div></div>
       <div class="mini-s"><div class="mini"><span>Billing window</span><b id="o_billed"></b></div><input type="range" id="billed" min="1" max="9" step="1"></div>
       <div class="mini-s"><div class="mini"><span>Retention</span><b id="o_retention"></b></div><input type="range" id="retention" min="3" max="48" step="1"></div>
       <div class="mini-s"><div class="mini"><span>Expansion / mo</span><b id="o_expansion"></b></div><input type="range" id="expansion" min="0" max="15" step="1"></div>
@@ -682,6 +690,24 @@ function render(){
  $("chain").innerHTML=(over?"&#9888; Above capacity &mdash; ":"&#10003; At capacity &mdash; ")+
   "ceiling today is <b>"+nm(sNow,2)+"</b> / mo, rising to <b>"+nm(sCeil,2)+"</b> by month "+Math.min(v.toFloor+1,M)+".<br>"+
   "Requires <b>"+nm(aud,1)+" audits</b> &rarr; <b>"+ic(att)+" attendees</b> &rarr; <b>"+ic(inv)+" invites</b> / month (<b>"+ic(inv/Math.max(v.webinars,1))+"</b> per webinar).";
+
+ // recurring vs onboarding, per hour
+ var onbHr=v.baseHrs>0?v.upfront/v.baseHrs:0;
+ var upHr=v.upkeep>0?v.recurring/v.upkeep:0;
+ var parityP=v.baseHrs>0?v.upfront*v.upkeep/v.baseHrs:0;
+ var ratio=onbHr>0?upHr/onbHr:0;
+ var pe=$("parity");
+ if(v.upkeep<=0){
+  pe.className="parity";
+  pe.innerHTML="With zero upkeep hours, a live client costs nothing to keep \u2014 every recurring dollar is free.";
+ }else{
+  pe.className="parity "+(ratio>=1?"good":"bad");
+  pe.innerHTML="An upkeep hour earns <b>"+money0(Math.round(upHr))+"</b>/hr against <b>"+
+   money0(Math.round(onbHr))+"</b>/hr on onboarding."+
+   "<span class=\"verdict\">"+(ratio>=1
+     ?nm(ratio,2)+"\u00d7 better \u00b7 parity at "+money0(Math.round(parityP))+"/mo"
+     :nm(ratio,2)+"\u00d7 \u2014 below parity of "+money0(Math.round(parityP))+"/mo")+"</span>";
+ }
 
  // tiles
  $("tiles").innerHTML=[
