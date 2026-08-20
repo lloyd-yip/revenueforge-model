@@ -113,6 +113,40 @@ input[type=range]{width:100%;accent-color:var(--accent);height:16px;margin:0;dis
  text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
 .ccv{font-family:"IBM Plex Mono",monospace;font-size:21px;font-weight:600}
 .ccs{font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;color:var(--ink-3);margin-top:6px;line-height:1.45}
+.cwrap{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:stretch}
+.cy{display:flex;flex-direction:column;justify-content:space-between;padding:2px 9px 18px 0;text-align:right}
+.cy span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;color:var(--ink-2)}
+.cplot{position:relative;border-left:1px solid var(--rule-strong);border-bottom:1px solid var(--rule-strong)}
+.cgrid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between}
+.cgrid i{display:block;height:1px;background:var(--rule)}
+.cbars{position:relative;display:flex;align-items:flex-end;gap:3px;height:170px;padding:0 3px}
+.ccol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative;cursor:crosshair}
+.ccol:hover{background:rgba(127,184,179,.12)}
+.ccol i{display:block}
+.cx{display:flex;gap:3px;padding:5px 3px 0}
+.cx span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:9px;
+ font-weight:500;color:var(--ink-2);white-space:nowrap}
+.cxt{text-align:center;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-top:6px}
+.cyt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:7px}
+.cline{position:absolute;left:0;right:0;border-top:2px dashed var(--crit);z-index:2;pointer-events:none}
+.cmark{position:absolute;top:0;bottom:0;width:2px;background:var(--warn);z-index:3;pointer-events:none}
+.cmark em{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-style:normal;
+ font-family:"IBM Plex Mono",monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;
+ color:var(--warn);white-space:nowrap}
+.ctip{display:none;position:absolute;bottom:calc(100% + 10px);z-index:40;width:212px;
+ background:var(--ink);color:var(--ground);padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.4);
+ font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.5;pointer-events:none;
+ font-variant-numeric:tabular-nums}
+.ctip b{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px;
+ padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.28);opacity:.85}
+.ctip .tr{display:flex;justify-content:space-between;gap:14px;padding:1.5px 0}
+.ctip .tr.hi{margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.18)}
+.ctip u{text-decoration:none;opacity:.68} .ctip s{text-decoration:none;font-weight:600}
+.clegend{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px;padding-left:64px}
+.clegend span{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-2)}
+.clegend i{width:10px;height:10px;display:inline-block;margin-right:6px;vertical-align:middle}
 .stamp{position:fixed;right:14px;bottom:14px;background:var(--crit);color:#fff;
  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
  text-transform:uppercase;padding:7px 12px;z-index:9}
@@ -194,40 +228,7 @@ maxed for two consecutive months, and the phase ends when your own calendar beco
     <div class="box" style="margin-top:16px"><div class="box-h"><span class="box-n">01</span>
       <span class="box-t">Capacity &amp; headcount</span><span class="box-s">hires step the ceiling up</span></div>
       <div class="box-b">
-        <div class="axttl">Y &mdash; delivery hours</div>
-        <div class="chartwrap">
-          <div class="yax"><span>320</span><span>213</span><span>107</span><span>0</span></div>
-          <div><div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div>
-            <div class="bars">
-              <div class="step" style="bottom:80px;right:66%"><span class="steplbl">160</span></div>
-              <div class="step" style="bottom:118px;left:34%;right:0"><span class="steplbl">237 &rarr; 306</span></div>
-              <div class="hiremark" style="left:33%"><span class="hiretag">hire 1</span></div>
-              <div class="hiremark" style="left:66%"><span class="hiretag">hire 2</span></div>
-              <div class="col"><i class="sC" style="height:26px"></i><i class="sB" style="height:54px"></i></div>
-              <div class="col"><i class="sC" style="height:26px"></i><i class="sB" style="height:54px"></i></div>
-              <div class="col"><i class="sC" style="height:28px"></i><i class="sB" style="height:52px"></i></div>
-              <div class="col"><i class="sC" style="height:30px"></i><i class="sB" style="height:82px"></i></div>
-              <div class="col"><i class="sC" style="height:34px"></i><i class="sB" style="height:84px"></i></div>
-              <div class="col"><i class="sC" style="height:38px"></i><i class="sB" style="height:80px"></i></div>
-              <div class="col"><i class="sC" style="height:42px"></i><i class="sB" style="height:110px"></i></div>
-              <div class="col"><i class="sC" style="height:46px"></i><i class="sB" style="height:107px"></i></div>
-              <div class="col"><i class="sC" style="height:50px"></i><i class="sB" style="height:103px"></i></div>
-            </div></div>
-            <div class="xax"><span>M13</span><span>M14</span><span>M15</span><span>M16</span><span>M17</span><span>M18</span><span>M19</span><span>M20</span><span>M21</span></div>
-          </div>
-        </div>
-        <div class="datarow k2"><div class="rk">Starts</div><div class="rv">
-          <span>2.9</span><span>2.9</span><span>2.9</span><span>4.4</span><span>4.4</span><span>4.4</span><span>5.6</span><span>5.6</span><span>5.6</span></div></div>
-        <div class="datarow k1"><div class="rk">Audits<br>/ wk</div><div class="rv">
-          <span>2.7</span><span>2.7</span><span>2.7</span><span>4.0</span><span>4.0</span><span>4.0</span><span>5.2</span><span>5.2</span><span>5.2</span></div></div>
-        <div class="datarow k3"><div class="rk">Team</div><div class="rv">
-          <span>0</span><span>0</span><span>1</span><span>1</span><span>1</span><span>2</span><span>2</span><span>2</span><span>2</span></div></div>
-        <div class="legend">
-          <span><i style="background:var(--accent)"></i>Onboarding</span>
-          <span><i style="background:var(--accent-2)"></i>Steady-state</span>
-          <span><i style="background:var(--crit)"></i>Hours available</span>
-          <span><i style="background:var(--warn)"></i>Hire lands</span>
-        </div>
+        <div class="chartbox" data-chart="cap2"></div>
         <div class="wall">Phase ends at <b>M21</b>. Two delivery hires take you to <b>5.6 starts/month</b> &mdash;
           but that needs <b>5.2 audits a week</b> and your ceiling is <b>5</b>. A third delivery hire would add
           capacity you cannot feed. <b>The constraint has moved from delivery to your calendar.</b></div>
@@ -291,28 +292,7 @@ you set on the left.</p>
 
     <div class="box"><div class="box-h"><span class="box-n">03</span><span class="box-t">Headcount over the arc</span></div>
       <div class="box-b">
-        <div class="axttl">Y &mdash; people</div>
-        <div class="chartwrap">
-          <div class="yax"><span>9</span><span>6</span><span>3</span><span>0</span></div>
-          <div><div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div>
-            <div class="bars">
-              <div class="col"><i class="sB" style="height:36px"></i></div>
-              <div class="col"><i class="sB" style="height:36px"></i></div>
-              <div class="col"><i class="sB" style="height:53px"></i></div>
-              <div class="col"><i class="sB" style="height:53px"></i></div>
-              <div class="col"><i class="sH" style="height:18px"></i><i class="sB" style="height:71px"></i></div>
-              <div class="col"><i class="sH" style="height:18px"></i><i class="sB" style="height:89px"></i></div>
-              <div class="col"><i class="sH" style="height:18px"></i><i class="sB" style="height:106px"></i></div>
-              <div class="col"><i class="sH" style="height:36px"></i><i class="sB" style="height:106px"></i></div>
-              <div class="col"><i class="sH" style="height:36px"></i><i class="sB" style="height:124px"></i></div>
-            </div></div>
-            <div class="xax"><span>M21</span><span>M23</span><span>M25</span><span>M27</span><span>M29</span><span>M31</span><span>M33</span><span>M35</span><span>M38</span></div>
-          </div>
-        </div>
-        <div class="legend">
-          <span><i style="background:var(--accent)"></i>Delivery</span>
-          <span><i style="background:var(--warn)"></i>Sales</span>
-        </div>
+        <div class="chartbox" data-chart="head3"></div>
       </div>
     </div>
   </div>
@@ -325,29 +305,7 @@ you set on the left.</p>
 <p class="sf">Every phase on one axis, never cut. Each hire marked, and the phase boundaries are the moments the
 binding constraint changed.</p>
 <div class="box"><div class="box-b">
-  <div class="axttl">Y &mdash; cash / month, months 1 to 38</div>
-  <div class="chartwrap">
-    <div class="yax"><span>$350k</span><span>$233k</span><span>$117k</span><span>$0</span></div>
-    <div><div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div>
-      <div class="bars" style="height:190px">
-        <div class="hiremark" style="left:34%"><span class="hiretag">delivery hires</span></div>
-        <div class="hiremark" style="left:55%;background:var(--crit)"><span class="hiretag" style="color:var(--crit)">rep 1</span></div>
-        <div class="hiremark" style="left:84%;background:var(--crit)"><span class="hiretag" style="color:var(--crit)">rep 2</span></div>
-        <div class="col"><i class="sB" style="height:8px"></i></div><div class="col"><i class="sB" style="height:14px"></i></div>
-        <div class="col"><i class="sB" style="height:19px"></i></div><div class="col"><i class="sB" style="height:24px"></i></div>
-        <div class="col"><i class="sB" style="height:30px"></i></div><div class="col"><i class="sB" style="height:36px"></i></div>
-        <div class="col"><i class="sB" style="height:43px"></i></div><div class="col"><i class="sB" style="height:48px"></i></div>
-        <div class="col"><i class="sB" style="height:52px"></i></div><div class="col"><i class="sB" style="height:55px"></i></div>
-        <div class="col"><i class="sB" style="height:56px"></i></div><div class="col"><i class="sB" style="height:56px"></i></div>
-        <div class="col"><i class="sB" style="height:72px"></i></div><div class="col"><i class="sB" style="height:78px"></i></div>
-        <div class="col"><i class="sB" style="height:84px"></i></div><div class="col"><i class="sB" style="height:96px"></i></div>
-        <div class="col"><i class="sB" style="height:104px"></i></div><div class="col"><i class="sB" style="height:112px"></i></div>
-        <div class="col"><i class="sB" style="height:128px"></i></div><div class="col"><i class="sB" style="height:140px"></i></div>
-        <div class="col"><i class="sB" style="height:150px"></i></div><div class="col"><i class="sB" style="height:158px"></i></div>
-        <div class="col"><i class="sB" style="height:168px"></i></div><div class="col"><i class="sB" style="height:176px"></i></div>
-      </div></div>
-      <div class="xax"><span>M1</span><span>M8</span><span>M13</span><span>M17</span><span>M21</span><span>M26</span><span>M31</span><span>M38</span></div>
-    </div>
+        <div class="chartbox" data-chart="arc4"></div>
   </div>
   <div class="wall" style="border-left-color:var(--accent);background:var(--accent-soft)">
     The whole arc on one axis, with every hire marked. Phase boundaries are the moments the binding constraint
@@ -360,6 +318,78 @@ binding constraint changed.</p>
 </div>
 
 <script>
+var M2=[13,14,15,16,17,18,19,20,21];
+var D2={cap:[160,160,160,237,237,237,306,306,306],
+ onb:[116,117,118,168,170,172,214,216,218], sty:[42,42,42,62,64,65,84,86,88],
+ starts:[2.9,2.9,2.9,4.4,4.4,4.4,5.6,5.6,5.6], aud:[2.7,2.7,2.7,4.0,4.0,4.0,5.2,5.2,5.2],
+ team:[0,0,1,1,1,2,2,2,2], live:[9,10,10,11,13,14,15,16,17],
+ cash:[108,112,116,130,142,150,158,161,164], inv:[357,357,357,540,540,540,690,690,690],
+ marks:{2:"hire 1",5:"hire 2"}};
+var M3=[21,23,25,27,29,31,33,35,38];
+var D3={del:[2,3,3,4,5,5,6,6,7], rep:[0,0,1,1,1,1,2,2,2],
+ starts:[5.6,6.8,7.4,8.4,9.6,9.9,11.2,11.6,12.4], aud:[5.2,5.0,4.0,3.2,2.5,2.5,0,0,0],
+ repaud:[0,0,4,6,8,8,16,16,16], cash:[164,196,232,268,296,312,336,341,352],
+ comm:[0,0,12,16,20,20,34,34,36], live:[17,21,24,27,31,33,37,39,42],
+ marks:{2:"rep 1",6:"rep 2"}};
+var M4=[1,4,7,10,13,16,19,22,25,28,31,34,38];
+var D4={cash:[24,31,44,58,86,130,150,164,232,268,312,341,352],
+ starts:[1.0,1.3,1.7,2.3,2.9,4.4,5.6,5.6,7.4,8.4,9.9,11.6,12.4],
+ team:[0,0,0,0,0,1,2,2,3,4,5,6,7], live:[1,3,5,7,9,11,15,17,24,27,33,39,42],
+ marks:{5:"delivery hires",8:"rep 1",11:"rep 2"}};
+
+function tipHTML(t,rows){return "<b>"+t+"</b>"+rows.map(function(r){
+ return '<span class="tr'+(r[2]?" hi":"")+'"><u>'+r[0]+'</u><s>'+r[1]+'</s></span>'}).join("")}
+function drawChart(el,cfg){
+ var n=cfg.months.length,max=cfg.max;
+ var bars=cfg.months.map(function(m,i){
+  return '<div class="ccol" data-i="'+i+'">'+cfg.series.map(function(se){
+   var h=se.data[i]/max*170; return h<=0?"":'<i style="height:'+h.toFixed(1)+'px;background:'+se.color+'"></i>';
+  }).join("")+'</div>'}).join("");
+ var cap=cfg.capData?'<div class="cline" style="bottom:'+(cfg.capData[n-1]/max*170).toFixed(1)+'px"></div>':"";
+ var marks=Object.keys(cfg.marks||{}).map(function(k){
+  return '<div class="cmark" style="left:'+(((+k)+0.5)/n*100).toFixed(2)+'%"><em>'+cfg.marks[k]+'</em></div>'}).join("");
+ el.innerHTML='<div class="cyt">Y &mdash; '+cfg.y+'</div><div class="cwrap"><div class="cy">'+
+  [1,.667,.333,0].map(function(f){return "<span>"+cfg.fmt(max*f)+"</span>"}).join("")+
+  '</div><div><div class="cplot"><div class="cgrid"><i></i><i></i><i></i><i></i></div><div class="cbars">'+
+  cap+marks+bars+'<div class="ctip"></div></div></div><div class="cx">'+
+  cfg.months.map(function(m){return "<span>M"+m+"</span>"}).join("")+
+  '</div><div class="cxt">X &mdash; month</div></div></div><div class="clegend">'+
+  cfg.series.map(function(se){return '<span><i style="background:'+se.color+'"></i>'+se.label+'</span>'}).join("")+
+  (cfg.capLabel?'<span><i style="background:var(--crit)"></i>'+cfg.capLabel+'</span>':"")+
+  (Object.keys(cfg.marks||{}).length?'<span><i style="background:var(--warn)"></i>Hire lands</span>':"")+'</div>';
+ var tip=el.querySelector(".ctip"),plot=el.querySelector(".cbars");
+ Array.prototype.forEach.call(el.querySelectorAll(".ccol"),function(c){
+  c.addEventListener("mouseenter",function(){
+   var i=+c.dataset.i; tip.innerHTML=tipHTML("Month "+cfg.months[i],cfg.tip(i)); tip.style.display="block";
+   var r=c.getBoundingClientRect(),pr=plot.getBoundingClientRect();
+   tip.style.left=Math.max(2,Math.min(pr.width-216,r.left-pr.left+r.width/2-106))+"px";});
+  c.addEventListener("mouseleave",function(){tip.style.display="none"});});
+}
+var C=function(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim()};
+function drawAll(){var e;
+ if(e=document.querySelector('[data-chart="cap2"]'))drawChart(e,{y:"delivery hours consumed",months:M2,max:320,
+  fmt:function(x){return Math.round(x)},
+  series:[{label:"Steady-state",color:C("--accent-2"),data:D2.sty},{label:"Onboarding",color:C("--accent"),data:D2.onb}],
+  capData:D2.cap,capLabel:"Hours available",marks:D2.marks,
+  tip:function(i){return [["Clients started",D2.starts[i]],["Delivery team",D2.team[i]],
+   ["Hours used",(D2.onb[i]+D2.sty[i])+" / "+D2.cap[i],1],["Hours free",D2.cap[i]-D2.onb[i]-D2.sty[i]],
+   ["Live clients",D2.live[i]],["Your audits / wk",D2.aud[i]],["Invites needed",D2.inv[i]+"k"],
+   ["Cash / mo","$"+D2.cash[i]+"k",1]]}});
+ if(e=document.querySelector('[data-chart="head3"]'))drawChart(e,{y:"people on the team",months:M3,max:9,
+  fmt:function(x){return x.toFixed(0)},
+  series:[{label:"Sales reps",color:C("--warn"),data:D3.rep},{label:"Delivery",color:C("--accent"),data:D3.del}],
+  marks:D3.marks,
+  tip:function(i){return [["Delivery team",D3.del[i]],["Sales reps",D3.rep[i]],
+   ["Clients started",D3.starts[i],1],["Live clients",D3.live[i]],["Your audits / wk",D3.aud[i]],
+   ["Rep audits / wk",D3.repaud[i]],["Cash / mo","$"+D3.cash[i]+"k"],["Commission","-$"+D3.comm[i]+"k"],
+   ["Net cash","$"+(D3.cash[i]-D3.comm[i])+"k",1]]}});
+ if(e=document.querySelector('[data-chart="arc4"]'))drawChart(e,{y:"cash collected / month",months:M4,max:400,
+  fmt:function(x){return "$"+Math.round(x)+"k"},
+  series:[{label:"Cash / mo",color:C("--accent"),data:D4.cash}],marks:D4.marks,
+  tip:function(i){return [["Cash / mo","$"+D4.cash[i]+"k"],["Clients started",D4.starts[i]],
+   ["Live clients",D4.live[i]],["Team size",D4.team[i]],
+   ["Phase",M4[i]<13?"1 - Startup":(M4[i]<21?"2 - Scale delivery":"3 - Scale sales"),1]]}});
+}
 (function(){
  var tabs=document.querySelectorAll('.tabs button');
  function show(id){
@@ -369,6 +399,8 @@ binding constraint changed.</p>
   tabs.forEach(function(b){b.setAttribute("aria-selected",b.dataset.p===id?"true":"false")});
   window.scrollTo(0,0);
  }
- tabs.forEach(function(b){b.addEventListener("click",function(){show(b.dataset.p)})});
+ tabs.forEach(function(b){b.addEventListener("click",function(){show(b.dataset.p);drawAll()})});
+ drawAll();
+ if(window.matchMedia)window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",drawAll);
 })();
 </script>
