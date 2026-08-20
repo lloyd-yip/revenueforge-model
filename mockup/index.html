@@ -1,514 +1,194 @@
-<title>RevenueForge Model - Layout Mockup v6</title>
+<title>RevenueForge Model - Ideas Tab Mockup</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
 <style>
 :root{--ground:#E7EBEB;--surface:#F7F9F9;--surface-2:#EFF3F3;--sunken:#DCE2E2;
  --ink:#10171A;--ink-2:#3C4A4D;--ink-3:#697A7D;--rule:#C4CFCF;--rule-strong:#A4B2B2;
- --accent:#12605C;--accent-2:#2E8A84;--accent-3:#7FB8B3;--accent-soft:#D2E2E0;
+ --accent:#12605C;--accent-2:#2E8A84;--accent-soft:#D2E2E0;
  --warn:#9E650F;--warn-soft:#EFE1C4;--crit:#95331F;--crit-soft:#EFD8D1;}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){
  --ground:#0B1112;--surface:#131B1C;--surface-2:#182122;--sunken:#080D0E;
  --ink:#E5ECEB;--ink-2:#A7B6B5;--ink-3:#768685;--rule:#243233;--rule-strong:#38494A;
- --accent:#4FB6AE;--accent-2:#2E7F79;--accent-3:#1E5551;--accent-soft:#153634;
+ --accent:#4FB6AE;--accent-2:#2E7F79;--accent-soft:#153634;
  --warn:#D6A241;--warn-soft:#372B12;--crit:#D46E5A;--crit-soft:#381B15;}}
 :root[data-theme="dark"]{--ground:#0B1112;--surface:#131B1C;--surface-2:#182122;--sunken:#080D0E;
  --ink:#E5ECEB;--ink-2:#A7B6B5;--ink-3:#768685;--rule:#243233;--rule-strong:#38494A;
- --accent:#4FB6AE;--accent-2:#2E7F79;--accent-3:#1E5551;--accent-soft:#153634;
+ --accent:#4FB6AE;--accent-2:#2E7F79;--accent-soft:#153634;
  --warn:#D6A241;--warn-soft:#372B12;--crit:#D46E5A;--crit-soft:#381B15;}
 *{box-sizing:border-box}
 html,body{max-width:100%;overflow-x:hidden}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:"Archivo",Arial,sans-serif;
  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.wrap{max-width:1320px;margin:0 auto;padding:0 24px 70px}
-.masthead{border-bottom:2px solid var(--ink);padding:30px 0 16px;display:flex;
- justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.wrap{max-width:900px;margin:0 auto;padding:0 24px 80px}
+
+/* ---- TAB BAR (the new bit) ---- */
+.topbar{border-bottom:2px solid var(--ink);padding:26px 0 0;margin-bottom:26px}
 .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;
- text-transform:uppercase;color:var(--ink-3);margin:0 0 8px}
-h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin:0 0 6px;line-height:1.06}
-.sf{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink-2);margin:0}
-.presets{display:flex;border:1px solid var(--rule-strong);background:var(--surface)}
-.presets b{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.1em;
- text-transform:uppercase;padding:9px 14px;border-right:1px solid var(--rule);color:var(--ink-2);font-weight:400}
-.presets b:last-child{border-right:0}
-.presets b.on{background:var(--ink);color:var(--ground);font-weight:500}
-.seq{display:flex;align-items:center;gap:9px;margin:22px 0 8px}
-.seq i{width:22px;height:1px;background:var(--rule-strong);display:block}
-.seq span{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.13em;
- text-transform:uppercase;color:var(--ink-3)}
-.box{border:1px solid var(--rule);background:var(--surface);margin-bottom:16px}
-.box-h{padding:10px 14px;border-bottom:1px solid var(--rule);background:var(--surface-2);
- display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
-.box-n{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--accent);font-weight:600}
-.box-t{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;
- text-transform:uppercase;color:var(--ink-2);font-weight:600}
-.box-s{font-family:"Source Serif 4",Georgia,serif;font-size:12px;color:var(--ink-3);margin-left:auto}
-.box-b{padding:14px}
-.capgrid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:1px;background:var(--rule);
- border:1px solid var(--rule);margin-bottom:16px}
-@media(max-width:940px){.capgrid{grid-template-columns:1fr}}
-.capcell{background:var(--surface);padding:13px 14px}
-.capk{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-3);margin:0 0 14px}
+.tabs{display:flex;gap:0;margin-bottom:-2px}
+.tabs button{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
+ text-transform:uppercase;padding:12px 20px;border:0;background:transparent;color:var(--ink-3);
+ cursor:pointer;border-bottom:2px solid transparent;font-weight:500}
+.tabs button:hover{color:var(--ink-2)}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs .count{display:inline-block;margin-left:8px;background:var(--accent);color:var(--ground);
+ font-size:9px;padding:1px 6px;border-radius:9px;vertical-align:middle}
+
+h1{font-size:clamp(24px,3.4vw,32px);font-weight:700;letter-spacing:-.02em;margin:0 0 8px;line-height:1.1}
+.sf{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink-2);margin:0 0 30px;max-width:62ch}
+
+/* ---- idea entries ---- */
+.idea{border:1px solid var(--rule);background:var(--surface);margin-bottom:18px}
+.idea-h{padding:13px 18px;border-bottom:1px solid var(--rule);background:var(--surface-2);
+ display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.idea-n{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.14em;color:var(--accent);font-weight:600}
+.chip{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+ padding:3px 8px;border:1px solid var(--rule-strong);color:var(--ink-3);margin-left:auto}
+.chip.open{border-color:var(--warn);color:var(--warn);background:var(--warn-soft)}
+.chip.verify{border-color:var(--crit);color:var(--crit);background:var(--crit-soft)}
+.chip.parked{border-color:var(--rule-strong);color:var(--ink-3)}
+.idea-q{font-size:16px;font-weight:600;letter-spacing:-.01em;line-height:1.35;margin:0;flex:1 1 100%}
+.idea-b{padding:16px 18px}
+.idea-b p{font-family:"Source Serif 4",Georgia,serif;font-size:14px;color:var(--ink-2);
+ margin:0 0 12px;line-height:1.65}
+.idea-b p:last-child{margin-bottom:0}
+.idea-b strong{color:var(--ink)}
+.known{background:var(--surface-2);border-left:3px solid var(--accent);padding:12px 15px;margin:14px 0}
+.known-k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.13em;
  text-transform:uppercase;color:var(--ink-3);margin-bottom:8px}
-.capv{font-family:"IBM Plex Mono",monospace;font-size:23px;font-weight:600;letter-spacing:-.02em;line-height:1}
-.capv.big{font-size:27px}
-.capsub{font-family:"Source Serif 4",Georgia,serif;font-size:11px;color:var(--ink-3);margin-top:7px;line-height:1.4}
-.effcurve{display:flex;align-items:flex-end;gap:2px;height:46px;margin-top:4px}
-.effcurve i{flex:1;background:var(--accent);display:block}
-.effcurve i.floor{background:var(--crit)}
-.efflbl{display:flex;justify-content:space-between;margin-top:4px}
-.efflbl span{font-family:"IBM Plex Mono",monospace;font-size:9px;color:var(--ink-3)}
-.levers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px 22px;margin-bottom:16px}
-.levgroup{}
-.grouphdr{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;
-  text-transform:uppercase;color:var(--accent);font-weight:600;margin:4px 0 9px;
-  padding-bottom:5px;border-bottom:1px solid var(--rule)}
-.linknote{grid-column:1/-1;font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;
-  color:var(--ink-3);line-height:1.45;margin-top:-2px}
-@media(max-width:940px){.levers{grid-template-columns:1fr 1fr}}
-.lev label{display:flex;justify-content:space-between;align-items:baseline;gap:8px;
- font-size:12.5px;color:var(--ink-2);margin-bottom:3px}
-.lev label b{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
- background:var(--sunken);border:1px solid var(--rule);padding:1px 7px}
-input[type=range]{width:100%;accent-color:var(--accent);height:16px;margin:0;display:block}
-.chk{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-2);padding-top:14px}
-.chk i{width:14px;height:14px;border:1px solid var(--rule-strong);background:var(--accent);display:inline-block}
-.tgt{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px}
-.tgt-in{font-family:"IBM Plex Mono",monospace;font-size:26px;font-weight:600;
- background:var(--surface-2);border:1px solid var(--rule-strong);padding:7px 14px;width:130px;text-align:right}
-.tgt-l{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
- text-transform:uppercase;color:var(--ink-3);line-height:1.5}
-.btn{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
- padding:9px 14px;border:1px solid var(--ink);background:var(--ink);color:var(--ground)}
-.chain{background:var(--accent-soft);border-left:3px solid var(--accent);padding:11px 14px;
- font-family:"IBM Plex Mono",monospace;font-size:11.5px;color:var(--ink-2);line-height:1.7}
-.chain b{color:var(--ink);font-weight:600}
-.cols{display:grid;grid-template-columns:300px minmax(0,1fr);gap:24px;align-items:start}
-@media(max-width:940px){.cols{grid-template-columns:minmax(0,1fr)}}
-.fn{display:flex;flex-direction:column;align-items:center}
-.fbar{background:var(--accent);color:#fff;padding:9px 13px;display:flex;justify-content:space-between;
- align-items:baseline;gap:12px;width:100%}
-.fbar.b2{background:var(--accent-2)} .fbar.b3{background:var(--crit)}
-.fk{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;opacity:.9}
-.fv{font-family:"IBM Plex Mono",monospace;font-size:15px;font-weight:600}
-.fstep{width:100%;padding:9px 0 10px}
-.fstep .fl{font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;color:var(--ink-3);
- display:flex;justify-content:space-between;align-items:baseline;margin-bottom:3px}
-.fstep .fp{font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;color:var(--ink)}
-.gate{background:var(--crit-soft);border-top:1px solid var(--crit);border-bottom:1px solid var(--crit);
- width:100%;padding:7px 10px;text-align:center;font-family:"IBM Plex Mono",monospace;
- font-size:9.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--crit);font-weight:600}
-.mini{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
-.mini span{font-size:12.5px;color:var(--ink-2)}
-.mini b{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;
- background:var(--sunken);border:1px solid var(--rule);padding:1px 7px;min-width:72px;text-align:right}
-.mini-s{margin-bottom:12px}
-.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
-@media(max-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
-.tl{background:var(--surface);padding:13px 12px}
-.tlk{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.11em;
- text-transform:uppercase;color:var(--ink-3);margin-bottom:7px}
-.tlv{font-family:"IBM Plex Mono",monospace;font-size:19px;font-weight:600;letter-spacing:-.02em}
-
-/* phase strip */
-.phase{display:flex;gap:2px;margin-bottom:2px}
-.phase div{flex:1;padding:5px 4px;text-align:center;font-family:"IBM Plex Mono",monospace;
- font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:#fff;overflow:hidden;white-space:nowrap}
-.p1{background:var(--crit)} .p2{background:var(--warn)} .p3{background:var(--accent)}
-.phaselbl{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.11em;
- text-transform:uppercase;color:var(--ink-3);margin-bottom:5px}
-
-/* charts */
-.chartwrap{display:grid;grid-template-columns:52px minmax(0,1fr) 62px;align-items:stretch}
-.yax{display:flex;flex-direction:column;justify-content:space-between;padding:2px 8px 16px 0;text-align:right}
-.yax span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;color:var(--ink-2)}
-.yax.r{text-align:left;padding:2px 0 16px 8px}
-.plot{position:relative;border-left:1px solid var(--rule-strong);border-bottom:1px solid var(--rule-strong)}
-.grid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between}
-.grid i{display:block;height:1px;background:var(--rule)}
-.bars{position:relative;display:flex;align-items:flex-end;gap:4px;height:170px;padding:0 4px}
-.col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative}
-.col i{display:block}
-.sA{background:var(--warn)} .sB{background:var(--accent)} .sC{background:var(--accent-2)}
-.sP{background:var(--crit);opacity:.75}
-.freeband{background:repeating-linear-gradient(45deg,transparent,transparent 3px,var(--rule) 3px,var(--rule) 4px);
-  border-top:1px solid var(--rule-strong)}
-.thline{position:absolute;left:0;right:0;border-top:1px dotted var(--warn);z-index:2}
-.thlbl{position:absolute;left:2px;top:-14px;font-family:"IBM Plex Mono",monospace;
-  font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--warn)}
-.grp{flex:1;display:flex;align-items:flex-end;gap:2px;height:100%}
-.grp i{flex:1;display:block}
-.gA{background:var(--warn)} .gB{background:var(--accent)}
-.pausetag{position:absolute;bottom:2px;left:50%;transform:translateX(-50%) rotate(-90deg);
-  transform-origin:center;font-family:"IBM Plex Mono",monospace;font-size:7.5px;
-  letter-spacing:.1em;text-transform:uppercase;color:var(--crit);white-space:nowrap}
-.capline{position:absolute;left:0;right:0;border-top:2px dashed var(--crit);z-index:2}
-.caplbl{position:absolute;right:2px;top:-15px;font-family:"IBM Plex Mono",monospace;
- font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--crit)}
-.xax{display:flex;gap:4px;padding:5px 4px 0}
-.xax span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:500;color:var(--ink-2)}
-.axttl{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
- text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:6px}
-.axttl.x{text-align:center;margin:6px 0 0}
-.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;padding-left:52px}
-.legend span{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-2)}
-.legend i{width:10px;height:10px;display:inline-block;margin-right:6px;vertical-align:middle}
-.startrow{display:flex;gap:4px;padding:5px 4px;margin-left:52px;margin-right:62px;border-top:1px solid var(--rule)}
-.startrow span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;color:var(--ink)}
-.datarow{display:flex;align-items:center;margin-right:62px;border-top:1px solid var(--rule)}
-.datarow .rk{width:52px;flex:none;font-family:"IBM Plex Mono",monospace;font-size:8.5px;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);padding-right:6px;text-align:right;line-height:1.2}
-.datarow .rv{flex:1;display:flex;gap:4px;padding:5px 4px}
-.datarow .rv span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600}
-.datarow.k1 .rv span{color:var(--warn)}
-.datarow.k2 .rv span{color:var(--accent)}
-.datarow.k3 .rv span{color:var(--ink-2);font-weight:500;font-size:10px}
-.startlbl{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.1em;
- text-transform:uppercase;color:var(--ink-3);padding:8px 0 0 52px}
-/* sales load */
-.salegrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule)}
-@media(max-width:760px){.salegrid{grid-template-columns:1fr}}
-.salecell{background:var(--surface);padding:13px 14px}
-.meter{height:20px;background:var(--sunken);border:1px solid var(--rule-strong);position:relative;margin-top:6px}
-.meter i{display:block;height:100%;background:var(--accent)}
-.meter .lim{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--crit)}
-.gapnote{border-left:3px solid var(--crit);background:var(--crit-soft);padding:11px 14px;margin-top:14px;
- font-family:"Source Serif 4",Georgia,serif;font-size:12.5px;color:var(--ink-2);line-height:1.55}
-.gapnote b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink)}
-table{border-collapse:collapse;width:100%;min-width:820px}
-th,td{padding:6px 9px;text-align:right;font-family:"IBM Plex Mono",monospace;font-size:11px;white-space:nowrap}
-th{font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
- border-bottom:1px solid var(--rule-strong);background:var(--surface-2)}
-th:first-child,td:first-child{text-align:left}
-tbody tr{border-bottom:1px solid var(--rule)}
-tbody tr:nth-child(even){background:var(--surface-2)}
-.tw{overflow-x:auto}
+.known ul{margin:0;padding-left:18px}
+.known li{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;color:var(--ink-2);
+ margin-bottom:5px;line-height:1.55}
+.known li:last-child{margin-bottom:0}
+.known b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink)}
+.settle{border-left:3px solid var(--warn);background:var(--warn-soft);padding:12px 15px;margin-top:14px}
+.settle-k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.13em;
+ text-transform:uppercase;color:var(--warn);font-weight:600;margin-bottom:6px}
+.settle p{font-family:"Source Serif 4",Georgia,serif;font-size:13.5px;color:var(--ink-2);margin:0;line-height:1.55}
 .stamp{position:fixed;right:14px;bottom:14px;background:var(--crit);color:#fff;
  font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
  text-transform:uppercase;padding:7px 12px;z-index:9}
+.ghost{border:1px dashed var(--rule-strong);padding:40px 20px;text-align:center;
+ font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.1em;
+ text-transform:uppercase;color:var(--ink-3)}
 </style>
 
 <div class="stamp">Mockup &middot; not wired up</div>
 <div class="wrap">
 
-<div class="masthead">
-  <div><p class="eyebrow">RevenueForge &middot; Unit Economics</p>
-  <h1>What can this business actually hold?</h1>
-  <p class="sf">Capacity is not a constant. It rises as the factory improves, then only with people.</p></div>
-  <div class="presets"><b class="on">Conservative</b><b>Base</b><b>Aggressive</b></div>
+<div class="topbar">
+  <p class="eyebrow">RevenueForge &middot; Unit Economics</p>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="false">The model</button>
+    <button role="tab" aria-selected="true">Ideas &amp; open questions <span class="count">6</span></button>
+  </div>
 </div>
 
-<div class="seq"><span>Capacity</span><i></i><span>sets the target</span><i></i><span>which sets the funnel</span></div>
+<h1>Questions we'll have to answer to scale</h1>
+<p class="sf">Things the model surfaced but deliberately doesn't answer. Each one is parked here with what we
+already know and what would settle it &mdash; so we're not rediscovering the same tension in three months.</p>
 
-<!-- 01 CAPACITY -->
-<div class="box">
-  <div class="box-h"><span class="box-n">01</span><span class="box-t">Delivery capacity</span>
-    <span class="box-s">hours are fixed &mdash; efficiency is what improves</span></div>
-  <div class="box-b">
-    <div class="capgrid">
-      <div class="capcell"><div class="capk">Starts / month &mdash; now</div>
-        <div class="capv big">1.18</div>
-        <div class="capsub"><b>100 hrs</b> per client today. Plus a one-time <b>80 hr</b> platform build before client #1.</div></div>
-      <div class="capcell"><div class="capk">Two-person ceiling</div>
-        <div class="capv big">2.94</div>
-        <div class="capsub">At 40 hrs/client. <b>2.5&times;</b> today, no hiring. ~17 live clients.</div></div>
-      <div class="capcell"><div class="capk">Efficiency over 12 months</div>
-        <div class="effcurve">
-          <i style="height:46px"></i><i style="height:44px"></i><i style="height:40px"></i><i style="height:37px"></i>
-          <i style="height:33px"></i><i style="height:29px"></i><i style="height:26px"></i><i style="height:23px"></i>
-          <i style="height:20px"></i><i style="height:18px"></i><i class="floor" style="height:16px"></i><i class="floor" style="height:16px"></i>
-        </div>
-        <div class="efflbl"><span>M1 &mdash; 100 hrs</span><span>M11 &mdash; 40 hrs &middot; floor</span></div>
-        <div class="capsub">Red = process gains exhausted. Past here, capacity grows only by adding hours.</div></div>
+<div class="idea">
+  <div class="idea-h"><span class="idea-n">01</span><span class="chip open">open</span>
+    <p class="idea-q">Should onboarding and long-term account maintenance eventually be separate people?</p></div>
+  <div class="idea-b">
+    <p>You can only run so many onboardings a month, but recurring accounts <strong>stack indefinitely</strong>.
+      Every client added keeps drawing maintenance hours forever, so the maintenance load grows while onboarding
+      capacity stays flat. At some point one person cannot hold both.</p>
+    <p>The tension: the dev who built a client's system maintains it far more cheaply than anyone else, because
+      the context is in their head. Handing it over means paying someone to slowly learn what Geri already knows.
+      <strong>But the reframe is that context in a head is a choice, not a law.</strong> The same factory work that
+      takes onboarding from 100 hours to 40 &mdash; specs, reusable adapters, runbooks, monitoring &mdash; is exactly
+      what makes maintenance transferable. It's one investment, not two.</p>
+    <div class="known">
+      <div class="known-k">What we already know</div>
+      <ul>
+        <li>At <b>96</b> of Geri's delivery hours a month and <b>12 hrs</b> upkeep per client, maintenance alone
+          consumes him entirely at <b>8 live clients</b>.</li>
+        <li>The model puts the two-person ceiling at <b>9&ndash;14 live clients</b> &mdash; so the maintenance wall
+          and the capacity ceiling arrive at <b>the same moment</b>. This is not a distant problem.</li>
+        <li>Halving upkeep to <b>6 hrs</b> moves the wall to <b>16 clients</b> &mdash; the same lever that fixes
+          everything else in this model.</li>
+        <li>A likely answer is splitting by <b>problem type</b>, not by person: recurring failures, monitoring and
+          data hygiene delegate cleanly; novel breakage and change requests don't.</li>
+      </ul>
     </div>
-
-    <div class="levgroup">
-      <div class="grouphdr">Time we have</div>
-      <div class="levers">
-        <div class="lev"><label>Delivery hours / week <b>37</b></label><input type="range" min="10" max="140" value="37"></div>
-        <div class="lev"><label>Delivery hours / month <b>160</b></label><input type="range" min="43" max="606" value="160"></div>
-        <div class="linknote">Linked &mdash; move either, the other follows (&times;4.33). Delivery time only, not sales or admin.</div>
-      </div>
-
-      <div class="grouphdr">What one client costs</div>
-      <div class="levers">
-        <div class="lev"><label>Total hours to onboard <b>100</b></label><input type="range" min="20" max="300" value="100">
-          <div class="linknote">70 technical + 30 human contact.</div></div>
-        <div class="lev"><label>Onboarding spread <b>3 mo</b></label><input type="range" min="1" max="9" value="3"></div>
-        <div class="lev"><label>Steady-state upkeep <b>12 hrs/mo</b></label><input type="range" min="0" max="60" value="12"></div>
-      </div>
-
-      <div class="grouphdr">One-time platform build</div>
-      <div class="levers">
-        <div class="lev"><label>Hours to go multi-tenant <b>80</b></label><input type="range" min="0" max="300" value="80"></div>
-        <div class="linknote" style="grid-column:2/-1">Paid once, before client #1 &mdash; tenant isolation, per-client auth and secrets, config that isn&rsquo;t hardcoded to QS. Never repeats, so it must not hide inside the per-client average.</div>
-      </div>
-
-      <div class="grouphdr">Acquisition throttle</div>
-      <div class="levers">
-        <div class="lev"><label>Pause selling when queue exceeds <b>1.5 mo</b></label><input type="range" min="0" max="6" value="2"></div>
-        <div class="linknote" style="grid-column:2/-1">Months of onboarding capacity already committed to closed deals. Above this, stop running audits rather than sell something you cannot deliver.</div>
-      </div>
-
-      <div class="grouphdr">How cheap it can get</div>
-      <div class="levers">
-        <div class="lev"><label>Efficiency floor <b>40%</b></label><input type="range" min="15" max="100" value="40">
-          <div class="linknote">40 hrs &mdash; 20 technical, 20 meetings. The meetings are the wall.</div></div>
-        <div class="lev"><label>Months to reach floor <b>11</b></label><input type="range" min="3" max="36" value="11"></div>
-        <div class="linknote">At the floor, process gains are spent. After that, only more hours move the number.</div>
-      </div>
-
-      <div class="grouphdr">What a hire buys</div>
-      <div class="levers">
-        <div class="lev"><label>Hours per delivery hire <b>110</b></label><input type="range" min="40" max="200" value="110"></div>
-        <div class="lev"><label>Hire efficiency vs Geri <b>70%</b></label><input type="range" min="30" max="100" value="70">
-          <div class="linknote">Keep this conservative &mdash; it also absorbs the fact that a new hire is slow at first.</div></div>
-        <div class="chk"><i></i> Allow hiring</div>
-      </div>
+    <div class="settle">
+      <div class="settle-k">What would settle it</div>
+      <p>Track, from client #1, what share of maintenance is <em>recurring</em> versus <em>novel</em>. If most fixes
+        are the same handful of failure modes across clients, maintenance is delegable and the hire is cheap. If
+        every client breaks differently, it stays welded to the builder &mdash; and that's an argument for tighter
+        qualification, not a bigger team.</p>
     </div>
   </div>
 </div>
 
-<!-- 02 TARGET -->
-<div class="box">
-  <div class="box-h"><span class="box-n">02</span><span class="box-t">Target</span>
-    <span class="box-s">what you're aiming to start each month</span></div>
-  <div class="box-b">
-    <div class="tgt"><div class="tgt-in">1.18</div>
-      <div class="tgt-l">target client<br>starts / month</div>
-      <div class="btn">Match capacity</div></div>
-    <div class="chain">&#10003; At capacity &mdash; ceiling today is 1.18 / mo, rising to 2.94 by month 11.<br>
-      Requires <b>4.7 audits</b> &rarr; <b>143 attendees</b> &rarr; <b>143,000 invites</b> / month (<b>35,750</b> per webinar).</div>
+<div class="idea">
+  <div class="idea-h"><span class="idea-n">02</span><span class="chip verify">verify</span>
+    <p class="idea-q">How many hours does a live client actually consume each month?</p></div>
+  <div class="idea-b">
+    <p>The single most load-bearing assumption in the model, and currently a guess. It sets the capacity ceiling,
+      it sets the parity price for the recurring tier, and it decides when the maintenance wall arrives.</p>
+    <div class="known">
+      <div class="known-k">What we already know</div>
+      <ul>
+        <li>Currently assumed <b>12 hrs/month</b> per live client, scaling down with efficiency.</li>
+        <li>At 12 hrs, recurring parity sits at <b>$2,400/mo</b> &mdash; so $3,000 is only <b>1.25&times;</b> ahead.</li>
+        <li>At 6 hrs, parity drops to <b>$1,200</b> and $3,000 becomes <b>2.5&times;</b> ahead. Halving upkeep does
+          the same work as doubling the price, without a pricing conversation.</li>
+      </ul>
+    </div>
+    <div class="settle"><div class="settle-k">What would settle it</div>
+      <p>Geri logs maintenance hours per client for the first two clients. Two months of real data replaces the
+        most consequential guess in the model.</p></div>
   </div>
 </div>
 
-<div class="cols">
-  <div>
-    <div class="box"><div class="box-h"><span class="box-n">03</span><span class="box-t">The funnel</span>
-      <span class="box-s">derived</span></div>
-      <div class="box-b"><div class="fn">
-        <div class="fbar"><span class="fk">Invites / month</span><span class="fv">143,000</span></div>
-        <div class="fstep"><div class="fl"><span>invite &rarr; attendee</span><span class="fp">0.10%</span></div><input type="range" min="5" max="60" value="10"></div>
-        <div class="fbar" style="width:78%"><span class="fk">Attendees</span><span class="fv">143</span></div>
-        <div class="fstep"><div class="fl"><span>attendee &rarr; audit</span><span class="fp">3.0%</span></div><input type="range" min="5" max="200" value="30"></div>
-        <div class="fbar b2" style="width:58%"><span class="fk">Audits</span><span class="fv">4.7</span></div>
-        <div class="fstep"><div class="fl"><span>audit &rarr; build</span><span class="fp">25%</span></div><input type="range" min="5" max="70" value="25"></div>
-        <div class="fbar b2" style="width:42%"><span class="fk">Deals won</span><span class="fv">1.18</span></div>
-        <div class="gate" style="width:42%">capacity gate</div>
-        <div class="fbar b3" style="width:42%"><span class="fk">Started</span><span class="fv">1.18</span></div>
-      </div></div></div>
-
-    <div class="box"><div class="box-h"><span class="box-t">Demand volume</span></div><div class="box-b">
-      <div class="mini"><span>Invites / webinar</span><b>35,750</b></div>
-      <div class="mini-s"><div class="mini"><span>Webinars / month</span><b>4</b></div><input type="range" min="1" max="8" value="4"></div>
-      <div class="mini-s"><div class="mini"><span>Follow-up uplift</span><b>+10%</b></div><input type="range" min="0" max="30" value="10"></div>
-      <div class="mini-s"><div class="mini"><span>Queue drop-off</span><b>10%</b></div><input type="range" min="0" max="50" value="10"></div>
-    </div></div>
-
-    <div class="box"><div class="box-h"><span class="box-t">Deal economics</span></div><div class="box-b">
-      <div class="mini-s"><div class="mini"><span>Audit price</span><b>$897</b></div><input type="range" min="297" max="2500" value="897"></div>
-      <div class="mini-s"><div class="mini"><span>Upfront</span><b>$20,000</b></div><input type="range" min="5000" max="60000" value="20000"></div>
-      <div class="mini-s"><div class="mini"><span>Recurring / mo</span><b>$3,000</b></div><input type="range" min="0" max="10000" value="3000"></div>
-      <div class="mini-s"><div class="mini"><span>Billing window</span><b>3 mo</b></div><input type="range" min="1" max="9" value="3"></div>
-      <div class="mini-s"><div class="mini"><span>Retention</span><b>6 mo</b></div><input type="range" min="3" max="48" value="6"></div>
-      <div class="mini-s"><div class="mini"><span>Expansion / mo</span><b>0%</b></div><input type="range" min="0" max="15" value="0"></div>
-    </div></div>
-
-    <div class="box"><div class="box-h"><span class="box-t">Sales &amp; costs</span></div><div class="box-b">
-      <div class="mini-s"><div class="mini"><span>Your audit ceiling / wk</span><b>5</b></div><input type="range" min="1" max="12" value="5"></div>
-      <div class="mini-s"><div class="mini"><span>Hours per audit</span><b>3.5</b></div><input type="range" min="1" max="8" value="4"></div>
-      <div class="mini-s"><div class="mini"><span>Rep audit ceiling / wk</span><b>8</b></div><input type="range" min="3" max="15" value="8"></div>
-      <div class="mini-s"><div class="mini"><span>Rep close rate vs you</span><b>70%</b></div><input type="range" min="30" max="100" value="70"></div>
-      <div class="mini-s"><div class="mini"><span>Rep commission</span><b>10% upfront</b></div><input type="range" min="0" max="25" value="10"></div>
-      <div class="mini"><span>Tools &amp; infra</span><b>$1,500</b></div>
-      <div class="mini"><span>Cost per delivery hire</span><b>$8,000</b></div>
-      <div class="mini"><span>Your share</span><b>60 / 40</b></div>
-    </div></div>
-  </div>
-
-  <div>
-    <div class="box"><div class="box-h"><span class="box-n">04</span><span class="box-t">What it produces</span>
-      <span class="box-s">month 12</span></div>
-      <div class="tiles">
-        <div class="tl"><div class="tlk">Cash / mo</div><div class="tlv">$88.0k</div></div>
-        <div class="tl"><div class="tlk">Profit / mo</div><div class="tlv">$86.5k</div></div>
-        <div class="tl"><div class="tlk">MRR</div><div class="tlv">$26.5k</div></div>
-        <div class="tl"><div class="tlk">Live clients</div><div class="tlv">14.7</div></div>
-        <div class="tl"><div class="tlk">Team</div><div class="tlv">0</div></div>
-      </div></div>
-
-    <!-- MONEY -->
-    <div class="box"><div class="box-h"><span class="box-n">05</span><span class="box-t">Money &mdash; 12 months</span>
-      <span class="box-s">cash collected &middot; contract value booked</span></div>
-      <div class="box-b">
-        <div class="phaselbl">Phase</div>
-        <div class="phase" style="margin-left:52px;margin-right:62px">
-          <div class="p1" style="flex:3">Learning</div><div class="p2" style="flex:7">Improving</div><div class="p3" style="flex:2">Ceiling</div>
-        </div>
-        <div class="axttl">Y &mdash; dollars collected in month</div>
-        <div class="chartwrap">
-          <div class="yax"><span>$60k</span><span>$40k</span><span>$20k</span><span>$0</span></div>
-          <div>
-            <div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div>
-              <div class="bars">
-                <div class="col"><i class="sB" style="height:57px"></i><i class="sA" style="height:7px"></i></div>
-                <div class="col"><i class="sB" style="height:20px"></i><i class="sA" style="height:7px"></i></div>
-                <div class="col"><i class="sC" style="height:5px"></i><i class="sB" style="height:48px"></i><i class="sA" style="height:8px"></i></div>
-                <div class="col"><i class="sC" style="height:10px"></i><i class="sB" style="height:52px"></i><i class="sA" style="height:9px"></i></div>
-                <div class="col"><i class="sC" style="height:15px"></i><i class="sB" style="height:60px"></i><i class="sA" style="height:10px"></i></div>
-                <div class="col"><i class="sC" style="height:21px"></i><i class="sB" style="height:68px"></i><i class="sA" style="height:11px"></i></div>
-                <div class="col"><i class="sC" style="height:27px"></i><i class="sB" style="height:77px"></i><i class="sA" style="height:13px"></i></div>
-                <div class="col"><i class="sC" style="height:33px"></i><i class="sB" style="height:86px"></i><i class="sA" style="height:15px"></i></div>
-                <div class="col"><i class="sC" style="height:38px"></i><i class="sB" style="height:95px"></i><i class="sA" style="height:16px"></i></div>
-                <div class="col"><i class="sC" style="height:41px"></i><i class="sB" style="height:103px"></i><i class="sA" style="height:18px"></i></div>
-                <div class="col"><i class="sC" style="height:43px"></i><i class="sB" style="height:110px"></i><i class="sA" style="height:19px"></i></div>
-                <div class="col"><i class="sC" style="height:43px"></i><i class="sB" style="height:110px"></i><i class="sA" style="height:20px"></i></div>
-              </div>
-            </div>
-            <div class="xax"><span>M1</span><span>M2</span><span>M3</span><span>M4</span><span>M5</span><span>M6</span><span>M7</span><span>M8</span><span>M9</span><span>M10</span><span>M11</span><span>M12</span></div>
-            <div class="axttl x">X &mdash; month</div>
-          </div>
-          <div class="yax r"><span>$430k</span><span>$287k</span><span>$143k</span><span>$0</span></div>
-        </div>
-        <div class="datarow k3"><div class="rk">Cash<br>collected</div><div class="rv">
-          <span>$4k</span><span>$26k</span><span>$29k</span><span>$36k</span><span>$44k</span><span>$52k</span>
-          <span>$59k</span><span>$65k</span><span>$72k</span><span>$78k</span><span>$84k</span><span>$88k</span></div></div>
-        <div class="legend">
-          <span><i style="background:var(--warn)"></i>Audit fees</span>
-          <span><i style="background:var(--accent)"></i>Upfront</span>
-          <span><i style="background:var(--accent-2)"></i>Recurring</span>
-          <span><i style="background:var(--ink-3)"></i>Right axis: cumulative contract value</span>
-        </div>
-      </div></div>
-
-    <!-- DELIVERY LOAD -->
-    <div class="box"><div class="box-h"><span class="box-n">06</span><span class="box-t">Delivery load &mdash; 12 months</span>
-      <span class="box-s">hours consumed against capacity</span></div>
-      <div class="box-b">
-        <div class="axttl">Y &mdash; delivery hours consumed</div>
-        <div class="chartwrap">
-          <div class="yax"><span>240</span><span>160</span><span>80</span><span>0</span></div>
-          <div>
-            <div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div>
-              <div class="bars">
-                <div class="capline" style="bottom:113px"><span class="caplbl">hours available 160</span></div>
-                <div class="col"><i class="sP" style="height:57px"></i><i class="sB" style="height:56px"></i></div>
-                <div class="col"><i class="sP" style="height:57px"></i><i class="sB" style="height:56px"></i></div>
-                <div class="col"><i class="sC" style="height:4px"></i><i class="sA" style="height:24px"></i><i class="sB" style="height:85px"></i></div>
-                <div class="col"><i class="sC" style="height:7px"></i><i class="sA" style="height:20px"></i><i class="sB" style="height:86px"></i></div>
-                <div class="col"><i class="sC" style="height:10px"></i><i class="sA" style="height:19px"></i><i class="sB" style="height:84px"></i></div>
-                <div class="col"><i class="sC" style="height:12px"></i><i class="sA" style="height:19px"></i><i class="sB" style="height:82px"></i></div>
-                <div class="col"><i class="sC" style="height:14px"></i><i class="sA" style="height:19px"></i><i class="sB" style="height:80px"></i></div>
-                <div class="col"><i class="sC" style="height:15px"></i><i class="sA" style="height:19px"></i><i class="sB" style="height:79px"></i></div>
-                <div class="col"><i class="sC" style="height:16px"></i><i class="sA" style="height:19px"></i><i class="sB" style="height:78px"></i></div>
-                <div class="col"><i class="sC" style="height:17px"></i><i class="sA" style="height:19px"></i><i class="sB" style="height:77px"></i></div>
-                <div class="col"><i class="sC" style="height:17px"></i><i class="sA" style="height:19px"></i><i class="sB" style="height:77px"></i></div>
-                <div class="col"><i class="sC" style="height:17px"></i><i class="sA" style="height:19px"></i><i class="sB" style="height:77px"></i></div>
-              </div>
-            </div>
-            <div class="xax"><span>M1</span><span>M2</span><span>M3</span><span>M4</span><span>M5</span><span>M6</span><span>M7</span><span>M8</span><span>M9</span><span>M10</span><span>M11</span><span>M12</span></div>
-            <div class="axttl x">X &mdash; month</div>
-          </div>
-          <div class="yax r"><span></span><span></span><span></span><span></span></div>
-        </div>
-        <div class="datarow k2"><div class="rk">Clients<br>onboarded</div><div class="rv">
-          <span>0.00</span><span>1.00</span><span>1.12</span><span>1.31</span><span>1.52</span><span>1.74</span>
-          <span>1.98</span><span>2.22</span><span>2.45</span><span>2.66</span><span>2.85</span><span>2.94</span></div></div>
-        <div class="datarow k3"><div class="rk">Hours<br>used</div><div class="rv">
-          <span>80</span><span>113</span><span>140</span><span>149</span><span>153</span><span>156</span>
-          <span>158</span><span>159</span><span>160</span><span>160</span><span>160</span><span>160</span></div></div>
-        <div class="datarow k3"><div class="rk">Hours<br>free</div><div class="rv">
-          <span>80</span><span>47</span><span>20</span><span>11</span><span>7</span><span>4</span>
-          <span>2</span><span>1</span><span>0</span><span>0</span><span>0</span><span>0</span></div></div>
-        <div class="legend">
-          <span><i style="background:var(--accent)"></i>Onboarding</span>
-          <span><i style="background:var(--warn)"></i>Tapering</span>
-          <span><i style="background:var(--accent-2)"></i>Steady-state</span>
-          <span><i style="background:var(--crit);opacity:.75"></i>One-time platform build</span>
-          <span><i class="freeband" style="width:10px;height:10px"></i>Gap to the line = free hours</span>
-          <span><i style="background:var(--crit)"></i>Capacity ceiling</span>
-        </div>
-      </div></div>
-
-    <!-- ACQUISITION -->
-    <div class="box"><div class="box-h"><span class="box-n">07</span><span class="box-t">Acquisition &mdash; 12 months</span>
-      <span class="box-s">throttled to what delivery can absorb</span></div>
-      <div class="box-b">
-        <div class="axttl">Y &mdash; audits run and deals closed per month</div>
-        <div class="chartwrap">
-          <div class="yax"><span>12</span><span>8</span><span>4</span><span>0</span></div>
-          <div>
-            <div class="plot"><div class="grid"><i></i><i></i><i></i><i></i></div>
-              <div class="bars">
-                <div class="col" style="position:relative"><div class="grp"><i class="gA" style="height:0"></i><i class="gB" style="height:0"></i></div><span class="pausetag">paused &mdash; platform build</span></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:57px"></i><i class="gB" style="height:14px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:64px"></i><i class="gB" style="height:16px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:74px"></i><i class="gB" style="height:19px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:86px"></i><i class="gB" style="height:22px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:99px"></i><i class="gB" style="height:25px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:112px"></i><i class="gB" style="height:28px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:126px"></i><i class="gB" style="height:31px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:139px"></i><i class="gB" style="height:35px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:150px"></i><i class="gB" style="height:38px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:161px"></i><i class="gB" style="height:40px"></i></div></div>
-                <div class="col"><div class="grp"><i class="gA" style="height:167px"></i><i class="gB" style="height:42px"></i></div></div>
-              </div>
-            </div>
-            <div class="xax"><span>M1</span><span>M2</span><span>M3</span><span>M4</span><span>M5</span><span>M6</span><span>M7</span><span>M8</span><span>M9</span><span>M10</span><span>M11</span><span>M12</span></div>
-            <div class="axttl x">X &mdash; month</div>
-          </div>
-          <div class="yax r"><span></span><span></span><span></span><span></span></div>
-        </div>
-        <div class="datarow k1"><div class="rk">Audits<br>run</div><div class="rv">
-          <span>0</span><span>4.0</span><span>4.5</span><span>5.2</span><span>6.1</span><span>7.0</span>
-          <span>7.9</span><span>8.9</span><span>9.8</span><span>10.6</span><span>11.4</span><span>11.8</span></div></div>
-        <div class="datarow k2"><div class="rk">Deals<br>closed</div><div class="rv">
-          <span>0</span><span>1.00</span><span>1.12</span><span>1.31</span><span>1.52</span><span>1.74</span>
-          <span>1.98</span><span>2.22</span><span>2.45</span><span>2.66</span><span>2.85</span><span>2.94</span></div></div>
-        <div class="datarow k3"><div class="rk">Invites<br>needed</div><div class="rv">
-          <span>0</span><span>121k</span><span>136k</span><span>158k</span><span>184k</span><span>212k</span>
-          <span>240k</span><span>269k</span><span>297k</span><span>322k</span><span>345k</span><span>357k</span></div></div>
-        <div class="legend">
-          <span><i style="background:var(--warn)"></i>Audits run</span>
-          <span><i style="background:var(--accent)"></i>Deals closed</span>
-          <span><i style="background:var(--crit)"></i>Acquisition paused</span>
-        </div>
-        <div class="gapnote" style="border-left-color:var(--warn);background:var(--warn-soft)">
-          Acquisition is <b>throttled by the delivery queue</b>, not by free hours &mdash; at equilibrium free hours are always near zero,
-          so a free-hours trigger would switch selling off forever. The rule here: <b>pause when closed-but-unstarted deals exceed 1.5 months of onboarding capacity.</b>
-          Month 1 pauses because the platform build owns the calendar.
-        </div>
-      </div></div>
-
-    <!-- SALES LOAD -->
-    <div class="box"><div class="box-h"><span class="box-n">08</span><span class="box-t">Your calendar</span>
-      <span class="box-s">when does the audit load become the constraint?</span></div>
-      <div class="box-b">
-        <div class="salegrid">
-          <div class="salecell"><div class="capk">Audits / week &mdash; month 12</div><div class="capv">2.7</div>
-            <div class="meter"><i style="width:54%"></i><span class="lim" style="left:100%"></span></div>
-            <div class="capsub">Your ceiling is 5/wk. Delivery runs out long before your calendar does.</div></div>
-          <div class="salecell"><div class="capk">Your sales hours / month</div><div class="capv">41</div>
-            <div class="capsub">11.8 audits at 3.5 hrs each. Still inside your limit.</div></div>
-          <div class="salecell"><div class="capk">Rep viable at</div><div class="capv" style="color:var(--crit)">5.0<span style="font-size:13px"> deals/mo</span></div>
-            <div class="capsub">10% of $20k upfront = $2k/deal. They need 5 to clear $10k.</div></div>
-        </div>
-        <div class="gapnote">You reach <b>2.94</b> starts/month on your own. A rep needs <b>5.0</b> to earn a living on commission alone &mdash;
-          that is <b>1.7&times;</b> further, and it needs roughly <b>two delivery hires</b> first.
-          <b>Hire delivery before sales.</b> A closer hired now would sit on a capped calendar and leave.</div>
-      </div></div>
-
-    <div class="box"><div class="box-h"><span class="box-n">09</span><span class="box-t">Month by month</span></div>
-      <div class="tw"><table>
-        <thead><tr><th>Mo</th><th>Eff</th><th>Hrs/client</th><th>Starts</th><th>Audits/wk</th>
-          <th>Hrs used</th><th>Hrs free</th><th>Onboarding</th><th>Steady</th><th>Cash</th><th>Contract</th></tr></thead>
-        <tbody>
-          <tr><td>1</td><td>100%</td><td>100</td><td>0.00</td><td>0.0</td><td>160</td><td>0</td><td>0.00</td><td>0.00</td><td>$4k</td><td>$0</td></tr>
-          <tr><td>2</td><td>95%</td><td>95</td><td>1.00</td><td>1.1</td><td>155</td><td>5</td><td>1.00</td><td>0.00</td><td>$26k</td><td>$29k</td></tr>
-          <tr><td>3</td><td>88%</td><td>88</td><td>1.12</td><td>1.1</td><td>159</td><td>1</td><td>2.12</td><td>0.00</td><td>$29k</td><td>$32k</td></tr>
-          <tr><td>6</td><td>67%</td><td>67</td><td>1.74</td><td>1.6</td><td>160</td><td>0</td><td>3.26</td><td>2.12</td><td>$52k</td><td>$50k</td></tr>
-          <tr><td>9</td><td>50%</td><td>50</td><td>2.45</td><td>2.3</td><td>160</td><td>0</td><td>4.67</td><td>5.38</td><td>$72k</td><td>$71k</td></tr>
-          <tr><td>12</td><td>40%</td><td>40</td><td>2.94</td><td>2.7</td><td>160</td><td>0</td><td>5.88</td><td>8.82</td><td>$88k</td><td>$85k</td></tr>
-        </tbody>
-      </table></div></div>
+<div class="idea">
+  <div class="idea-h"><span class="idea-n">03</span><span class="chip open">open</span>
+    <p class="idea-q">Should efficiency improve with clients delivered rather than with time?</p></div>
+  <div class="idea-b">
+    <p>The model currently improves efficiency on a monthly timer. But you learn by <strong>shipping</strong>, not
+      by waiting &mdash; a month with two onboardings should teach more than a month with none. Driving the curve off
+      completed clients would make early throughput self-reinforcing, and would correctly punish a slow start.</p>
+    <div class="settle"><div class="settle-k">What would settle it</div>
+      <p>Straightforward to change once there's real data on how much cheaper client #3 was than client #1.</p></div>
   </div>
 </div>
+
+<div class="idea">
+  <div class="idea-h"><span class="idea-n">04</span><span class="chip open">open</span>
+    <p class="idea-q">Do we refuse clients on non-standard stacks?</p></div>
+  <div class="idea-b">
+    <p>A client on an exotic CRM could cost <strong>2&ndash;3&times;</strong> a normal onboarding and eat a month.
+      Worse, their maintenance never standardises &mdash; so they stay welded to Geri permanently rather than ever
+      being delegable. That's a stronger reason to decline than the onboarding hours alone.</p>
+    <div class="settle"><div class="settle-k">What would settle it</div>
+      <p>Probably a qualification rule in the audit &mdash; <em>we deploy onto these systems</em> &mdash; rather than a
+        lever in the model.</p></div>
+  </div>
+</div>
+
+<div class="idea">
+  <div class="idea-h"><span class="idea-n">05</span><span class="chip parked">parked</span>
+    <p class="idea-q">The model is deliberately pessimistic about retention. How much?</p></div>
+  <div class="idea-b">
+    <p>Expansion revenue is switched off, referrals aren't modelled, and a retained client's biggest hidden benefit
+      &mdash; that it needs <strong>no sales or pre-sales time at all</strong> &mdash; is invisible here. Every one of
+      those pushes the same way, so any conclusion this model reaches about keeping clients is a <strong>floor,
+      not a forecast</strong>.</p>
+  </div>
+</div>
+
+<div class="idea">
+  <div class="idea-h"><span class="idea-n">06</span><span class="chip parked">parked</span>
+    <p class="idea-q">The hiring extension &mdash; what happens past the two-person ceiling?</p></div>
+  <div class="idea-b">
+    <p>Phase 2 of the model. Delivery hires first, then the question of when a commission-only closer becomes
+      viable &mdash; they need <strong>5 deals a month</strong> to clear $10k at 10% of upfront, which is well beyond
+      what two people can deliver.</p>
+  </div>
+</div>
+
+<div class="ghost">+ new question</div>
+
 </div>
