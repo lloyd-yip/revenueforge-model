@@ -22,8 +22,9 @@ html,body{max-width:100%;overflow-x:hidden}
 body{margin:0;background:var(--ground);color:var(--ink);font-family:"Archivo",Arial,sans-serif;
  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
 .wrap{max-width:1320px;margin:0 auto;padding:0 24px 70px}
-.masthead{border-bottom:2px solid var(--ink);padding:30px 0 16px;display:flex;
- justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.masthead{border-bottom:2px solid var(--ink);padding:26px 0 14px;display:flex;
+ justify-content:space-between;align-items:flex-end;gap:14px 20px;flex-wrap:wrap}
+.masthead>div:last-child{flex:0 0 auto}
 .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.16em;
  text-transform:uppercase;color:var(--ink-3);margin:0 0 8px}
 h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin:0 0 6px;line-height:1.06}
@@ -47,11 +48,17 @@ h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin
 .saved.on{opacity:1}
 .presets button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tabs{display:flex;gap:0;margin:0 0 22px;border-bottom:1px solid var(--rule)}
-.tabs button{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.12em;
- text-transform:uppercase;padding:12px 20px;border:0;background:transparent;color:var(--ink-3);
- cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500}
-.tabs button:hover{color:var(--ink-2)}
-.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+.tabs button{display:flex;flex-direction:column;align-items:flex-start;gap:3px;padding:10px 16px;
+ border:0;background:transparent;cursor:pointer;border-bottom:2px solid transparent;
+ margin-bottom:-1px;text-align:left}
+.tabs button em{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:11px;
+ letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500;white-space:nowrap}
+.tabs button i{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:9px;
+ letter-spacing:.07em;color:var(--ink-3);opacity:.6;white-space:nowrap}
+.tabs button:hover em{color:var(--ink-2)}
+.tabs button[aria-selected="true"]{border-bottom-color:var(--accent)}
+.tabs button[aria-selected="true"] em{color:var(--ink)}
+.tabs button[aria-selected="true"] i{color:var(--accent);opacity:1}
 .tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .tabs .count{display:inline-block;margin-left:8px;background:var(--accent);color:var(--ground);
  font-size:9px;padding:1px 6px;border-radius:9px;vertical-align:middle}
@@ -262,6 +269,55 @@ td.pause{color:var(--crit)}
 .q.flip .tipbox{bottom:auto;top:calc(100% + 8px)}
 .q.flip .tipbox::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--ink)}
 .tiphint{font-family:"Source Serif 4",Georgia,serif;font-size:12.5px;color:var(--ink-3);margin-left:auto}
+.ph-h1{font-size:clamp(22px,3vw,29px);font-weight:700;letter-spacing:-.02em;margin:0 0 8px;line-height:1.15}
+.ph-sf{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink-2);margin:0 0 22px;max-width:70ch}
+.cwrap{display:grid;grid-template-columns:64px minmax(0,1fr);align-items:stretch}
+.cy{display:flex;flex-direction:column;justify-content:space-between;padding:2px 9px 18px 0;text-align:right}
+.cy span{font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:500;color:var(--ink-2)}
+.cplot{position:relative;border-left:1px solid var(--rule-strong);border-bottom:1px solid var(--rule-strong)}
+.cgrid{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between}
+.cgrid i{display:block;height:1px;background:var(--rule)}
+.cbars{position:relative;display:flex;align-items:flex-end;gap:3px;height:170px;padding:0 3px}
+.ccol{flex:1;display:flex;flex-direction:column;justify-content:flex-end;position:relative;cursor:crosshair;min-width:0}
+.ccol:hover{background:rgba(127,184,179,.12)}
+.ccol i{display:block}
+.cx{display:flex;gap:3px;padding:5px 3px 0}
+.cx span{flex:1;text-align:center;font-family:"IBM Plex Mono",monospace;font-size:9px;
+ font-weight:500;color:var(--ink-2);white-space:nowrap;overflow:hidden;min-width:0}
+.cxt{text-align:center;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-top:6px}
+.cyt{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-2);font-weight:600;margin-bottom:7px}
+.cline{position:absolute;left:0;right:0;border-top:2px dashed var(--crit);z-index:2;pointer-events:none}
+.cmark{position:absolute;top:0;bottom:0;width:2px;background:var(--warn);z-index:3;pointer-events:none}
+.cmark em{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-style:normal;
+ font-family:"IBM Plex Mono",monospace;font-size:8px;letter-spacing:.07em;text-transform:uppercase;
+ color:var(--warn);white-space:nowrap}
+.ctip{display:none;position:absolute;bottom:calc(100% + 10px);z-index:40;width:214px;
+ background:var(--ink);color:var(--ground);padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.4);
+ font-family:"IBM Plex Mono",monospace;font-size:11px;line-height:1.5;pointer-events:none;
+ font-variant-numeric:tabular-nums}
+.ctip b{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:7px;
+ padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.28);opacity:.85}
+.ctip .tr{display:flex;justify-content:space-between;gap:14px;padding:1.5px 0}
+.ctip .tr.hi{margin-top:5px;padding-top:5px;border-top:1px solid rgba(255,255,255,.18)}
+.ctip u{text-decoration:none;opacity:.68} .ctip s{text-decoration:none;font-weight:600}
+.clegend{display:flex;gap:15px;flex-wrap:wrap;margin-top:12px;padding-left:64px}
+.clegend span{font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-2)}
+.clegend i{width:10px;height:10px;display:inline-block;margin-right:6px;vertical-align:middle}
+.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1px;
+ background:var(--rule);border:1px solid var(--rule)}
+.cc{background:var(--surface);padding:14px}
+.cc.best{background:var(--accent-soft)}
+.cck{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.12em;
+ text-transform:uppercase;color:var(--ink-3);margin-bottom:9px}
+.ccv{font-family:"IBM Plex Mono",monospace;font-size:21px;font-weight:600}
+.ccs{font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;color:var(--ink-3);margin-top:6px;line-height:1.45}
+.note{font-family:"Source Serif 4",Georgia,serif;font-size:11.5px;color:var(--ink-3);margin-top:5px;line-height:1.45}
+.wall{border-left:3px solid var(--crit);background:var(--crit-soft);padding:12px 15px;margin-top:14px;
+ font-family:"Source Serif 4",Georgia,serif;font-size:13px;color:var(--ink-2);line-height:1.55}
+.wall b{font-family:"IBM Plex Mono",monospace;font-weight:600;color:var(--ink)}
+.wall.ok{border-left-color:var(--accent);background:var(--accent-soft)}
 </style>
 
 <div class="wrap">
@@ -281,11 +337,14 @@ td.pause{color:var(--crit)}
 </div>
 
 <div class="tabs" role="tablist">
-  <button type="button" role="tab" id="tab-model" aria-selected="true">The model</button>
-  <button type="button" role="tab" id="tab-ideas" aria-selected="false">Ideas &amp; open questions <span class="count">7</span></button>
+  <button type="button" role="tab" data-p="p1" aria-selected="true"><em>1 &middot; Startup</em><i id="rng1">&nbsp;</i></button>
+  <button type="button" role="tab" data-p="p2" aria-selected="false"><em>2 &middot; Scale delivery</em><i id="rng2">&nbsp;</i></button>
+  <button type="button" role="tab" data-p="p3" aria-selected="false"><em>3 &middot; Scale sales</em><i id="rng3">&nbsp;</i></button>
+  <button type="button" role="tab" data-p="p4" aria-selected="false"><em>4 &middot; Full arc</em><i id="rng4">&nbsp;</i></button>
+  <button type="button" role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">7</span></em><i>open questions</i></button>
 </div>
 
-<div id="panel-model">
+<div id="p1">
 <div class="seq"><span>Capacity</span><i></i><span>sets the target</span><i></i><span>which sets the funnel</span></div>
 
 <div class="box">
@@ -485,9 +544,110 @@ td.pause{color:var(--crit)}
       conservative floor, so this understates the business on purpose. The hiring extension is the next build.</p>
   </div>
 </div>
-</div><!-- /panel-model -->
+</div><!-- /p1 -->
 
-<div id="panel-ideas" hidden>
+<div id="p2" hidden>
+  <h2 class="ph-h1">Scale delivery</h2>
+  <p class="ph-sf">Picks up exactly where phase 1 cut off. Efficiency has bottomed out, so process improvement is
+    spent &mdash; the only lever left is people. A delivery hire lands whenever capacity has been full for the
+    trigger period, and the phase ends when your own calendar becomes the constraint instead.</p>
+  <div class="cols">
+    <div>
+      <div class="box"><div class="box-h"><span class="box-t">Delivery hires</span></div><div class="box-b">
+        <div class="mini-s"><div class="mini"><span>Hours per hire / mo</span><b id="o_hireHrs"></b></div>
+          <input type="range" id="hireHrs" min="40" max="200" step="5"></div>
+        <div class="mini-s"><div class="mini"><span>Effectiveness vs Geri</span><b id="o_hireEff"></b></div>
+          <input type="range" id="hireEff" min="30" max="100" step="5">
+          <p class="note">Keep conservative &mdash; also absorbs the fact that a new hire is slow at first.</p></div>
+        <div class="mini-s"><div class="mini"><span>Decay per extra hire</span><b id="o_decay"></b></div>
+          <input type="range" id="decay" min="60" max="100" step="1">
+          <p class="note">Each hire is this much as effective as the one before. Stands in for coordination
+            overhead and Geri drifting toward management.</p></div>
+        <div class="mini-s"><div class="mini"><span>Cost per hire / mo</span><b id="o_hireCost"></b></div>
+          <input type="range" id="hireCost" min="2000" max="20000" step="500"></div>
+        <div class="mini-s"><div class="mini"><span>Trigger: months maxed</span><b id="o_trigM"></b></div>
+          <input type="range" id="trigM" min="1" max="6" step="1">
+          <p class="note">Hire only after capacity has been full this many months running <em>and</em> efficiency
+            has already hit its floor.</p></div>
+      </div></div>
+      <div class="box"><div class="box-h"><span class="box-t">Carried from phase 1</span></div>
+        <div class="box-b" id="carry2"></div></div>
+    </div>
+    <div>
+      <div class="tiles" id="tiles2"></div>
+      <div class="box" style="margin-top:16px"><div class="box-h"><span class="box-n">01</span>
+        <span class="box-t">Capacity &amp; headcount</span><span class="box-s">hires step the ceiling up &middot; hover any month</span></div>
+        <div class="box-b"><div class="chartbox" data-chart="cap2"></div>
+          <div class="wall" id="wall2"></div></div></div>
+      <div class="box"><div class="box-h"><span class="box-n">02</span><span class="box-t">Month by month</span></div>
+        <div class="tw"><table><thead id="th2"></thead><tbody id="tb2"></tbody></table></div></div>
+    </div>
+  </div>
+</div><!-- /p2 -->
+
+<div id="p3" hidden>
+  <h2 class="ph-h1">Scale sales</h2>
+  <p class="ph-sf">Starts where phase 2 cut off, at the month your audit load hit its ceiling. Delivery hires keep
+    landing in the background &mdash; the new decision is sales headcount. The phase runs as long as it takes to
+    reach the number of reps you set.</p>
+  <div class="cols">
+    <div>
+      <div class="box"><div class="box-h"><span class="box-t">Sales hires</span></div><div class="box-b">
+        <div class="mini-s"><div class="mini"><span>Rep audits / wk full tilt</span><b id="o_repAud"></b></div>
+          <input type="range" id="repAud" min="3" max="15" step="1"></div>
+        <div class="mini-s"><div class="mini"><span>Rep close rate vs you</span><b id="o_repClose"></b></div>
+          <input type="range" id="repClose" min="30" max="120" step="5">
+          <p class="note" id="repCloseNote"></p></div>
+        <div class="mini-s"><div class="mini"><span>Ramp to full calendar</span><b id="o_repRamp"></b></div>
+          <input type="range" id="repRamp" min="0" max="6" step="1">
+          <p class="note">Half a calendar until they have proven it.</p></div>
+        <div class="mini-s"><div class="mini"><span>Commission on upfront</span><b id="o_comm"></b></div>
+          <input type="range" id="comm" min="0" max="25" step="1"></div>
+        <div class="mini-s"><div class="mini"><span>Project out to</span><b id="o_targetReps"></b></div>
+          <input type="range" id="targetReps" min="1" max="6" step="1">
+          <p class="note">The timeline runs as long as it takes to get here.</p></div>
+      </div></div>
+      <div class="box"><div class="box-h"><span class="box-t">Your calendar</span></div><div class="box-b">
+        <div class="mini-s"><div class="mini"><span>Solo &mdash; audits / wk</span><b id="o_auditCap2"></b></div>
+          <input type="range" id="auditCap2" min="1" max="12" step="1" disabled>
+          <p class="note">Set on tab 1. Shown here so the hand-off reads in one place.</p></div>
+        <div class="mini-s"><div class="mini"><span>After rep 1</span><b id="o_myAud1"></b></div>
+          <input type="range" id="myAud1" min="0" max="12" step="0.5"></div>
+        <div class="mini-s"><div class="mini"><span>After rep 2</span><b id="o_myAud2"></b></div>
+          <input type="range" id="myAud2" min="0" max="12" step="0.5">
+          <p class="note">Your hand-off schedule. Keep more calls yourself and you close at a higher rate but
+            spend the time.</p></div>
+      </div></div>
+    </div>
+    <div>
+      <div class="tiles" id="tiles3"></div>
+      <div class="box" style="margin-top:16px"><div class="box-h"><span class="box-n">01</span>
+        <span class="box-t">Headcount</span><span class="box-s">hover any month</span></div>
+        <div class="box-b"><div class="chartbox" data-chart="head3"></div></div></div>
+      <div class="box"><div class="box-h"><span class="box-n">02</span>
+        <span class="box-t">Is the next rep worth it?</span></div>
+        <div class="box-b"><div class="compare" id="cmp3"></div>
+          <div class="wall" id="wall3"></div></div></div>
+      <div class="box"><div class="box-h"><span class="box-n">03</span><span class="box-t">Month by month</span></div>
+        <div class="tw"><table><thead id="th3"></thead><tbody id="tb3"></tbody></table></div></div>
+    </div>
+  </div>
+</div><!-- /p3 -->
+
+<div id="p4" hidden>
+  <h2 class="ph-h1">Full arc</h2>
+  <p class="ph-sf">Every phase on one axis, never cut. Each hire is marked, and the phase boundaries are the
+    moments the binding constraint changed.</p>
+  <div class="tiles" id="tiles4"></div>
+  <div class="box" style="margin-top:16px"><div class="box-h"><span class="box-n">01</span>
+    <span class="box-t">Cash &amp; headcount over the whole arc</span><span class="box-s">hover any month</span></div>
+    <div class="box-b"><div class="chartbox" data-chart="arc4"></div>
+      <div class="wall" id="wall4"></div></div></div>
+</div><!-- /p4 -->
+
+
+
+<div id="p5" hidden>
   <h2 class="ideas-h1">Questions we'll have to answer to scale</h2>
   <p class="ideas-sf">Things the model surfaced but deliberately doesn't answer. Each is parked here with what we
     already know and what would settle it &mdash; so we're not rediscovering the same tension in three months.</p>
@@ -611,7 +771,7 @@ td.pause{color:var(--crit)}
         need <strong>5 deals a month</strong> to clear $10k at 10% of upfront, well beyond what two people deliver.</p>
     </div>
   </div>
-</div><!-- /panel-ideas -->
+</div><!-- /p5 -->
 </div>
 
 <script>
@@ -624,19 +784,22 @@ var P={
  cons:{hrsMonth:160,baseHrs:100,spread:3,upkeep:12,qThresh:1.5,floor:40,toFloor:11,
    attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,drop:10,
    auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,expansion:0,
-   auditCap:5,hrsAudit:3.5},
+   auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
+   repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0},
  base:{hrsMonth:200,baseHrs:85,spread:3,upkeep:10,qThresh:2,floor:38,toFloor:9,
    attRate:0.20,auditConv:5,closeRate:35,webinars:4,followup:12,drop:10,
    auditPrice:897,upfront:20000,recurring:3500,billed:3,retention:12,expansion:0,
-   auditCap:5,hrsAudit:3.5},
+   auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
+   repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0},
  agg:{hrsMonth:240,baseHrs:70,spread:2,upkeep:8,qThresh:2.5,floor:35,toFloor:7,
    attRate:0.50,auditConv:10,closeRate:50,webinars:4,followup:15,drop:5,
    auditPrice:897,upfront:25000,recurring:4000,billed:3,retention:24,expansion:0,
-   auditCap:5,hrsAudit:3.5}
+   auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
+   repAud:8,repClose:70,repRamp:3,comm:10,targetReps:2,myAud1:2.5,myAud2:0}
 };
 var IDS=["hrsMonth","baseHrs","spread","upkeep","qThresh","floor","toFloor",
  "attRate","auditConv","closeRate","webinars","followup","drop","auditPrice","upfront",
- "recurring","billed","retention","expansion","auditCap","hrsAudit"];
+ "recurring","billed","retention","expansion","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","repAud","repClose","repRamp","comm","targetReps","myAud1","myAud2"];
 
 function money(n){var a=Math.abs(n);
  if(a>=1e6)return (n<0?"-":"")+"$"+(a/1e6).toFixed(2)+"M";
@@ -657,6 +820,92 @@ function lifetimeHrs(v,e){
  return v.baseHrs*e + v.upkeep*e*Math.max(0,v.retention-v.spread);
 }
 function sustain(v,e){var L=lifetimeHrs(v,e);return L>0?v.hrsMonth/L:0}
+
+function fullSim(v){
+ var MAXM=140, rows=[], cohorts=[], queue=0, del=[], reps=[], maxedRun=0;
+ var p1End=null, p2End=null, p3End=null;
+ for(var m=0;m<MAXM;m++){
+  var e=eff(v,m), onbTotal=v.baseHrs*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
+
+  // ---- delivery capacity: base + each hire, decayed ----
+  var cap=v.hrsMonth, effHires=0;
+  del.forEach(function(hm,idx){
+   if(m>=hm){ cap += v.hireHrs*(v.hireEff/100)*Math.pow(v.decay/100,idx); effHires++; }
+  });
+
+  // ---- existing load ----
+  var onbHrs=0,styHrs=0,live=0,paying=0;
+  cohorts.forEach(function(c){var age=m-c.start;
+   if(age<v.spread){onbHrs+=c.n*c.onbPerMo}
+   else if(age<v.retention){styHrs+=c.n*c.up;live+=c.n;if(age>=v.billed)paying+=c.n}
+   if(age<v.spread)live+=c.n;
+  });
+  var load=onbHrs+styHrs, free=Math.max(0,cap-load);
+
+  // ---- audit capacity: mine (steps down per rep) + reps (ramped) ----
+  var mine=v.auditCap;
+  if(reps.length>=1)mine=v.myAud1;
+  if(reps.length>=2)mine=v.myAud2;
+  var repWk=0;
+  reps.forEach(function(rm){ if(m>=rm) repWk += v.repAud*((m-rm)<v.repRamp?0.5:1) });
+  var audCapMo=(mine+repWk)*WPM;
+
+  // ---- demand: run only as many audits as capacity can absorb ----
+  var myClose=v.closeRate/100, repCloseR=myClose*(v.repClose/100);
+  var sustain_=sustainCap(v,e,cap);
+  var blended=(mine+repWk)>0 ? (mine*myClose+repWk*repCloseR)/(mine+repWk) : myClose;
+  var auditsNeeded=blended>0 ? sustain_/blended : 0;
+  var audits=Math.min(audCapMo,auditsNeeded);
+  var myAudits=audCapMo>0?audits*(mine*WPM/Math.max(audCapMo,0.0001)):audits;
+  var repAudits=audits-myAudits;
+  var won=myAudits*myClose+repAudits*repCloseR+live*(v.expansion/100);
+
+  queue=queue*(1-v.drop/100)+won;
+  var starts=Math.max(0,Math.min(Math.floor(queue),Math.floor(onbPerMo>0?free/onbPerMo:0)));
+  queue-=starts;
+  if(starts>0)cohorts.push({start:m,n:starts,onbPerMo:onbPerMo,up:up});
+  onbHrs+=starts*onbPerMo; load+=starts*onbPerMo; live+=starts;
+  free=Math.max(0,cap-load);
+
+  // ---- money ----
+  var auditRev=audits*v.auditPrice, upR=starts*v.upfront, recR=paying*v.recurring;
+  var cash=auditRev+upR+recR;
+  var commission=repAudits*repCloseR*v.upfront*(v.comm/100);
+  var payroll=del.filter(function(hm){return m>=hm}).length*v.hireCost;
+  var net=cash-commission-payroll;
+
+  rows.push({m:m+1,e:e,onbTotal:onbTotal,cap:cap,load:load,free:free,onbHrs:onbHrs,styHrs:styHrs,
+   audits:audits,myAudits:myAudits,repAudits:repAudits,won:won,starts:starts,queue:queue,
+   live:live,paying:paying,auditRev:auditRev,upR:upR,recR:recR,cash:cash,
+   commission:commission,payroll:payroll,net:net,
+   delTeam:del.filter(function(hm){return m>=hm}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
+   myWk:mine, repWk:repWk, auditsWk:audits/WPM, atFloor:e<=v.floor/100+0.001});
+
+  // ---- triggers ----
+  var maxed=free<onbPerMo*0.999;
+  maxedRun=maxed?maxedRun+1:0;
+  var atFloor=e<=v.floor/100+0.001;
+
+  if(maxedRun>=v.trigM && atFloor && queue>0.5){
+   if(p1End===null)p1End=m;
+   del.push(m+1); maxedRun=0;
+  }
+  // sales hire when audit demand outruns the calendar
+  if(auditsNeeded>audCapMo*1.02 && reps.length<v.targetReps && p1End!==null){
+   if(p2End===null)p2End=m;
+   reps.push(m+1);
+  }
+  if(p2End!==null && reps.length>=v.targetReps && p3End===null && m>reps[reps.length-1]+8) p3End=m;
+  if(p3End!==null && m>p3End+2) break;
+ }
+ var n=rows.length;
+ return {rows:rows, p1End:p1End===null?n-1:p1End, p2End:p2End===null?n-1:p2End,
+         p3End:p3End===null?n-1:p3End, delHires:del, repHires:reps};
+}
+function sustainCap(v,e,cap){
+ var L=v.baseHrs*e+v.upkeep*e*Math.max(0,v.retention-v.spread);
+ return L>0?cap/L:0;
+}
 
 function sim(v){
  var rows=[],cohorts=[],queue=0,cum=0;
@@ -720,6 +969,18 @@ function lbl(id,v){switch(id){
  case "expansion":return v.expansion+"%";
  case "auditCap":return String(v.auditCap);
  case "hrsAudit":return nm(v.hrsAudit,1);
+ case "hireHrs":return Math.round(v.hireHrs)+" hrs";
+ case "hireEff":return v.hireEff+"%";
+ case "decay":return v.decay+"%";
+ case "hireCost":return money0(v.hireCost);
+ case "trigM":return v.trigM+" mo";
+ case "repAud":return String(v.repAud);
+ case "repClose":return v.repClose+"%";
+ case "repRamp":return v.repRamp+" mo";
+ case "comm":return v.comm+"%";
+ case "targetReps":return v.targetReps+" rep"+(v.targetReps>1?"s":"");
+ case "myAud1":return nm(v.myAud1,1)+"/wk";
+ case "myAud2":return nm(v.myAud2,1)+"/wk";
 } return String(v[id])}
 
 function tip(title,pairs){
@@ -1059,8 +1320,169 @@ function tagLabels(){
   b.textContent=map[id](V());
  });
 }
+
+/* ---------- phases 2-4 ---------- */
+function tipHTML(t,rows){return "<b>"+t+"</b>"+rows.map(function(r){
+ return '<span class="tr'+(r[2]?" hi":"")+'"><u>'+r[0]+'</u><s>'+r[1]+'</s></span>'}).join("")}
+function drawChart(el,cfg){
+ if(!el)return; var n=cfg.rows.length; if(!n){el.innerHTML="";return}
+ var max=cfg.max||1;
+ var bars=cfg.rows.map(function(r,i){
+  return '<div class="ccol" data-i="'+i+'">'+cfg.series.map(function(se){
+   var h=se.get(r)/max*170; return h<=0?"":'<i style="height:'+h.toFixed(1)+'px;background:'+se.color+'"></i>';
+  }).join("")+'</div>'}).join("");
+ var capline=cfg.capGet?'<div class="cline" style="bottom:'+(cfg.capGet(cfg.rows[n-1])/max*170).toFixed(1)+'px"></div>':"";
+ var marks=(cfg.marks||[]).filter(function(k){return k.i>=0&&k.i<n}).map(function(k){
+  return '<div class="cmark" style="left:'+((k.i+0.5)/n*100).toFixed(2)+'%"><em>'+k.label+'</em></div>'}).join("");
+ var every=Math.max(1,Math.ceil(n/14));
+ el.innerHTML='<div class="cyt">Y \u2014 '+cfg.y+'</div><div class="cwrap"><div class="cy">'+
+  [1,.667,.333,0].map(function(f){return "<span>"+cfg.fmt(max*f)+"</span>"}).join("")+
+  '</div><div><div class="cplot"><div class="cgrid"><i></i><i></i><i></i><i></i></div><div class="cbars">'+
+  capline+marks+bars+'<div class="ctip"></div></div></div><div class="cx">'+
+  cfg.rows.map(function(r,i){return "<span>"+(i%every===0?"M"+r.m:"&nbsp;")+"</span>"}).join("")+
+  '</div><div class="cxt">X \u2014 month</div></div></div><div class="clegend">'+
+  cfg.series.map(function(se){return '<span><i style="background:'+se.color+'"></i>'+se.label+'</span>'}).join("")+
+  (cfg.capLabel?'<span><i style="background:var(--crit)"></i>'+cfg.capLabel+'</span>':"")+
+  ((cfg.marks||[]).length?'<span><i style="background:var(--warn)"></i>Hire lands</span>':"")+'</div>';
+ var tip=el.querySelector(".ctip"), plot=el.querySelector(".cbars");
+ Array.prototype.forEach.call(el.querySelectorAll(".ccol"),function(c){
+  c.addEventListener("mouseenter",function(){
+   var r=cfg.rows[+c.dataset.i];
+   tip.innerHTML=tipHTML("Month "+r.m,cfg.tip(r)); tip.style.display="block";
+   var b=c.getBoundingClientRect(), pr=plot.getBoundingClientRect();
+   tip.style.left=Math.max(2,Math.min(pr.width-218,b.left-pr.left+b.width/2-107))+"px";});
+  c.addEventListener("mouseleave",function(){tip.style.display="none"});});
+}
+function tilesInto(id,arr){var el=$(id); if(!el)return;
+ el.innerHTML=arr.map(function(t){return '<div class="tl"><div class="tlk">'+t.k+'</div><div class="tlv">'+
+  t.v+'</div>'+(t.s?'<div class="tls">'+t.s+'</div>':'')+'</div>'}).join("")}
+function tableInto(thId,tbId,cols,rows){
+ if(!$(thId))return;
+ $(thId).innerHTML="<tr>"+cols.map(function(c){return "<th>"+c.h+"</th>"}).join("")+"</tr>";
+ $(tbId).innerHTML=rows.map(function(r){return "<tr>"+cols.map(function(c){
+  return "<td>"+c.f(r)+"</td>"}).join("")+"</tr>"}).join("")}
+var CV=function(x){return getComputedStyle(document.documentElement).getPropertyValue(x).trim()};
+
+function renderPhases(){
+ var v=V(), F=fullSim(v), R=F.rows; if(!R.length)return;
+ var s1=R.slice(0,F.p1End+1), s2=R.slice(F.p1End,F.p2End+1), s3=R.slice(F.p2End,F.p3End+1);
+ if(s2.length<2)s2=R.slice(F.p1End);
+ if(s3.length<2)s3=R.slice(F.p2End);
+ var rng=function(a){return a.length?("M"+a[0].m+"\u2013M"+a[a.length-1].m):"\u2014"};
+ $("rng1").textContent=rng(s1); $("rng2").textContent=rng(s2);
+ $("rng3").textContent=rng(s3); $("rng4").textContent=rng(R);
+ var f1=s1[s1.length-1], last2=s2[s2.length-1], last3=s3[s3.length-1], last4=R[R.length-1];
+
+ var c2=$("carry2");
+ if(c2)c2.innerHTML='<div class="mini"><span>Onboarding hours</span><b>'+Math.round(f1.onbTotal)+' hrs</b></div>'+
+   '<div class="mini"><span>Upkeep / client</span><b>'+nm(v.upkeep*f1.e,1)+' hrs</b></div>'+
+   '<div class="mini"><span>Your hours / mo</span><b>'+Math.round(v.hrsMonth)+'</b></div>'+
+   '<div class="mini"><span>Live clients at start</span><b>'+Math.round(f1.live)+'</b></div>'+
+   '<p class="note">Locked at whatever phase 1 ended on. Change anything on tab 1 and every later phase moves.</p>';
+
+ tilesInto("tiles2",[
+  {k:"Starts / mo",v:String(last2.starts),s:"from "+f1.starts},
+  {k:"Delivery team",v:String(last2.delTeam),s:"+ you and Geri"},
+  {k:"Live clients",v:String(Math.round(last2.live))},
+  {k:"Cash / mo",v:money(last2.cash)},
+  {k:"Your audits / wk",v:nm(last2.auditsWk,1),s:"ceiling is "+v.auditCap}]);
+ drawChart(document.querySelector('[data-chart="cap2"]'),{
+  y:"delivery hours consumed", rows:s2,
+  max:Math.max.apply(null,s2.map(function(r){return Math.max(r.cap,r.load)}))*1.15,
+  fmt:function(x){return Math.round(x)},
+  series:[{label:"Steady-state",color:CV("--accent-2"),get:function(r){return r.styHrs}},
+          {label:"Onboarding",color:CV("--accent"),get:function(r){return r.onbHrs}}],
+  capGet:function(r){return r.cap}, capLabel:"Hours available",
+  marks:F.delHires.map(function(hm,i){var ix=-1;s2.forEach(function(r,j){if(r.m===hm+1)ix=j});
+   return {i:ix,label:"hire "+(i+1)}}),
+  tip:function(r){return [["Clients started",r.starts],["Delivery team",r.delTeam],
+   ["Hours used",Math.round(r.load)+" / "+Math.round(r.cap),1],["Hours free",Math.round(r.free)],
+   ["Live clients",Math.round(r.live)],["Your audits / wk",nm(r.auditsWk,1)],
+   ["Cash / mo",money(r.cash),1],["Net of payroll",money(r.net)]]}});
+ tableInto("th2","tb2",[
+  {h:"Mo",f:function(r){return r.m}},{h:"Team",f:function(r){return r.delTeam}},
+  {h:"Cap",f:function(r){return Math.round(r.cap)}},{h:"Used",f:function(r){return Math.round(r.load)}},
+  {h:"Free",f:function(r){return Math.round(r.free)}},{h:"Started",f:function(r){return r.starts}},
+  {h:"Live",f:function(r){return Math.round(r.live)}},{h:"Audits/wk",f:function(r){return nm(r.auditsWk,1)}},
+  {h:"Cash",f:function(r){return money(r.cash)}},{h:"Net",f:function(r){return money(r.net)}}],s2);
+ if($("wall2"))$("wall2").innerHTML="Phase ends at <b>M"+last2.m+"</b>. "+last2.delTeam+" delivery hire"+
+  (last2.delTeam===1?"":"s")+" take you to <b>"+last2.starts+" starts/month</b> \u2014 but that needs <b>"+
+  nm(last2.auditsWk,1)+" audits a week</b> against your ceiling of <b>"+v.auditCap+
+  "</b>. More delivery capacity now would be capacity you cannot feed. <b>The constraint has moved from delivery to your calendar.</b>";
+
+ if($("o_auditCap2")){$("o_auditCap2").textContent=String(v.auditCap);$("auditCap2").value=v.auditCap}
+ if($("repCloseNote"))$("repCloseNote").innerHTML="You close at "+v.closeRate+"%, so a rep closes at "+
+  nm(v.closeRate*v.repClose/100,1)+"%.";
+ tilesInto("tiles3",[
+  {k:"Starts / mo",v:String(last3.starts)},
+  {k:"Delivery team",v:String(last3.delTeam)},
+  {k:"Sales reps",v:String(last3.repTeam)},
+  {k:"Cash / mo",v:money(last3.cash)},
+  {k:"Net of costs",v:money(last3.net),s:"after commission and payroll"}]);
+ drawChart(document.querySelector('[data-chart="head3"]'),{
+  y:"people on the team", rows:s3,
+  max:Math.max(4,Math.max.apply(null,s3.map(function(r){return r.delTeam+r.repTeam}))+1),
+  fmt:function(x){return Math.round(x)},
+  series:[{label:"Sales reps",color:CV("--warn"),get:function(r){return r.repTeam}},
+          {label:"Delivery",color:CV("--accent"),get:function(r){return r.delTeam}}],
+  marks:F.repHires.map(function(rm,i){var ix=-1;s3.forEach(function(r,j){if(r.m===rm+1)ix=j});
+   return {i:ix,label:"rep "+(i+1)}}),
+  tip:function(r){return [["Delivery team",r.delTeam],["Sales reps",r.repTeam],
+   ["Clients started",r.starts,1],["Live clients",Math.round(r.live)],
+   ["Your audits / wk",nm(r.myWk,1)],["Rep audits / wk",nm(r.repWk,1)],
+   ["Cash / mo",money(r.cash)],["Commission",money(-r.commission)],["Payroll",money(-r.payroll)],
+   ["Net cash",money(r.net),1]]}});
+ tableInto("th3","tb3",[
+  {h:"Mo",f:function(r){return r.m}},{h:"Del",f:function(r){return r.delTeam}},
+  {h:"Reps",f:function(r){return r.repTeam}},{h:"You/wk",f:function(r){return nm(r.myWk,1)}},
+  {h:"Rep/wk",f:function(r){return nm(r.repWk,1)}},{h:"Started",f:function(r){return r.starts}},
+  {h:"Live",f:function(r){return Math.round(r.live)}},{h:"Cash",f:function(r){return money(r.cash)}},
+  {h:"Comm",f:function(r){return money(-r.commission)}},{h:"Net",f:function(r){return money(r.net)}}],s3);
+
+ var byReps={};
+ R.forEach(function(r){byReps[r.repTeam]=r});
+ var keys=Object.keys(byReps).sort(function(a,b){return a-b});
+ var bestK=keys.reduce(function(a,b){return byReps[b].net>byReps[a].net?b:a},keys[0]);
+ if($("cmp3"))$("cmp3").innerHTML=keys.map(function(k){var r=byReps[k];
+  return '<div class="cc'+(k===bestK?" best":"")+'"><div class="cck">'+
+   (k==="0"?"You only":k+" rep"+(k==="1"?"":"s"))+' \u00b7 '+nm(r.myWk,1)+'/wk yours</div>'+
+   '<div class="ccv">'+money(r.net)+'</div><div class="ccs">net cash/mo at M'+r.m+
+   ' \u00b7 '+r.starts+' starts, '+r.delTeam+' delivery.'+
+   (k===bestK?' <b>Best of these.</b>':'')+'</div></div>'}).join("");
+ if($("wall3")){
+  $("wall3").className="wall"+(bestK===String(last4.repTeam)?" ok":"");
+  $("wall3").innerHTML=(bestK===String(last4.repTeam)
+   ? "Every rep up to <b>"+last4.repTeam+"</b> pays for itself at these assumptions."
+   : "Net cash peaks at <b>"+bestK+" rep"+(bestK==="1"?"":"s")+"</b>, not "+last4.repTeam+
+     ". Past that, commission and a lower close rate cost more than the extra volume brings \u2014 which makes the next hire a <b>time decision, not a revenue one</b>.");}
+
+ tilesInto("tiles4",[
+  {k:"Months modelled",v:String(last4.m)},
+  {k:"Cash / mo at end",v:money(last4.cash)},
+  {k:"Net / mo at end",v:money(last4.net)},
+  {k:"Team",v:String(last4.delTeam+last4.repTeam),s:last4.delTeam+" delivery, "+last4.repTeam+" sales"},
+  {k:"Live clients",v:String(Math.round(last4.live))}]);
+ drawChart(document.querySelector('[data-chart="arc4"]'),{
+  y:"cash collected / month", rows:R,
+  max:Math.max.apply(null,R.map(function(r){return r.cash}))*1.12,
+  fmt:function(x){return money(x)},
+  series:[{label:"Recurring",color:CV("--accent-2"),get:function(r){return r.recR}},
+          {label:"Upfront",color:CV("--accent"),get:function(r){return r.upR}},
+          {label:"Audit fees",color:CV("--warn"),get:function(r){return r.auditRev}}],
+  marks:F.delHires.map(function(hm){return {i:hm,label:"del"}})
+        .concat(F.repHires.map(function(rm,i){return {i:rm,label:"rep "+(i+1)}})),
+  tip:function(r){return [["Phase",r.m<=f1.m?"1 \u00b7 Startup":(r.m<=last2.m?"2 \u00b7 Scale delivery":"3 \u00b7 Scale sales")],
+   ["Clients started",r.starts],["Live clients",Math.round(r.live)],
+   ["Team",r.delTeam+" del / "+r.repTeam+" sales"],
+   ["Cash / mo",money(r.cash),1],["Net / mo",money(r.net)]]}});
+ if($("wall4")){$("wall4").className="wall ok";
+  $("wall4").innerHTML="Phase 1 runs to <b>M"+f1.m+"</b>, when delivery capacity maxes. Phase 2 to <b>M"+
+   last2.m+"</b>, when your calendar maxes. Phase 3 ends at <b>M"+last4.m+"</b> with <b>"+
+   last4.repTeam+"</b> rep"+(last4.repTeam===1?"":"s")+" and <b>"+last4.delTeam+"</b> on delivery.";}
+}
+
 var _r=render;
-render=function(){_r();tagLabels()};
+render=function(){_r();tagLabels();try{renderPhases()}catch(e){}};
 
 IDS.forEach(function(i){$(i).addEventListener("input",function(){
   markCustom();
@@ -1073,19 +1495,18 @@ document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
  b.addEventListener("click",function(){applyPreset(b.dataset.preset)})});
 
 installTips();
-function showTab(name){
- var isModel=name!=="ideas";
- $("panel-model").hidden=!isModel;
- $("panel-ideas").hidden=isModel;
- $("tab-model").setAttribute("aria-selected",isModel?"true":"false");
- $("tab-ideas").setAttribute("aria-selected",isModel?"false":"true");
- document.querySelector(".presets").style.visibility=isModel?"visible":"hidden";
- if(isModel)render();
+var PANEL_IDS=["p1","p2","p3","p4","p5"];
+function showTab(id){
+ PANEL_IDS.forEach(function(x){var el=$(x); if(el)el.hidden=(x!==id)});
+ document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
+  b.setAttribute("aria-selected",b.dataset.p===id?"true":"false")});
+ document.querySelector(".presets").style.visibility=(id==="p5")?"hidden":"visible";
+ render();
 }
-$("tab-model").addEventListener("click",function(){showTab("model")});
-$("tab-ideas").addEventListener("click",function(){showTab("ideas")});
+document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
+ b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0819-2355";
+var BUILD_ID="0820-0004";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
