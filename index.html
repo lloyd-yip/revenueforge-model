@@ -420,6 +420,12 @@ td.pause{color:var(--crit)}
 
     <div class="grouphdr">When phase 1 ends</div>
     <div class="levers">
+      <div class="lev"><label for="wipBase">Builds you can run at once</label><input type="range" id="wipBase" min="1" max="10" step="1"></div>
+      <div class="lev"><label for="wipPerHire">&hellip; each delivery hire adds</label><input type="range" id="wipPerHire" min="0" max="4" step="1"></div>
+      <div class="linknote" style="grid-column:1/-1">Hours are not the only limit. Two people cannot run five kickoffs at once
+        however the arithmetic falls, so this caps how many builds can be <b>in flight</b> in the same month. Onboarding runs
+        for the spread above, so a cap of 2 over 3 months is roughly 0.7 starts a month.</div>
+      <div class="lev"><label for="wipCompress">Efficiency also shortens the build</label><input type="range" id="wipCompress" min="0" max="100" step="5"></div>
       <div class="lev"><label for="m1cap">Month-1 hard cap on new clients</label><input type="range" id="m1cap" min="1" max="6" step="1"></div>
       <div class="lev"><label for="trigM">Months at full capacity before hiring</label><input type="range" id="trigM" min="1" max="6" step="1"></div>
       <div class="linknote" style="grid-column:1/-1">Your one-ideal-client rule: month 1 is capped regardless of what
@@ -948,7 +954,7 @@ var DEF={hrsMonth:160,baseHrs:100,spread:3,upkeep:12,floor:40,toFloor:11,
    attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,
    auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,
    auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
-   m1cap:1,myAud1:2.5,myAud2:0,
+   m1cap:1,wipBase:2,wipPerHire:1,wipCompress:50,myAud1:2.5,myAud2:0,
    mgrPer:5,mgrCost:10000,maxInv:1500000,
    upfront2:30000,recurring2:5000,upfront3:40000,recurring3:7000,
    diagCount:1,diagAud:4,diagClose:90,diagBase:8000,diagCommUp:10,diagCommRec:5,
@@ -972,7 +978,7 @@ var P={
 };
 var IDS=["hrsMonth","baseHrs","spread","upkeep","floor","toFloor",
  "attRate","auditConv","closeRate","webinars","followup","auditPrice","upfront",
- "recurring","billed","retention","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","m1cap","myAud1","myAud2","mgrPer","mgrCost","maxInv","upfront2","recurring2","upfront3","recurring3","diagCount","diagAud","diagClose","diagBase","diagCommUp","diagCommRec","diagRecMo","diagSpec","auditCovers","csPer","csCost"];
+ "recurring","billed","retention","auditCap","hrsAudit","hireHrs","hireEff","decay","hireCost","trigM","m1cap","wipBase","wipPerHire","wipCompress","myAud1","myAud2","mgrPer","mgrCost","maxInv","upfront2","recurring2","upfront3","recurring3","diagCount","diagAud","diagClose","diagBase","diagCommUp","diagCommRec","diagRecMo","diagSpec","auditCovers","csPer","csCost"];
 // fail loudly in the console if a preset ever falls behind the lever list again
 (function(){for(var n in P){var miss=IDS.filter(function(i){return P[n][i]===undefined});
  if(miss.length)console.error("preset "+n+" missing levers:",miss.join(","))}})();
@@ -1008,13 +1014,19 @@ function fullSim(v){
  var MAXM=140, rows=[], cohorts=[], del=[], reps=[], mgrs=[], diags=[], maxedRun=0, calRun=0, cum=0, decayIdx=0;
  var p1End=null, p2End=null, p3End=null;
  for(var m=0;m<MAXM;m++){
-  var e=eff(v,m), onbTotal=Math.max(5,(v.baseHrs-v.auditCovers))*e, onbPerMo=onbTotal/Math.max(v.spread,1), up=v.upkeep*e;
+  var e=eff(v,m), onbTotal=Math.max(5,(v.baseHrs-v.auditCovers))*e;
+  // getting better at builds makes them cost fewer hours AND (optionally) finish sooner.
+  // with no compression a slot stays occupied for the full spread however good you get,
+  // so efficiency gains buy nothing at all once slots are the binding constraint.
+  var spreadNow=Math.max(1,Math.round(v.spread*(1-(v.wipCompress/100)*(1-e))));
+  var onbPerMo=onbTotal/spreadNow, up=v.upkeep*e;
   // pricing rises by phase; a client is locked to what it signed at unless re-pricing is on
   var phaseNow=(p1End===null)?1:((p2End===null)?2:3);
   var curUp=phaseNow===1?v.upfront:(phaseNow===2?v.upfront2:v.upfront3);
   var curRec=phaseNow===1?v.recurring:(phaseNow===2?v.recurring2:v.recurring3);
 
   // ---- delivery capacity: base + each hire, decayed ----
+  var delTeamNow=del.filter(function(h){return m>=h.m}).length;
   var cap=v.hrsMonth, effHires=0;
   del.forEach(function(h){
    if(m>=h.m){ cap += v.hireHrs*(v.hireEff/100)*Math.pow(v.decay/100,h.k); effHires++; }
@@ -1023,10 +1035,11 @@ function fullSim(v){
   // ---- existing load ----
   var onbHrs=0,styHrs=0,live=0,paying=0,recCash=0;
   cohorts.forEach(function(c){var age=m-c.start;
-   if(age<v.spread){onbHrs+=c.n*c.onbPerMo}
+   var csp=c.sp||v.spread;
+   if(age<csp){onbHrs+=c.n*c.onbPerMo}
    else if(age<v.retention){styHrs+=c.n*c.up;live+=c.n;
     if(age>=v.billed){paying+=c.n;recCash+=c.n*(v.reprice?curRec:(c.rec||v.recurring))}}
-   if(age<v.spread)live+=c.n;
+   if(age<csp)live+=c.n;
   });
   var load=onbHrs+styHrs, free=Math.max(0,cap-load);
 
@@ -1054,9 +1067,16 @@ function fullSim(v){
   var specDrag=1+(diagShareNow*((v.diagSpec-100)/100));
   var onbPerMoEff=onbPerMo*specDrag;
 
-  // 1. what delivery can absorb -- whole clients only, no banking of spare hours
-  var capStarts=Math.max(0,Math.floor(onbPerMoEff>0?free/onbPerMoEff:0));
+  // 1. what delivery can absorb. TWO limits, not one:
+  //    hours (can we afford the work) and slots (can we hold that many builds at once)
+  var byHours=Math.max(0,Math.floor(onbPerMoEff>0?free/onbPerMoEff:0));
+  var inFlight=0;
+  cohorts.forEach(function(c){if(m-c.start<(c.sp||v.spread))inFlight+=c.n});
+  var wipCap=v.wipBase+delTeamNow*v.wipPerHire;
+  var bySlots=Math.max(0,wipCap-inFlight);
+  var capStarts=Math.min(byHours,bySlots);
   if(m===0)capStarts=Math.min(capStarts,v.m1cap);   // one ideal client first
+  var wipBound=(bySlots<byHours);
 
   // 2. the selling that would take, and no more. An audit you cannot convert into a
   //    start is a call that should never have been booked.
@@ -1079,8 +1099,8 @@ function fullSim(v){
   // which wall did we hit this month? this replaces the queue as the hiring signal
   var inviteBound=isFinite(INVCAP)&&(auditsFromInvites<Math.min(auditsNeeded,audCapMo)-0.001);
   var calendarBound=(audCapMo<auditsNeeded-0.001)&&!inviteBound;
-  var bound=inviteBound?"invites":(calendarBound?"calendar":"capacity");
-  if(starts>0)cohorts.push({start:m,n:starts,onbPerMo:onbPerMoEff,up:up,upf:curUp,rec:curRec,diagShare:diagShareNow});
+  var bound=inviteBound?"invites":(calendarBound?"calendar":(wipBound?"in flight":"hours"));
+  if(starts>0)cohorts.push({start:m,n:starts,onbPerMo:onbPerMoEff,up:up,upf:curUp,rec:curRec,diagShare:diagShareNow,sp:spreadNow});
   onbHrs+=starts*onbPerMoEff; load+=starts*onbPerMoEff; live+=starts;
   free=Math.max(0,cap-load);
 
@@ -1102,9 +1122,10 @@ function fullSim(v){
    var net=cash-commission-payroll;
 
   cum+=cash;
-  rows.push({m:m+1,e:e,onbTotal:onbTotal,onbPerMo:onbPerMo,cap:cap,load:load,free:free,cum:cum,onbHrs:onbHrs,styHrs:styHrs,
+  rows.push({m:m+1,e:e,onbTotal:onbTotal,onbPerMo:onbPerMo,spreadNow:spreadNow,cap:cap,load:load,free:free,cum:cum,onbHrs:onbHrs,styHrs:styHrs,
    audits:audits,myAudits:myAudits,repAudits:repAudits,won:won,starts:starts,
    capStarts:capStarts,auditsNeeded:auditsNeeded,bound:bound,
+   inFlight:inFlight,wipCap:wipCap,byHours:byHours,bySlots:bySlots,
    live:live,paying:paying,auditRev:auditRev,upR:upR,recR:recR,cash:cash,
    commission:commission,payroll:payroll,net:net,
    delTeam:del.filter(function(h){return m>=h.m}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
@@ -1120,13 +1141,13 @@ function fullSim(v){
   // ---- triggers ----
   // Delivery is the wall when selling could fill more than the hours allow.
   var atFloor=e<=v.floor/100+0.001;
-  var maxed=(bound==="capacity");
+  var maxed=(bound==="hours"||bound==="in flight");
   // the clock only starts once efficiency has bottomed out: hiring before then
   // buys hours you were about to find for free
   maxedRun=(maxed&&atFloor)?maxedRun+1:0;
   rows[rows.length-1].maxed=maxed;
   rows[rows.length-1].maxedRun=maxedRun;
-  rows[rows.length-1].calendarBound=(bound!=="capacity");
+  rows[rows.length-1].calendarBound=(bound==="calendar"||bound==="invites");
 
   if(maxedRun>=v.trigM && atFloor){
    if(p1End===null)p1End=m;
@@ -1135,7 +1156,7 @@ function fullSim(v){
    if(v.mgrPer>0 && del.length%v.mgrPer===0){ mgrs.push(m+1); decayIdx=0; }
   }
   // sales hire when the calendar cannot feed the delivery room you already have
-  calRun=((bound!=="capacity") && p1End!==null)?calRun+1:0;
+  calRun=((bound==="calendar"||bound==="invites") && p1End!==null)?calRun+1:0;
   if(calRun>=v.trigM && p1End!==null && diags.length<v.diagCount){
    if(p2End===null)p2End=m;
    diags.push(m+1); calRun=0;
@@ -1183,6 +1204,9 @@ function lbl(id,v){
  case "decay":return v.decay+"%";
  case "hireCost":return money0(v.hireCost);
  case "trigM":return v.trigM+" mo";
+ case "wipBase":return v.wipBase+" at once";
+ case "wipPerHire":return "+"+v.wipPerHire;
+ case "wipCompress":return v.wipCompress+"%";
  case "m1cap":return String(v.m1cap);
  case "myAud1":return nm(v.myAud1,1)+"/wk";
  case "myAud2":return nm(v.myAud2,1)+"/wk";
@@ -1259,6 +1283,9 @@ function row(el,vals){el.innerHTML=vals.map(function(x){return "<span>"+x+"</spa
 
 
 var TIPS={
+ wipBase:"How many builds you and Geri can have in flight at the same time, whatever the hours say. Kickoffs, discovery and architecture all want your attention at once, and attention does not divide the way hours do.",
+ wipPerHire:"Extra concurrent builds each delivery hire can carry. Set to 0 if a hire only adds hours rather than the ability to own a client end to end.",
+ wipCompress:"How much of your efficiency gain also makes the build FINISH sooner, rather than just cost fewer hours. At 0% a build always takes the full spread no matter how good you get, so getting better buys you nothing at all while slots are the constraint. At 100% a build at the efficiency floor finishes in a proportionally shorter calendar time, freeing the slot for the next client.",
  hrsWeek:"Hours a week you and Geri together spend actually delivering \u2014 building, integrating, training clients. Not sales calls, not admin.",
  hrsMonth:"The same number expressed monthly (\u00d74.33). Move either slider and the other follows.",
  baseHrs:"Total human hours to take one new client from signed to live, at today\u2019s efficiency. Roughly 70 hrs of technical work plus 30 hrs of calls and training.",
@@ -1463,7 +1490,7 @@ function render(){
   "<td>"+r.m+"</td><td>"+Math.round(r.e*100)+"%</td><td>"+Math.round(r.onbTotal)+"</td>"+
   '<td class="'+(r.capStarts===0?"pause":"")+'">'+nm(r.audits,1)+"</td>"+
   "<td>"+Math.floor(r.won)+"</td><td>"+r.starts+"</td>"+
-  '<td class="'+(r.bound==="capacity"?"":"pause")+'">'+r.bound+"</td>"+
+  '<td class="'+(r.bound==="hours"?"":"pause")+'">'+r.bound+"</td>"+
   "<td>"+Math.round(r.load)+"</td><td>"+Math.round(r.free)+"</td>"+
   "<td>"+Math.round(r.live)+"</td><td>"+Math.round(r.paying)+"</td>"+
   "<td>"+money(r.cash)+"</td></tr>"}).join("");
@@ -1950,7 +1977,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-1806";
+var BUILD_ID="0820-1957";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
