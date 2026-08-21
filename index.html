@@ -252,6 +252,16 @@ th:first-child,td:first-child{text-align:left}
 tbody tr{border-bottom:1px solid var(--rule)}
 tbody tr:nth-child(even){background:var(--surface-2)}
 td.pause{color:var(--crit)}
+.oscwrap{padding:14px 0 2px}
+.osc{display:flex;align-items:stretch;gap:3px;height:150px;position:relative}
+.osc .om{flex:1;display:flex;flex-direction:column;justify-content:center;position:relative;min-width:0}
+.osc .ob{border-radius:2px;min-height:2px}
+.osc .otop{align-self:stretch}
+.oscmid{position:absolute;left:0;right:0;top:50%;border-top:1px dashed var(--rule-strong)}
+.osclegend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--ink-3);margin-top:10px}
+.osclegend .sw{display:inline-block;width:11px;height:11px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.oschire{position:absolute;top:-2px;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.04em;
+ color:var(--ink-3);white-space:nowrap;transform:translateX(-50%)}
 .tw{overflow-x:auto}
 .foot{font-family:"Source Serif 4",Georgia,serif;font-size:13px;color:var(--ink-3);
  margin:24px 0 0;line-height:1.6;max-width:80ch}
@@ -599,7 +609,17 @@ td.pause{color:var(--crit)}
         </div>
       </div></div>
 
-    <div class="box"><div class="box-h"><span class="box-n">08</span><span class="box-t">Your calendar</span>
+    <div class="box"><div class="box-h"><span class="box-n">08</span><span class="box-t">The oscillation &mdash; <span id="rngOsc"></span></span>
+      <span class="box-s">full arc &middot; what selling could close vs what delivery can absorb &middot; hover any month</span></div>
+      <div class="oscwrap"><div class="osc" id="oscChart"></div>
+      <div class="osclegend">
+        <span><i class="sw" style="background:var(--warn)"></i>delivery is short &mdash; you are throttling the funnel</span>
+        <span><i class="sw" style="background:var(--accent)"></i>selling is short &mdash; delivery room you cannot feed</span>
+      </div>
+      <p class="note" id="oscNote"></p></div>
+    </div>
+
+    <div class="box"><div class="box-h"><span class="box-n">09</span><span class="box-t">Your calendar</span>
       <span class="box-s">when does the audit load become the constraint?</span></div>
       <div class="box-b">
         <div class="salegrid">
@@ -614,10 +634,10 @@ td.pause{color:var(--crit)}
         <div class="gapnote" id="s_gap"></div>
       </div></div>
 
-    <div class="box"><div class="box-h"><span class="box-n">09</span><span class="box-t">Month by month</span></div>
+    <div class="box"><div class="box-h"><span class="box-n">10</span><span class="box-t">Month by month</span></div>
       <div class="tw"><table>
         <thead><tr><th>Mo</th><th>Eff</th><th>Hrs/client</th><th>Audits</th><th>Won</th><th>Started</th>
-          <th>Bound by</th><th>Hrs used</th><th>Hrs free</th><th>Live</th><th>Paying</th>
+          <th>Sales could</th><th>Deliv can</th><th>Gap</th><th>Bound by</th><th>Hrs used</th><th>Hrs free</th><th>Live</th><th>Paying</th>
           <th>Cash</th></tr></thead>
         <tbody id="tbody"></tbody></table></div></div>
 
@@ -954,10 +974,10 @@ var DEF={hrsMonth:160,baseHrs:100,spread:3,upkeep:12,floor:40,toFloor:11,
    attRate:0.10,auditConv:3,closeRate:25,webinars:4,followup:10,
    auditPrice:897,upfront:20000,recurring:3000,billed:3,retention:6,
    auditCap:5,hrsAudit:3.5,hireHrs:110,hireEff:70,decay:90,hireCost:8000,trigM:2,
-   m1cap:1,wipBase:2,wipPerHire:1,wipCompress:50,myAud1:2.5,myAud2:0,
+   m1cap:1,wipBase:2,wipPerHire:3,wipCompress:50,myAud1:2.5,myAud2:0,
    mgrPer:5,mgrCost:10000,maxInv:1500000,
    upfront2:30000,recurring2:5000,upfront3:40000,recurring3:7000,
-   diagCount:1,diagAud:4,diagClose:90,diagBase:8000,diagCommUp:10,diagCommRec:5,
+   diagCount:2,diagAud:4,diagClose:90,diagBase:8000,diagCommUp:10,diagCommRec:5,
    diagRecMo:12,diagSpec:100,auditCovers:15,csPer:20,csCost:6000};
 function preset(o){var r={};for(var k in DEF)r[k]=DEF[k];for(var k2 in o)r[k2]=o[k2];return r}
 var P={
@@ -967,13 +987,13 @@ var P={
  base:preset({hrsMonth:200,baseHrs:85,spread:3,upkeep:10,floor:38,toFloor:9,
    attRate:0.20,auditConv:5,closeRate:35,followup:12,
    recurring:3500,retention:12,
-   m1cap:2,auditCovers:20,csPer:25,diagCount:2,diagAud:5}),
+   m1cap:2,auditCovers:20,csPer:25,diagAud:5}),
  // Aggressive: the upside case -- two-year retention, half the audits close, and
  // pricing escalates harder in phases 2 and 3.
  agg:preset({hrsMonth:240,baseHrs:70,spread:2,upkeep:8,floor:35,toFloor:7,
    attRate:0.50,auditConv:10,closeRate:50,followup:15,
    upfront:25000,recurring:4000,retention:24,
-   m1cap:3,auditCovers:25,csPer:30,diagCount:2,diagAud:6,
+   m1cap:3,auditCovers:25,csPer:30,diagAud:6,
    upfront2:35000,recurring2:6000,upfront3:50000,recurring3:8000})
 };
 var IDS=["hrsMonth","baseHrs","spread","upkeep","floor","toFloor",
@@ -1087,6 +1107,10 @@ function fullSim(v){
   var INVCAP=(v.maxInv>=2000000)?Infinity:v.maxInv;   // top of the slider = genuinely no limit
   var auditsFromInvites=INVCAP*perAudit;
   var auditsAvail=Math.min(audCapMo,auditsFromInvites);
+  // the other half of the oscillation: what selling COULD close if delivery were infinite.
+  // the gap between this and capStarts is the whole story -- positive means you are
+  // throttling the funnel and the next hire is delivery; negative means the reverse.
+  var salesCap=auditsAvail*blended;
   var audits=Math.min(auditsNeeded,auditsAvail);
 
   // 4. you start everything you close, so closes are capped by capacity as well
@@ -1126,6 +1150,7 @@ function fullSim(v){
    audits:audits,myAudits:myAudits,repAudits:repAudits,won:won,starts:starts,
    capStarts:capStarts,auditsNeeded:auditsNeeded,bound:bound,
    inFlight:inFlight,wipCap:wipCap,byHours:byHours,bySlots:bySlots,
+   salesCap:salesCap,gap:salesCap-capStarts,
    live:live,paying:paying,auditRev:auditRev,upR:upR,recR:recR,cash:cash,
    commission:commission,payroll:payroll,net:net,
    delTeam:del.filter(function(h){return m>=h.m}).length, repTeam:reps.filter(function(rm){return m>=rm}).length,
@@ -1156,7 +1181,9 @@ function fullSim(v){
    if(v.mgrPer>0 && del.length%v.mgrPer===0){ mgrs.push(m+1); decayIdx=0; }
   }
   // sales hire when the calendar cannot feed the delivery room you already have
-  calRun=((bound==="calendar"||bound==="invites") && p1End!==null)?calRun+1:0;
+  // only a CALENDAR shortage is fixable by hiring sales. an invite shortage is a
+  // marketing problem and hiring into it buys nothing.
+  calRun=((bound==="calendar") && p1End!==null)?calRun+1:0;
   if(calRun>=v.trigM && p1End!==null && diags.length<v.diagCount){
    if(p2End===null)p2End=m;
    diags.push(m+1); calRun=0;
@@ -1485,11 +1512,53 @@ function render(){
   "</b> to clear $10k on commission alone &mdash; that is <b>"+nm(repNeed/Math.max(sCeil,0.01),1)+
   "&times;</b> further. <b>Hire delivery before sales.</b> A closer hired now would sit on a capped calendar and leave.";
 
+
+ // ---- the oscillation: diverging bars, delivery-short above, sales-short below ----
+ (function(){
+  var el=$("oscChart"); if(!el)return;
+  var rows=_F.rows;   // the oscillation is the WHOLE arc, not just this phase
+  var mx=Math.max.apply(null,rows.map(function(r){return Math.abs(r.gap)}).concat([1]));
+  var hires={};
+  rows.forEach(function(r,i){
+   var pd=i?rows[i-1].delTeam:0, pa=i?rows[i-1].diagTeam:0;
+   if(r.delTeam>pd)hires[i]=(hires[i]||"")+"+del";
+   if(r.diagTeam>pa)hires[i]=(hires[i]||"")+"+ARCH";
+  });
+  el.innerHTML='<div class="oscmid"></div>'+rows.map(function(r,i){
+   var h=Math.max(2,Math.abs(r.gap)/mx*66), up=r.gap>0;
+   var col=up?"var(--warn)":"var(--accent)";
+   var t=tip("Month "+r.m,[["Selling could close",nm(r.salesCap,1)],
+     ["Delivery can absorb",r.capStarts],
+     [up?"Delivery short by":"Selling short by",nm(Math.abs(r.gap),1),1],
+     ["Constrained by",r.bound],
+     ["Team",r.delTeam+" delivery, "+r.diagTeam+" architect"+(r.diagTeam===1?"":"s")]]);
+   return '<div class="om" data-tip="'+t.replace(/"/g,"&quot;")+'">'+
+    '<div style="height:68px;display:flex;align-items:flex-end">'+
+      (up?'<div class="ob otop" style="height:'+h.toFixed(1)+'px;background:'+col+'"></div>':'')+
+    '</div>'+
+    '<div style="height:68px;display:flex;align-items:flex-start">'+
+      (up?'':'<div class="ob otop" style="height:'+h.toFixed(1)+'px;background:'+col+'"></div>')+
+    '</div>'+
+    (hires[i]?'<div class="oschire" style="left:50%">'+hires[i]+'</div>':'')+
+    '</div>'}).join("")+'<div class="charttip"></div>';
+  wireTips(el,".om");
+  var thr=rows.filter(function(r){return r.gap>0.05}).length;
+  var srt=rows.filter(function(r){return r.gap<-0.05}).length;
+  $("oscNote").innerHTML="Above the line you could sell more than you can build, so you hold the funnel back and get better instead. "+
+   "Below it you have delivery room your own calendar cannot fill, and the next hire is a salesperson. "+
+   "Across the whole arc you are delivery-short <b>"+thr+"</b> months and selling-short <b>"+srt+"</b>. "+
+   "Each hire flips it back the other way \u2014 that alternation is the business.";
+  if($("rngOsc"))$("rngOsc").textContent=rows.length?("M"+rows[0].m+"\u2013M"+rows[rows.length-1].m):"\u2014";
+ })();
+
  // table
  $("tbody").innerHTML=rows.map(function(r){return "<tr>"+
   "<td>"+r.m+"</td><td>"+Math.round(r.e*100)+"%</td><td>"+Math.round(r.onbTotal)+"</td>"+
   '<td class="'+(r.capStarts===0?"pause":"")+'">'+nm(r.audits,1)+"</td>"+
   "<td>"+Math.floor(r.won)+"</td><td>"+r.starts+"</td>"+
+  "<td>"+nm(r.salesCap,1)+"</td><td>"+r.capStarts+"</td>"+
+  '<td style="color:'+(r.gap>0.05?"var(--warn)":(r.gap<-0.05?"var(--accent)":"var(--ink-3)"))+'">'+
+    (r.gap>0?"+":"")+nm(r.gap,1)+"</td>"+
   '<td class="'+(r.bound==="hours"?"":"pause")+'">'+r.bound+"</td>"+
   "<td>"+Math.round(r.load)+"</td><td>"+Math.round(r.free)+"</td>"+
   "<td>"+Math.round(r.live)+"</td><td>"+Math.round(r.paying)+"</td>"+
@@ -1977,7 +2046,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-1957";
+var BUILD_ID="0820-2214";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
