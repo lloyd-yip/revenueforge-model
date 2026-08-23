@@ -1003,6 +1003,7 @@ td.pause{color:var(--crit)}
   <button type="button" data-r="r2" aria-selected="false"><b>Onboarding manager</b><span>the delivery IC &middot; draft</span></button>
   <button type="button" data-r="r3" aria-selected="false"><b>AI Revenue Architect</b><span>the audit seat &middot; draft</span></button>
   <button type="button" data-r="r4" aria-selected="false"><b>Client Success</b><span>retention &middot; draft</span></button>
+  <button type="button" data-r="r5" aria-selected="false"><b>Maintenance &amp; support</b><span>the live book &middot; draft</span></button>
  </div>
 
  <!-- ============ HEAD OF DELIVERY ============ -->
@@ -1440,6 +1441,37 @@ td.pause{color:var(--crit)}
     four, which is a delivery problem wearing a retention costume.</li>
   </ul>
 
+  <h4>Adoption and internal buy-in &mdash; the core of the job</h4>
+  <p>This is the part that is easy to underweight and is actually the whole role. What you sell changes how somebody
+   inside that business does their work. <b>That is not a technical event, it is a people event</b>, and it can fail
+   completely while every system runs perfectly.</p>
+
+  <div class="callout crit"><p><b>The founder bought it. The team has to live with it.</b> Those are different people
+   with different incentives, and the second group was usually not in the room. A founder who is excited and a team who
+   were told on Monday is the single most common way a working build produces zero value.</p></div>
+
+  <p><b>What that actually looks like in practice:</b></p>
+  <ul>
+   <li><b>Someone inside must own it.</b> Not the founder &mdash; they are too busy and it will drift. A named person on
+    the client&rsquo;s team whose job now visibly includes this. If nobody owns it, it belongs to nobody, and it decays
+    from week one.</li>
+   <li><b>A visible early win, fast.</b> The team needs one concrete moment where this obviously saved them something
+    &mdash; a lead handled overnight, a report that used to take an afternoon. Abstract efficiency arguments do not
+    change behaviour; one visible win does.</li>
+   <li><b>The old way has to get harder or disappear.</b> If the spreadsheet still exists, people use the spreadsheet.
+    Adoption is as much about retiring the old process as introducing the new one, and that is a conversation with the
+    founder, not a technical task.</li>
+   <li><b>Watch for the threat reaction.</b> Some of the client&rsquo;s staff will read automation as aimed at their job.
+    They will not say so &mdash; they will simply not use it, and describe it as unreliable. This is quiet, common, and
+    fatal, and spotting it is a human skill, not a dashboard.</li>
+   <li><b>Re-buy-in when people change.</b> A new hire on the client&rsquo;s team was not there for the training and has
+    no attachment to any of it. Every staffing change is a small re-adoption problem.</li>
+  </ul>
+
+  <div class="callout"><p><b>The reframe worth internalising:</b> you are not maintaining a system, you are maintaining a
+   <b>habit</b> inside somebody else&rsquo;s company. Systems stay where you put them. Habits decay unless something keeps
+   reinforcing them, and this hire is that something.</p></div>
+
   <h4>The signals they watch</h4>
   <p>Concrete, not vibes. If they cannot tell you these per client from memory, they are not doing the job:</p>
   <ul>
@@ -1502,6 +1534,94 @@ td.pause{color:var(--crit)}
    ever crediting the retention they buy. That is a deliberate choice: adoption and retention dynamics are too situational to
    model without inventing false precision. Judge this hire on the ownership described above, not on anything the numbers say.</p></div>
  </div>
+ <div class="role" id="r5" hidden>
+  <h3>Maintenance &amp; support</h3>
+  <p class="lead">The seat that keeps a growing book of live builds running. Reactive, technical, high account volume.
+   Currently unnamed in this model &mdash; the work exists and is fully costed, but it is buried inside the delivery
+   headcount rather than recognised as its own function.</p>
+
+  <div class="rolemeta">
+   <div><div class="k">Upkeep per client</div><div class="v" id="t_upkeep">&mdash;</div><div class="k" style="margin-top:4px">hrs / month, at today&rsquo;s efficiency</div></div>
+   <div><div class="k">Upkeep at terminal</div><div class="v" id="t_upkhrs">&mdash;</div><div class="k" style="margin-top:4px">hrs / month total</div></div>
+   <div><div class="k">That is</div><div class="v" id="t_upkfte">&mdash;</div><div class="k" style="margin-top:4px">full-time people</div></div>
+   <div><div class="k">Passes one full-timer</div><div class="v" id="t_upkwhen">&mdash;</div><div class="k" style="margin-top:4px">in the current arc</div></div>
+  </div>
+
+  <div class="callout warn"><p><b>Why this profile exists.</b> Every live client carries permanent monthly upkeep, and the
+   model charges those hours to your delivery team. Around <b>a third of all delivery hours</b> are maintenance, steadily,
+   from month four onward. At the terminal state that is well over one full-time person doing nothing but keeping existing
+   builds alive &mdash; being paid an implementation salary to do it.</p></div>
+
+  <h4>Are these the same person as Client Success?</h4>
+  <p><b>No, and combining them is a well-documented way to lose clients.</b></p>
+  <div class="callout crit"><p><b>Reactive work always crowds out proactive work.</b> Give one person a ticket queue and a
+   list of proactive check-ins, and the queue wins every single time &mdash; because a ticket has a person waiting at the
+   other end and a check-in does not. The check-ins get postponed, then skipped, then quietly abandoned, and the person
+   looks busy the entire time.</p></div>
+  <p>This is why every MSP separates the service desk from account management, and every SaaS company separates support
+   from customer success. Not because the skills cannot coexist in one human &mdash; because the <em>incentives</em> cannot
+   coexist in one calendar.</p>
+  <p>They are also different people by temperament and by price. Maintenance is technical, pattern-matching, runbook-driven
+   work. Client success is proactive, relational and analytical. Someone excellent at one is usually indifferent at the other,
+   and the maintenance seat is materially cheaper.</p>
+
+  <table>
+   <thead><tr><th></th><th>Maintenance &amp; support</th><th>Client Success</th></tr></thead>
+   <tbody>
+    <tr><td><b>Mode</b></td><td>Reactive &mdash; responds to a queue</td><td>Proactive &mdash; initiates contact</td></tr>
+    <tr><td><b>Skill</b></td><td>Technical triage, runbooks</td><td>Business conversation, pattern-spotting</td></tr>
+    <tr><td><b>Talks to</b></td><td>The operator</td><td>The founder and the champion</td></tr>
+    <tr><td><b>Success is</b></td><td>Nothing broken, fast resolution</td><td>Still being used, still growing</td></tr>
+    <tr><td><b>Fails by</b></td><td>Rebuilding rather than fixing</td><td>Going quiet on quiet accounts</td></tr>
+   </tbody>
+  </table>
+
+  <div class="callout"><p><b>They do have one important dependency.</b> The maintenance person sees the technical usage
+   signal first &mdash; runs dropping off, a workflow erroring for weeks with nobody reporting it, an operator who has
+   stopped logging in. That is early churn intelligence, and it is worthless unless it routes to client success as a
+   standing habit rather than an occasional remark.</p></div>
+
+  <h4>What they actually do</h4>
+  <ul>
+   <li>First-line triage on anything that breaks across the whole live book</li>
+   <li>Monitoring &mdash; noticing failures the client has not noticed yet, which is most of them</li>
+   <li>Small config changes: the client changed a form, renamed a field, switched a tool</li>
+   <li>Routine upkeep: credentials, API changes, dependency updates, quota limits</li>
+   <li>Escalating anything that needs re-architecting rather than repairing</li>
+   <li><b>Feeding the runbook</b> &mdash; every fix that happens twice should become a documented procedure, then eventually a fix in the build itself</li>
+  </ul>
+
+  <h4>Who this person is</h4>
+  <ul>
+   <li><b>Technical but not an architect.</b> Comfortable in logs, APIs and configuration. Does not need to design systems &mdash; and should not want to.</li>
+   <li><b>Temperamentally suited to a queue.</b> Finds satisfaction in closing things. This is a real and specific personality, and people who have it are not failed engineers.</li>
+   <li><b>High account tolerance.</b> Context-switching across dozens of clients without losing the thread.</li>
+   <li><b>Writes things down.</b> The runbook is the actual product of this role. Without it you are paying someone to solve the same problem repeatedly and forget it each time.</li>
+  </ul>
+  <p><b>Where they come from:</b> MSP service desk, SaaS technical support (tier 2), or a junior developer with an ops
+   temperament. This is a strong nearshore or offshore seat &mdash; largely asynchronous, ticket-driven, and less dependent
+   on live founder conversation than any other role here.</p>
+
+  <h4>The decoys</h4>
+  <div class="decoy"><div class="dh">A strong developer who will &ldquo;also help with maintenance&rdquo;</div><p>They will
+   rebuild things that did not need rebuilding, get bored, and quietly reprioritise toward building. Maintenance done by
+   someone who resents it is maintenance not done.</p></div>
+  <div class="decoy"><div class="dh">Someone who wants to grow into the architect role</div><p>Fine as a long-term outcome,
+   dangerous as a hiring motivation. They will treat every ticket as an audition and over-engineer the fixes.</p></div>
+  <div class="decoy"><div class="dh">Cheapest available offshore support</div><p>This role touches live client systems with
+   real credentials. The floor on competence is higher than a generic support hire, and a bad fix here is a client-facing
+   outage, not an internal inconvenience.</p></div>
+
+  <h4>When to hire them</h4>
+  <p>The signal is in the numbers above: <b>when upkeep crosses roughly one full-time person&rsquo;s worth of hours</b>. Before
+   that it is genuinely absorbable by the delivery team. After that you are paying implementation salaries for triage work
+   and, worse, you are spending delivery capacity &mdash; your actual constraint &mdash; on maintenance instead of new clients.</p>
+  <div class="callout"><p><b>Not modelled as a separate headcount, deliberately.</b> The hours and their cost are already in
+   the model; splitting them into their own line would change the payroll number without changing the constraint, and the
+   decision this drives is a <em>who</em>, not a <em>how much</em>. Worth revisiting if the salary gap between an implementation
+   hire and a support hire turns out to be large in practice.</p></div>
+ </div>
+
 </div><!-- /p6 -->
 
 </div>
@@ -2592,8 +2712,14 @@ function renderTalent(){
  set("t_csper","every "+v.csPer);
  set("t_cswhen",mo(at(function(r){return r.csTeam>0})));
  set("t_ret",v.retention+" mo");
+ var fte=v.hireHrs*v.hireEff/100, L=R[R.length-1];
+ var cross=R.find(function(r){return r.styHrs>=fte});
+ set("t_upkeep",v.upkeep+" hrs");
+ set("t_upkhrs",Math.round(L.styHrs)+" hrs");
+ set("t_upkfte",(L.styHrs/fte).toFixed(1));
+ set("t_upkwhen",cross?("M"+cross.m):"not in arc");
 }
-var ROLE_IDS=["r1","r2","r3","r4"];
+var ROLE_IDS=["r1","r2","r3","r4","r5"];
 document.querySelectorAll('.subtabs button[data-r]').forEach(function(b){
  b.addEventListener("click",function(){
   ROLE_IDS.forEach(function(x){var el=$(x); if(el)el.hidden=(x!==b.dataset.r)});
@@ -2627,7 +2753,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-1954";
+var BUILD_ID="0822-2000";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
