@@ -1002,7 +1002,7 @@ td.pause{color:var(--crit)}
   <button type="button" data-r="r1" aria-selected="true"><b>Head of Delivery</b><span>the factory builder &middot; specced</span></button>
   <button type="button" data-r="r2" aria-selected="false"><b>Onboarding manager</b><span>the delivery IC &middot; draft</span></button>
   <button type="button" data-r="r3" aria-selected="false"><b>AI Revenue Architect</b><span>the audit seat &middot; draft</span></button>
-  <button type="button" data-r="r4" aria-selected="false"><b>Client Success</b><span>retention &middot; draft</span></button>
+  <button type="button" data-r="r4" aria-selected="false"><b>Client Success</b><span>the TAM seat &middot; draft</span></button>
   <button type="button" data-r="r5" aria-selected="false"><b>Maintenance &amp; support</b><span>the live book &middot; draft</span></button>
  </div>
 
@@ -1409,8 +1409,9 @@ td.pause{color:var(--crit)}
  <div class="role" id="r4" hidden>
   <h3>Client Success</h3>
   <p class="lead">Owns the client after the adoption threshold is met: keeping the workflows in use, catching decay before
-   it becomes churn, and finding the next build. A different function and a different person from the Head of Delivery,
-   who owns getting them there.</p>
+   it becomes churn, and finding the next build. Technically literate but not a builder &mdash; the industry calls this a
+   Technical Account Manager. A different function and a different person from the Head of Delivery, who owns getting them
+   there, and from maintenance, who fixes what breaks.</p>
   <div class="rolemeta">
    <div><div class="k">Salary</div><div class="v" id="t_cscost">&mdash;</div><div class="k" style="margin-top:4px">per month</div></div>
    <div><div class="k">One hire per</div><div class="v" id="t_csper">&mdash;</div><div class="k" style="margin-top:4px">live clients</div></div>
@@ -1486,6 +1487,65 @@ td.pause{color:var(--crit)}
    That is not a metric, it is a hope. This is a real argument for instrumenting what you build from the first client
    onward, even crudely.</p></div>
 
+  <h4>How technical do they need to be?</h4>
+  <p>Technical enough to be <b>credible about the thing you built</b>, and not one step further. The line is clean:
+   <b>they must be able to read and explain. They do not need to be able to build.</b></p>
+
+  <div class="callout"><p><b>The industry title for this is Technical Account Manager</b> &mdash; sometimes Customer
+   Success Engineer or post-sales Solutions Consultant. It is a real, established role, which matters: it means these
+   people exist, they have a career track, and you can search for them by name rather than hoping to find a unicorn.</p></div>
+
+  <p><b>Six things they must be able to do unaided:</b></p>
+  <ul>
+   <li><b>Open what was built and understand what it does</b> without asking the delivery team. If every client question
+    routes through delivery, you have not offloaded anything &mdash; you have added a relay.</li>
+   <li><b>Tell whether it is being used <em>correctly</em></b>, not merely whether it is being used. A client running a
+    workflow the wrong way looks identical to a healthy account in any usage count, and produces none of the value.</li>
+   <li><b>Hold a real conversation with the client&rsquo;s operator</b> about how they are working, and catch the moment
+    where they describe a workaround they invented because they misunderstood the system.</li>
+   <li><b>Triage correctly</b> &mdash; is this a bug, a training gap, or an architecture problem? Bug goes to maintenance,
+    training is theirs to fix, architecture goes to delivery. Someone who cannot tell these apart routes everything to
+    delivery and burns your actual constraint on questions that were never technical.</li>
+   <li><b>Spot the adjacent build.</b> Upsell here is not asking &ldquo;anything else we can help with?&rdquo; &mdash; it is
+    hearing a client describe a manual process and recognising it as something your toolkit already solves. That requires
+    knowing what you <em>can</em> build, not just what you did build for them.</li>
+   <li><b>Translate a technical outcome into the founder&rsquo;s number.</b> &ldquo;The workflow ran 400 times&rdquo; means
+    nothing. &ldquo;That is roughly 60 hours your team did not spend, and eleven leads that would have gone cold&rdquo; is
+    the renewal conversation.</li>
+  </ul>
+
+  <p><b>Three things they do not need:</b> to build anything, to debug code, or to design architecture. Hiring for those
+   is how you end up paying a developer salary for someone who will get bored of the actual job within six months.</p>
+
+  <div class="callout crit"><p><b>Why a genuinely non-technical person fails here, specifically.</b> Not because they cannot
+   learn it eventually &mdash; because credibility is required on day one. The moment the client&rsquo;s technical person
+   asks a real question and gets a deflection, the account manager becomes a switchboard. From that point on the client
+   goes straight to your delivery team for everything, the relationship layer you paid for evaporates, and your constraint
+   gets consumed by conversations that were never engineering.</p></div>
+
+  <h4>Where these people come from</h4>
+  <ul>
+   <li><b>Ex-implementation consultants who preferred the relationship half of the job.</b> The single best source &mdash;
+    they already know how builds work and why they fail, and many find the account side more interesting than the build side.</li>
+   <li><b>Solutions engineers moving from pre-sales to post-sales.</b> Technically fluent, already skilled at explaining
+    systems to non-technical buyers.</li>
+   <li><b>Senior technical support moving up.</b> Deep product knowledge, though the proactive habit has to be built &mdash;
+    they are coming out of a queue.</li>
+   <li><b>Internally, from your own delivery team.</b> The person who is good with clients but middling at builds is often
+    an outstanding TAM, and they already know your stack, your builds and your failure patterns. Cheapest and lowest-risk
+    path, and worth watching for from your first delivery hires onward.</li>
+  </ul>
+
+  <h4>The three post-sale roles, side by side</h4>
+  <table>
+   <thead><tr><th>Role</th><th>Technical depth</th><th>Mode</th><th>What they are</th></tr></thead>
+   <tbody>
+    <tr><td><b>Onboarding manager</b></td><td>Builds it</td><td>Project</td><td>A developer</td></tr>
+    <tr><td><b>Maintenance &amp; support</b></td><td>Fixes it</td><td>Reactive queue</td><td>Semi-technical, runbook-driven</td></tr>
+    <tr><td><b>Client Success / TAM</b></td><td>Reads and explains it</td><td>Proactive rounds</td><td>Technically literate, not a builder</td></tr>
+   </tbody>
+  </table>
+
   <h4>Non-negotiables</h4>
   <ul>
    <li><b>Enough technical literacy to tell whether a workflow is being used correctly</b> &mdash; not just whether the
@@ -1517,6 +1577,10 @@ td.pause{color:var(--crit)}
    Wrong muscle entirely.</p></div>
   <div class="decoy"><div class="dh">Carried a big book of accounts</div><p>&ldquo;I managed 200 accounts&rdquo; usually means
    an inbox and a renewal calendar. You want someone who carried fewer accounts with real depth on each.</p></div>
+  <div class="decoy"><div class="dh">&ldquo;We will train them on the technical side&rdquo;</div><p>The most reasonable-sounding
+   mistake available. It is learnable &mdash; over six to twelve months, during which they cannot actually do the job, and
+   during which every client learns to route around them. Teaching a technical person to run relationships is the faster
+   direction of travel.</p></div>
   <div class="decoy"><div class="dh">Sales-adjacent CS</div><p>Someone comped mainly on expansion will chase the next
    build and neglect the boring monthly checks that actually prevent churn. Expansion should be a happy consequence of
    the rounds, not the reason for them.</p></div>
@@ -2753,7 +2817,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2000";
+var BUILD_ID="0822-2004";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
