@@ -1155,8 +1155,8 @@ td.pause{color:var(--crit)}
 
 
   <div class="idea">
-    <div class="idea-h"><span class="idea-n">16</span><span class="chip open">open</span>
-      <p class="idea-q">Pricing that grows with the client &mdash; without an unpredictable bill</p></div>
+    <div class="idea-h"><span class="idea-n">16</span><span class="chip locked">locked</span>
+      <p class="idea-q">Pricing: flat per menu item, with an annual uplift clause</p></div>
     <div class="idea-b">
       <p>Borrowed from MSPs, who charge per seat or per device so <b>revenue grows automatically as the client grows</b>,
         with no sales conversation. A flat monthly fee does not do that &mdash; a client who doubles their sales team pays
@@ -1169,21 +1169,35 @@ td.pause{color:var(--crit)}
         &bull; <b>Worst of all, it inverts the incentive.</b> If usage costs money, the rational client uses it less
         &mdash; you would be charging them for succeeding with the thing you sold them.</p>
 
-      <div class="settle"><div class="settle-k">The shape that solves it</div>
-        <p><b>Usage sets the band. The band sets the price. The price is flat.</b></p>
-        <p>Each menu item carries a flat monthly price. That price sits in a band determined by <b>one</b> client-size
-          metric they already track and control &mdash; sales seats, monthly lead volume, locations. Bands are reviewed
-          <b>annually</b>, not monthly.</p>
-        <p>The client gets a bill that does not move and a number they understand. You get revenue that rises as they
-          grow. And because the metric is their own headcount or volume, they will never shrink it to lower your invoice.</p></div>
+      <div class="settle"><div class="settle-k">The decision &mdash; flat per menu item, plus an annual uplift clause</div>
+        <p><b>Each menu item has one flat monthly price.</b> Transparent, explainable in a sentence, holdable in your head
+          on a sales call. No metering, no fluctuating invoice, no argument every month.</p>
+        <p><b>Plus a contractual annual price adjustment, capped at a stated percentage</b> &mdash; 5&ndash;7%, or CPI-linked.
+          Ubiquitous in enterprise SaaS and MSP contracts, and a buyer of the business will expect to see it.</p>
+        <p>Three reasons it is lower risk than not having it: the <b>optionality is the value</b> whether or not you exercise
+          it; it protects <b>margin</b> against your own rising salaries; and it <b>must exist from day one</b> &mdash; price
+          is grandfathered at signing, so without this clause every cheap client is cheap permanently and the only way to
+          reprice is to reopen the whole contract.</p>
+        <p><b>The rule that makes it safe: use it every year at a small number, never dormant then large.</b> A 5% annual
+          uplift is background noise. A clause that sleeps for three years and then fires at 25% reads as opportunistic and
+          makes the client re-examine the entire relationship at exactly the wrong moment.</p>
+        <p>Mechanics: adjustment on the anniversary, stated cap, 30&ndash;60 days written notice. A &ldquo;no increase in
+          year one&rdquo; grace makes it easier to sell and costs almost nothing.</p></div>
 
-      <p><b>That gives two clean expansion paths, neither of which needs a meter:</b></p>
-      <p>1. <b>More menu items installed &rarr; more MRR.</b> Discrete, transparent, and it is the upsell motion you
-        already want. This alone produces expansion revenue.<br>
-        2. <b>The client grows &rarr; the band moves &rarr; more MRR.</b> One conversation a year, fully predictable.</p>
+      <div class="settle"><div class="settle-k">When they push back on the clause</div>
+        <p>Do not cap it lower. <b>Trade price certainty for contract length:</b> <em>&ldquo;We will freeze your price for
+          three years if you commit for three.&rdquo;</em> They get the budget certainty they actually want; you get a
+          multi-year contract, which is a direct multiple driver on the Exit scorecard. A pricing concession converted into
+          a valuation asset.</p></div>
 
-      <p>An annual true-up is the other workable variant: bill flat all year, reconcile once against actual size. Same
-        properties, one conversation instead of a renegotiation.</p>
+      <div class="callout warn"><p><b>Be clear-eyed about what this is.</b> With the uplift as the only mechanism on
+        existing clients, net revenue retention caps around 105%. That is <b>margin protection, not a growth engine</b>.
+        Real expansion comes from installing more menu items. Do not let the clause make expansion feel solved.</p></div>
+
+      <p style="color:var(--ink-3);font-size:13px;margin-top:14px"><b>Parked variant:</b> size-banded pricing &mdash; the
+        flat price sits in a band set by one client-size metric they already track, reviewed annually. Captures client
+        growth automatically rather than just inflation. Additive later and non-conflicting: since price is fixed at
+        signing, it can be introduced for new cohorts without touching a single existing client.</p>
 
       <div class="settle"><div class="settle-k">What would settle it</div>
         <p>Pick the size metric before the first contract, because it is nearly impossible to change later &mdash; it has
@@ -3401,7 +3415,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2253";
+var BUILD_ID="0822-2255";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
