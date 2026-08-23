@@ -437,6 +437,7 @@ td.pause{color:var(--crit)}
   <button type="button" role="tab" data-p="p6" aria-selected="false"><em>Talent</em><i>who to hire</i></button>
   <button type="button" role="tab" data-p="p7" aria-selected="false"><em>Exit</em><i>what it is worth</i></button>
   <button type="button" role="tab" data-p="p8" aria-selected="false"><em>Pricing</em><i>working brainstorm</i></button>
+  <button type="button" role="tab" data-p="p9" aria-selected="false"><em>Persona</em><i>who this is for</i></button>
 </div>
 
 <div id="p1">
@@ -2452,11 +2453,123 @@ td.pause{color:var(--crit)}
     client choice, and the book drifts toward low-value items.</li>
    <li><b>One onboarding fee plus smaller per-item upfronts, or the per-item upfronts alone?</b> The shared setup cost is
     real and sits in item one either way &mdash; the question is whether to name it separately.</li>
+   <li><b>Client size drives the tier.</b> The revenue band, the qualifiers and the labour-replacement frame now live in
+    the <b>Persona</b> tab &mdash; price follows from who you are selling to.</li>
    <li><b>Does the $897 audit anchor badly?</b> A jump from $897 to $20k+ is roughly 22&times;. Probably fine &mdash; the audit
     should feel trivially cheap relative to the build &mdash; but worth watching in the first ten calls.</li>
   </ul>
  </div>
 </div><!-- /p8 -->
+
+<div id="p9" hidden>
+ <div class="role">
+  <h3>Who this is for</h3>
+  <p class="lead">A $5&ndash;15m knowledge business with a real sales team, an acute revenue-engine problem, and
+   <b>nobody inside who owns fixing it</b>. Most of what follows is derived rather than validated &mdash; the first ten
+   audits will confirm or break it.</p>
+
+  <h4>The revenue band, and what creates each boundary</h4>
+  <table>
+   <thead><tr><th></th><th>Revenue</th><th>Why the boundary sits there</th></tr></thead>
+   <tbody>
+    <tr><td><b>Floor</b></td><td>$2.5m</td><td>Below this the value pool is too thin and $89k/yr is an impossible share of revenue</td></tr>
+    <tr><td><b>Sweet spot</b></td><td><b>$5&ndash;15m</b></td><td>Pain is acute, budget exists, no internal capability, stack still standard, one person can decide</td></tr>
+    <tr><td><b>Stretch</b></td><td>$15&ndash;25m</td><td>Still workable, but committees appear and customisation pressure rises</td></tr>
+    <tr><td><b>Hard stop</b></td><td>~$25m</td><td>Procurement, security review, internal engineers, custom stacks and long cycles all arrive together</td></tr>
+   </tbody>
+  </table>
+
+  <h4>The four things that create the ceiling</h4>
+  <ul>
+   <li><b>When they can build it themselves.</b> Not when they hire a RevOps person &mdash; that happens at $5&ndash;10m and
+    they configure a CRM, they do not build AI systems. The real substitution risk is when they can justify
+    <b>one or two engineers on internal tooling</b>, around $25&ndash;35m. Below that, building it is a distraction from
+    their actual product.</li>
+   <li><b>When procurement appears.</b> Roughly $25&ndash;50m, or whenever there is a CFO and a legal function. Below $25m
+    you are still selling to someone who can simply decide.</li>
+   <li><b>When the CRM stops being templatable.</b> The one that actually decides your margin. Five to fifteen reps on a
+    standard stack is a template. Eight years of accumulated Salesforce config is a bespoke project wearing a menu
+    item&rsquo;s clothing.</li>
+   <li><b>When the sales cycle lengthens faster than the deal grows.</b> Founder-led: 2&ndash;6 weeks. VP with a committee:
+    2&ndash;4 months. Enterprise: 6&ndash;12.</li>
+  </ul>
+
+  <div class="callout crit"><p><b>That fourth one breaks this specific model, not just your patience.</b> The whole engine
+   assumes audits convert within the month &mdash; that is what makes capacity-first work. A three-month sales cycle means
+   audits sitting in a pipeline for a quarter, which is exactly the queue this model was rebuilt to eliminate.
+   <b>Past roughly $25m the cycle length invalidates the capacity maths the business is designed around.</b></p></div>
+
+  <h4>Better qualifiers than revenue</h4>
+  <p>Revenue is a proxy for three things you can ask about directly:</p>
+  <table>
+   <thead><tr><th>Signal</th><th>Green</th><th>Red</th></tr></thead>
+   <tbody>
+    <tr><td><b>Sales team size</b></td><td>3&ndash;20 reps</td><td>Under 3 &mdash; no leverage. Over 25 &mdash; process complexity</td></tr>
+    <tr><td><b>CRM maturity</b></td><td>Standard config, 1&ndash;3 years old</td><td>Heavily customised, 5+ years, integrations everywhere</td></tr>
+    <tr><td><b>RevOps function</b></td><td><b>None</b>, or one generalist</td><td>A RevOps <em>team</em></td></tr>
+    <tr><td><b>Who decides</b></td><td>Founder or one VP</td><td>A committee</td></tr>
+    <tr><td><b>Deal size</b></td><td>$5k+ contracts &mdash; each recovered deal pays for months of fee</td><td>Transactional / low ticket</td></tr>
+   </tbody>
+  </table>
+
+  <div class="callout warn"><p><b>The counterintuitive one: an existing RevOps function is a disqualifier, not a green
+   flag.</b> They will want to build it themselves, they will have strong opinions about how it should be built, and you
+   are partly threatening their remit. You will get customisation demands from someone with the internal credibility to
+   insist on them.</p>
+   <p style="margin-top:8px"><b>The ideal buyer has the pain and nobody who owns it.</b> That is the actual profile
+    &mdash; not a revenue band.</p></div>
+
+  <h4>What they are actually buying instead of</h4>
+  <p>The strongest frame, and it works at every size because it is about what you <em>replace</em> rather than what
+   percentage you add:</p>
+  <table>
+   <thead><tr><th>Function the stack covers</th><th>Loaded annual cost</th></tr></thead>
+   <tbody>
+    <tr><td>SDR (one to two)</td><td>$60&ndash;150k</td></tr>
+    <tr><td>Sales ops / CRM admin</td><td>$50&ndash;70k</td></tr>
+    <tr><td>Enablement and coaching</td><td>$80&ndash;120k</td></tr>
+    <tr><td>Reporting analyst</td><td>$60&ndash;90k</td></tr>
+    <tr><td><b>Total</b></td><td><b>$250&ndash;430k</b></td></tr>
+   </tbody>
+  </table>
+  <p><b>$89k against $250k+ of function is a 3&ndash;5&times; return that requires no faith in a percentage.</b> Compare
+   that to the lift frame: a $5m business growing 30% generates $1.5m of new revenue, a 10% lift is $150k, and at
+   10&ndash;20% of value that only justifies $15&ndash;30k. <b>The lift frame under-prices you at every size below $10m.
+   Use the replacement frame.</b></p>
+
+  <h4>The buyer inside the company</h4>
+  <p>Almost always the <b>founder or CRO</b> &mdash; someone who feels the revenue problem personally and has the authority
+   to spend without a committee. Not a sales manager (no budget), not a RevOps lead (see above), not a CFO (wrong frame
+   entirely &mdash; they will price it against cost, not against outcome).</p>
+  <p>They are <b>not naive</b>. They have already tried the obvious things and been burned by at least one agency or tool
+   that promised this. Copy and call structure that explains the problem to them loses; the frame that lands is
+   <em>&ldquo;you have been sold tactics &mdash; this is a system.&rdquo;</em></p>
+
+  <h4>Qualification questions for the audit</h4>
+  <div class="qbox"><div class="qhead">&ldquo;How many people are carrying a quota right now?&rdquo;</div>
+   <p>Sizes the leverage. Under three and there is not enough work to automate.</p></div>
+  <div class="qbox"><div class="qhead">&ldquo;Who owns your CRM &mdash; and how customised is it?&rdquo;</div>
+   <p>The single best predictor of whether delivery is a template or a project.</p></div>
+  <div class="qbox"><div class="qhead">&ldquo;If we did this, who inside would be responsible for it working?&rdquo;</div>
+   <p>Surfaces the RevOps question without asking it directly, and tells you who will own adoption &mdash; which is the
+    thing that decides retention.</p></div>
+  <div class="qbox"><div class="qhead">&ldquo;What have you already tried for this?&rdquo;</div>
+   <p>Doubles as competitive intelligence. After ten audits this answer <em>is</em> your competitive set &mdash; and it will
+    look nothing like what desk research would have produced.</p></div>
+
+  <h4>What is still assumption</h4>
+  <ul>
+   <li><b>The whole band is derived, not observed.</b> No client has confirmed the floor, the ceiling or the sweet spot.</li>
+   <li><b>The RevOps disqualifier is a hypothesis</b> &mdash; plausible and untested. It may turn out a RevOps lead is the
+    perfect internal champion rather than an obstacle.</li>
+   <li><b>The $2.5m floor may be too low.</b> At $89k a year that is 3.5% of revenue &mdash; defensible but tight, and those
+    clients will feel every invoice.</li>
+   <li><b>Nothing here reflects a real buyer.</b> Ten audits replaces all of it with evidence, and that is worth more than
+    another round of reasoning.</li>
+  </ul>
+ </div>
+</div><!-- /p9 -->
+
 
 
 
@@ -3605,7 +3718,7 @@ document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
  b.addEventListener("click",function(){applyPreset(b.dataset.preset)})});
 
 installTips();
-var PANEL_IDS=["p1","p2","p3","p4","p5","p6","p7","p8"];
+var PANEL_IDS=["p1","p2","p3","p4","p5","p6","p7","p8","p9"];
 function showTab(id){
  PANEL_IDS.forEach(function(x){var el=$(x); if(el)el.hidden=(x!==id)});
  document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
@@ -3617,7 +3730,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2344";
+var BUILD_ID="0822-2357";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
