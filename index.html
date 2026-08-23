@@ -2290,33 +2290,72 @@ td.pause{color:var(--crit)}
     <tr><td>6</td><td>$9k</td><td>$101k</td><td>81%</td><td>10&ndash;14&times;</td></tr>
    </tbody>
   </table>
-  <div class="callout crit"><p><b>A four-item minimum commit is a valuation decision disguised as a sales policy.</b>
+  <div class="callout crit"><p><b>A minimum total spend is a valuation decision disguised as a sales policy.</b>
    It roughly doubles year-one contract value <em>and</em> moves you into the premium multiple band, with the $20k upfront
    completely untouched.</p>
    <p style="margin-top:8px">Which reframes the minimum commit you already wanted. It is not only a qualification filter
     &mdash; <b>it is the cheapest thing on this page that changes what the company is worth.</b></p></div>
   <p><b>So the sales instruction is item count, not discounting.</b> Every conversation that ends at two items is a client
    priced in the wrong band for the life of the account, because price is grandfathered at signing. The number of items a
-   client starts with is close to permanent.</p>
+   client starts with is close to permanent &mdash; which is why the minimum is enforced on total upfront rather than
+   negotiated per deal.</p>
 
-  <h4>Per-item architecture &mdash; what replaces one flat price</h4>
-  <p>Each menu item carries <b>its own upfront and its own monthly</b>. A client buying three items pays three upfronts
-   and three monthlies. That keeps the quote transparent, scales the price to what they actually take, and makes expansion
-   a matter of adding a line rather than renegotiating a bundle.</p>
-  <p><b>Item one is different from items two through N.</b> The first build carries the shared setup cost &mdash; discovery,
-   integrations, credentials, environment, training the client&rsquo;s team. Later items reuse all of it. So:</p>
-  <p style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:var(--surface);border:1px solid var(--rule);
-   border-radius:5px;padding:14px 16px;color:var(--ink-2)">
-   <b>onboarding fee</b> (once, covers discovery + integration + training)<br>
-   &nbsp;&nbsp;+ item price &times; N (each with its own upfront and monthly)</p>
-  <p>That is more honest than a volume discount and it explains itself in one sentence on a call.</p>
+  <h4>The architecture &mdash; &agrave; la carte with a minimum</h4>
+  <p><b>Every menu item carries its own upfront and its own recurring</b>, both set by value with complexity as the floor.
+   Indicative shape: $5&ndash;10k upfront and $2&ndash;5k/month per item, depending on the item.</p>
+  <p><b>Clients mix and match freely.</b> Some take two, some take everything. What is enforced is not <em>which</em>
+   items or <em>how many</em> &mdash; it is that the <b>total upfront clears a minimum</b> of roughly $20k.</p>
+  <div class="callout"><p><b>A minimum on total spend is better than a minimum on item count.</b> It self-adjusts &mdash;
+   two expensive items clears it, four cheap ones clears it, and you never have to arbitrate. The client experiences it as
+   <em>&ldquo;pick enough that this is worth building properly&rdquo;</em> rather than as an arbitrary rule.</p></div>
+  <p>Someone who wants only item one at $5k is told, honestly: we can do it, but it is not worth allocating a delivery
+   team to. Pick more, or we are not the right fit. <b>That is a qualification filter and a valuation decision at the
+   same time</b> &mdash; recurring share rises with item count, and recurring share is what sets the multiple band.</p>
+  <p><b>Expansion is frictionless.</b> An existing client adding an item five months in is a new line, not a
+   renegotiation &mdash; a new upfront plus a new monthly, stacked onto what they already have.</p>
 
-  <div class="callout"><p><b>To be precise about volume discounting:</b> the discount is a small reduction on the
-   <em>sum</em> as items are added &mdash; five items cost less than five times one item, but more than four items ever
-   do. The total never falls when a client buys more. <b>And discount the upfront, never the MRR.</b> There is a real
-   cost economy on additional items and it sits entirely in setup, which is upfront. The monthly cost of running a workflow
-   does not fall because the client bought another one. And strategically: <b>a discount on the upfront is a one-time cash
-   concession; a discount on MRR damages enterprise value permanently</b>, at whatever multiple you eventually sell for.</p></div>
+  <div class="callout warn"><p><b>The early exception, and it is a real one.</b> During validation you take single-item
+   clients, because learning how to deliver matters more than revenue mix. That is correct &mdash; but see failure mode 5:
+   those clients are grandfathered at that price permanently.</p></div>
+
+  <h4>Failure modes in this pricing model</h4>
+
+  <div class="decoy"><div class="dh">1. Discounting the recurring &mdash; the expensive mistake</div>
+   <p><b>Discount the upfront. Hold the recurring firm.</b> The upfront has a genuine cost economy: discovery,
+    integrations, credentials and training are shared across every item, so item four genuinely costs less to set up than
+    item one. <b>The recurring has no such economy</b> &mdash; six running workflows cost roughly six times as much to
+    monitor and maintain as one. Discounting it gives away margin with no cost basis behind it, and it damages the metric
+    that sets your exit multiple. The client feels the upfront discount at the moment of decision anyway, which is when
+    incentives actually work.</p></div>
+
+  <div class="decoy"><div class="dh">2. The discount outrunning the cost saving</div>
+   <p>If the stacking discount falls faster than your marginal delivery cost falls, each additional item is worth less
+    than it costs. <b>Rule: discount percentage must stay below the marginal cost saving percentage</b>, and you need to
+    actually know that number &mdash; which means measuring setup hours for item one versus item four on real clients.</p></div>
+
+  <div class="decoy"><div class="dh">3. The minimum is a cliff, and cliffs get gamed</div>
+   <p>A client sitting at $18k will tempt your architect to either discount an item or bolt on a cheap one nobody needs.
+    <b>The second is much worse:</b> you now build, host and maintain something the client never uses &mdash; a permanent
+    support burden and a churn seed, because unused items are the first thing they question at renewal. <b>Never add an
+    item purely to clear the threshold.</b> If they cannot reach it with things they actually want, they are not a client
+    yet.</p></div>
+
+  <div class="decoy"><div class="dh">4. Cherry-picking the cheap end</div>
+   <p>With items spanning $5&ndash;10k, clients rationally pick the cheapest combination that clears $20k. Over time your
+    book skews toward your lowest-value items &mdash; which are also usually your least sticky. Worth considering a rule
+    that at least one <b>anchor item</b> is included, or pricing the cheap items so they are unattractive on their own.</p></div>
+
+  <div class="decoy"><div class="dh">5. Validation-phase clients are permanent</div>
+   <p>Price is grandfathered at signing. Ten single-item clients taken during validation are ten permanently sub-scale
+    accounts consuming delivery slots at maturity. <b>Cap the number deliberately, label them a founding cohort, and put a
+    stated repricing at first renewal in the contract.</b> Otherwise a decision that was correct for learning becomes a
+    drag you carry for years.</p></div>
+
+  <div class="decoy"><div class="dh">6. Quote complexity, and a model that no longer matches</div>
+   <p>Five items with two prices each plus stacking discounts plus a minimum is explainable. Fifteen items is a
+    configurator, and it slows every sales conversation. <b>Cap the menu at a size one person can explain from memory.</b>
+    Separately: mix-and-match means delivery hours are <em>per item</em>, while the capacity model still uses one number
+    for a whole onboarding. That will need revisiting once real per-item hours exist.</p></div>
 
   <h4>The two axes &mdash; with one correction</h4>
   <p>You named the right two inputs: complexity to build, and perceived value to the client. But they should not be used
@@ -3556,7 +3595,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2307";
+var BUILD_ID="0822-2313";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
