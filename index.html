@@ -2051,6 +2051,67 @@ td.pause{color:var(--crit)}
    are dragged down by helpdesk labour and low-margin hardware pass-through. The comparison is not aspirational. You are a
    higher-margin version of a shape that has already been proven and repeatedly bought.</p>
 
+  <h4>Why the comparison holds &mdash; the shared shape</h4>
+  <p>This is not a loose analogy. Nine structural characteristics are the same, which is why their valuation data is
+   usable as yours:</p>
+  <table>
+   <thead><tr><th></th><th>MSP</th><th>RevenueForge</th></tr></thead>
+   <tbody>
+    <tr><td><b>Upfront fee</b></td><td>Onboarding / migration fee</td><td>$20k build fee</td></tr>
+    <tr><td><b>Then recurring</b></td><td>$1.5&ndash;15k / month</td><td>$4&ndash;7k / month</td></tr>
+    <tr><td><b>High ticket</b></td><td>One of the client&rsquo;s larger vendor spends</td><td>Same</td></tr>
+    <tr><td><b>Sticky</b></td><td>Embedded in operations; switching is frightening</td><td>Hosted, load-bearing, switching is frightening</td></tr>
+    <tr><td><b>Capital to start</b></td><td>Almost none &mdash; no product to build first</td><td>Almost none</td></tr>
+    <tr><td><b>Scaling mechanism</b></td><td>Headcount, managed well</td><td>Headcount, managed well</td></tr>
+    <tr><td><b>Who operates it</b></td><td>The provider, on the provider&rsquo;s stack</td><td>The provider, on the provider&rsquo;s servers</td></tr>
+    <tr><td><b>Buyer</b></td><td>SMB and mid-market</td><td>$300k&ndash;$10m knowledge businesses</td></tr>
+    <tr><td><b>Competition</b></td><td>Fragmented, mostly sub-scale</td><td>Fragmented, mostly sub-scale</td></tr>
+   </tbody>
+  </table>
+  <p><b>Same business shape, different subject matter.</b> Which is why their failure modes, their diligence checklist and
+   their multiple bands all transfer.</p>
+
+  <h4>Where you are structurally better than an MSP</h4>
+  <p>Six real advantages, and the first two are the ones that matter most:</p>
+  <ul>
+   <li><b>1. You are not geographically bound.</b> MSPs traditionally needed local presence &mdash; someone has to
+    physically touch a server. That capped their addressable market to a metro area and is a large part of why the
+    industry stayed fragmented and sub-scale. <b>Nothing you build requires anyone to be anywhere.</b> Your TAM is the
+    language, not the postcode.</li>
+   <li><b>2. Your acquisition engine is your own.</b> MSPs grow by referral, local networking and trade association
+    relationships &mdash; notoriously hard to scale, which is precisely why private equity <em>rolled them up</em> rather
+    than growing them organically. Buying MSPs was easier than selling MSP services. <b>You already own a repeatable
+    acquisition machine, which is the exact capability the entire MSP industry lacked.</b></li>
+   <li><b>3. Acquisition cost is liquidated at the point of sale.</b> MSPs carry real sales cost against long cycles. The
+    $897 audit means you are cash-positive on acquisition immediately.</li>
+   <li><b>4. Delivery gets cheaper over time; theirs gets more expensive.</b> MSP costs are technician wages, which rise
+    every year. Your cost per client <em>falls</em> as builds standardise. Fundamentally opposite margin trajectories over
+    a decade.</li>
+   <li><b>5. No hardware pass-through.</b> A large slice of MSP revenue is low-margin equipment resale that drags blended
+    margin down. You have none of it &mdash; which is most of the gap between their $150&ndash;200k revenue per head and
+    your ~$600k.</li>
+   <li><b>6. No vendor margin squeeze.</b> MSPs resell other people&rsquo;s software and get squeezed when those vendors
+    raise prices or go direct. The primitives you build on are getting <em>cheaper</em>, and you keep the difference.</li>
+  </ul>
+
+  <h4>Where they are better than you &mdash; worth knowing honestly</h4>
+  <ul>
+   <li><b>Defensive spend.</b> IT gets paid in a recession because the alternative is not functioning. Growth
+    infrastructure is discretionary. <b>They are recession-resistant and you are not.</b></li>
+   <li><b>Higher retention.</b> 90%+ annually, because nobody casually switches the company that holds their passwords
+    and their compliance.</li>
+   <li><b>An established buyer pool.</b> Twenty years of transactions, buyers who understand the model instantly, and
+    comps on every deal. You will spend part of your sale process explaining what you are.</li>
+   <li><b>Regulatory lock-in.</b> Compliance obligations bolt the client to the provider in a way an automation workflow
+    does not.</li>
+  </ul>
+  <div class="callout"><p><b>The strategic read:</b> you have the MSP&rsquo;s economics without its two structural
+   handicaps &mdash; geography and distribution. Those two are exactly what kept that industry fragmented and made it a
+   rollup target rather than a category of large independent companies. <b>You start with the thing they had to be
+   acquired to obtain.</b></p>
+   <p style="margin-top:8px">What you lack is their defensiveness. Which is the argument, again, for building menu items
+    that the business cannot run without rather than ones that merely help it grow.</p></div>
+
   <h4>What separated a 12&times; MSP from a 5&times; MSP</h4>
   <p>This is a diligence checklist, and every item is buildable from client #1 at almost no cost:</p>
   <ul>
@@ -3340,7 +3401,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2248";
+var BUILD_ID="0822-2253";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
