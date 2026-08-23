@@ -435,6 +435,7 @@ td.pause{color:var(--crit)}
   <button type="button" role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">16</span></em><i>open questions</i></button>
   <button type="button" role="tab" data-p="p6" aria-selected="false"><em>Talent</em><i>who to hire</i></button>
   <button type="button" role="tab" data-p="p7" aria-selected="false"><em>Exit</em><i>what it is worth</i></button>
+  <button type="button" role="tab" data-p="p8" aria-selected="false"><em>Pricing</em><i>working brainstorm</i></button>
 </div>
 
 <div id="p1">
@@ -2260,6 +2261,138 @@ td.pause{color:var(--crit)}
  </div>
 </div><!-- /p7 -->
 
+<div id="p8" hidden>
+ <div class="role">
+  <h3>Pricing &mdash; a working brainstorm</h3>
+  <p class="lead">Nothing here is settled. The current numbers are placeholders that will not survive contact with the
+   first ten sales conversations, and that is fine &mdash; what matters is getting the <b>architecture</b> right before
+   the first contract, because two of these decisions are permanent.</p>
+
+  <div class="callout warn"><p><b>Where it stands today, and it is a guess:</b> $897 audit &middot; $20k upfront &middot;
+   $3k/month, billed after a three-month window. One price for one undefined bundle. <b>This will not hold past the first
+   few sales calls</b>, because a client who wants three workflows and one who wants seven are being quoted the same
+   number.</p></div>
+
+  <h4>The finding that should drive the architecture</h4>
+  <p>Your upfront fee is the largest single lever on what the business is eventually worth &mdash; in the wrong direction.</p>
+  <table>
+   <thead><tr><th>Split</th><th>12-month value</th><th>Recurring share</th><th>Multiple band</th><th>Est. exit</th></tr></thead>
+   <tbody>
+    <tr><td>$20k up + $3k/mo <em>(today)</em></td><td>$47.0k</td><td>59%</td><td>7&ndash;10&times;</td><td>$60m</td></tr>
+    <tr><td>$14k up + $3.5k/mo</td><td>$45.5k</td><td>70%</td><td>7&ndash;10&times;</td><td>$59m</td></tr>
+    <tr><td><b>$8k up + $4k/mo</b></td><td>$44.0k</td><td><b>81%</b></td><td><b>10&ndash;14&times;</b></td><td><b>$82m</b></td></tr>
+   </tbody>
+  </table>
+  <div class="callout crit"><p>Give up <b>$3k per client</b> in contract value, gain roughly <b>$22m in exit value</b>,
+   because 81% recurring moves you out of the project-business band and into the recurring-revenue one. <b>The upfront fee
+   is taxed at exit and the recurring fee is rewarded.</b></p></div>
+
+  <p><b>The counter-arguments, honestly:</b></p>
+  <ul>
+   <li><b>The upfront funds the build.</b> True, but it does not need to be $20k to do that &mdash; a build costs roughly
+    85 hours today falling to 34, so $5&ndash;8k covers delivery comfortably. The rest of the $20k is margin taken as cash
+    rather than as recurring.</li>
+   <li><b>A big upfront qualifies and commits.</b> This is the real argument. Someone who writes a $20k cheque is
+    committed; someone who writes $5k may churn casually. That is worth something and it is not captured in the table.</li>
+   <li><b>Cash now versus cash later.</b> Recurring is worth more at exit and less this quarter, and this quarter is when
+    you are fragile.</li>
+  </ul>
+  <p><b>Probable landing zone: $10&ndash;12k upfront.</b> Enough to qualify and fund the build, low enough to hold recurring
+   above 70%. Worth deciding deliberately rather than defaulting to $20k because it sounded right.</p>
+
+  <h4>Per-item architecture &mdash; what replaces one flat price</h4>
+  <p>Each menu item carries <b>its own upfront and its own monthly</b>. A client buying three items pays three upfronts
+   and three monthlies. That keeps the quote transparent, scales the price to what they actually take, and makes expansion
+   a matter of adding a line rather than renegotiating a bundle.</p>
+  <p><b>Item one is different from items two through N.</b> The first build carries the shared setup cost &mdash; discovery,
+   integrations, credentials, environment, training the client&rsquo;s team. Later items reuse all of it. So:</p>
+  <p style="font-family:'IBM Plex Mono',monospace;font-size:13px;background:var(--surface);border:1px solid var(--rule);
+   border-radius:5px;padding:14px 16px;color:var(--ink-2)">
+   <b>onboarding fee</b> (once, covers discovery + integration + training)<br>
+   &nbsp;&nbsp;+ item price &times; N (each with its own upfront and monthly)</p>
+  <p>That is more honest than a volume discount and it explains itself in one sentence on a call.</p>
+
+  <div class="callout"><p><b>If you do discount for volume, discount the upfront &mdash; never the MRR.</b> There is a real
+   cost economy on additional items and it sits entirely in setup, which is upfront. The monthly cost of running a workflow
+   does not fall because the client bought another one. And strategically: <b>a discount on the upfront is a one-time cash
+   concession; a discount on MRR damages enterprise value permanently</b>, at whatever multiple you eventually sell for.</p></div>
+
+  <h4>The two axes &mdash; with one correction</h4>
+  <p>You named the right two inputs: complexity to build, and perceived value to the client. But they should not be used
+   the same way.</p>
+  <div class="callout crit"><p><b>Complexity sets the floor. Value sets the price.</b></p>
+   <p style="margin-top:8px">Pricing <em>on</em> complexity is cost-plus &mdash; it is an agency billing hours in disguise,
+    and it produces a perverse result: <b>your most expensive items become the ones you are worst at building.</b> As you
+    get better and a build drops from 85 hours to 34, cost-plus pricing says charge less for the same outcome. That is
+    backwards.</p>
+   <p style="margin-top:8px">Complexity belongs in the <b>build / do-not-build</b> decision. If the value a client will pay
+    for sits below what it costs you to deliver, the item does not go on the menu. Above that line, complexity is
+    irrelevant to the price.</p></div>
+
+  <h4>The pricing grid &mdash; the same 2&times;2 as menu admission</h4>
+  <table>
+   <thead><tr><th></th><th>Low complexity</th><th>High complexity</th></tr></thead>
+   <tbody>
+    <tr><td><b>High value</b></td><td><b>Anchor items.</b> Price hard on value. Best margin on the menu &mdash; these fund everything else</td><td>Price high, watch margin, and put innovation effort here to drop the complexity</td></tr>
+    <tr><td><b>Low value</b></td><td>Cheap stacking items. Good for expansion, weak alone. Keep few</td><td><b>Never build.</b> Below the floor by definition</td></tr>
+   </tbody>
+  </table>
+  <p>Which is the same grid that decides what gets onto the menu at all &mdash; the admission test and the pricing
+   test are the same test, applied twice.</p>
+
+  <h4>How to actually price an item</h4>
+  <p>A method rather than a guess, for each item on the day-one menu:</p>
+  <p><b>1. Estimate the annual value to the client.</b> Hours saved &times; loaded rate, or revenue gained, or cost avoided.
+   Be specific and conservative &mdash; you will have to defend this number in the audit.<br>
+   <b>2. Price the annual contract at 10&ndash;20% of that value.</b> The standard B2B heuristic. Below 10% you are leaving
+   money on the table; above 25% the buyer starts doing the maths against alternatives.<br>
+   <b>3. Split it</b> between upfront and monthly using your chosen ratio.<br>
+   <b>4. Sanity-check against your floor.</b> If the resulting price does not clear delivery cost with real margin, the item
+   does not belong on the menu.</p>
+  <p><b>Worked shape:</b> a workflow saving 20 hours a month at $50/hr loaded = $12k of annual value &rarr; price
+   $1.2&ndash;2.4k per year. A workflow producing $200k of incremental pipeline is a completely different number. <b>Items
+   tied to revenue price far higher than items tied to time saved</b>, which is an argument for weighting the menu toward
+   revenue-generating automations rather than efficiency ones.</p>
+
+  <h4>Cohort pricing &mdash; already built into this model</h4>
+  <p>You can only raise an existing client by the uplift cap. But <b>new clients can pay whatever the market will bear</b>,
+   and the model already implements this: prices step up by phase and each client is locked to what it signed at.</p>
+  <table>
+   <thead><tr><th></th><th>Phase 1</th><th>Phase 2</th><th>Phase 3</th></tr></thead>
+   <tbody>
+    <tr><td><b>Upfront</b></td><td id="pr_up1">&mdash;</td><td id="pr_up2">&mdash;</td><td id="pr_up3">&mdash;</td></tr>
+    <tr><td><b>Recurring</b></td><td id="pr_rec1">&mdash;</td><td id="pr_rec2">&mdash;</td><td id="pr_rec3">&mdash;</td></tr>
+   </tbody>
+  </table>
+  <p>That is a doubling across the arc without touching a single existing client. <b>Cohort escalation is your real
+   expansion lever</b> &mdash; the uplift clause protects margin, more menu items grow the account, and new-cohort pricing
+   grows average revenue per client. Three separate mechanisms, and this is the largest of them.</p>
+
+  <h4>The launch move</h4>
+  <p>You cannot price correctly before selling anything, but you can avoid the one unfixable error: <b>anchoring too
+   low</b>. Price is grandfathered at signing, so an early low price is permanent.</p>
+  <div class="callout"><p><b>Set list price where you think it should be in eighteen months, then discount the first
+   cohort explicitly as founding clients.</b> The anchor stays high, the discount is a gift with a stated reason and an
+   end date, and cohort two pays list without anyone feeling that prices went up. A discount you can withdraw is
+   infinitely easier than a price you have to raise.</p></div>
+
+  <h4>Open questions</h4>
+  <ul>
+   <li><b>What is the day-one menu?</b> Every price question is downstream of this and it does not exist yet. Nothing else
+    here can be settled first.</li>
+   <li><b>Upfront/recurring ratio</b> &mdash; the $22m question above. Leaning $10&ndash;12k upfront.</li>
+   <li><b>Does recurring start at signing or at go-live?</b> Currently go-live, which gifts the client roughly three months
+    of fees. Most SaaS bills from signature. Worth <b>$9&ndash;21k of lifetime value per client</b>, and it is a decision,
+    not a law.</li>
+   <li><b>One onboarding fee, or an upfront per item?</b> Leaning: one onboarding fee plus a smaller per-item upfront.</li>
+   <li><b>Is there a minimum?</b> A client taking one cheap item may not be worth the relationship overhead at all.</li>
+   <li><b>Does the $897 audit anchor badly?</b> A jump from $897 to $20k+ is roughly 22&times;. Probably fine &mdash; the audit
+    should feel trivially cheap relative to the build &mdash; but worth watching in the first ten calls.</li>
+  </ul>
+ </div>
+</div><!-- /p8 -->
+
+
 
 </div>
 
@@ -3365,6 +3498,8 @@ function renderTalent(){
  set("x_rec",(L.recR/Math.max(L.cash,1)*100).toFixed(0)+"%");
  set("x_grow",flat?"flat":(g>0?"+"+g.toFixed(0)+"%":g.toFixed(0)+"%"));
  set("x_3m",x3?("M"+x3.m):"not in arc");
+ set("pr_up1",money(v.upfront)); set("pr_up2",money(v.upfront2)); set("pr_up3",money(v.upfront3));
+ set("pr_rec1",money(v.recurring)+"/mo"); set("pr_rec2",money(v.recurring2)+"/mo"); set("pr_rec3",money(v.recurring3)+"/mo");
  // ---- diligence scorecard ----
  var heads=L.delTeam+L.mgrTeam+L.diagTeam+L.csTeam+2;
  var eb=rev*0.5, r40=g+50;
@@ -3404,18 +3539,18 @@ document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
  b.addEventListener("click",function(){applyPreset(b.dataset.preset)})});
 
 installTips();
-var PANEL_IDS=["p1","p2","p3","p4","p5","p6","p7"];
+var PANEL_IDS=["p1","p2","p3","p4","p5","p6","p7","p8"];
 function showTab(id){
  PANEL_IDS.forEach(function(x){var el=$(x); if(el)el.hidden=(x!==id)});
  document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
   b.setAttribute("aria-selected",b.dataset.p===id?"true":"false")});
- document.querySelector(".presets").style.visibility=(id==="p5"||id==="p6"||id==="p7")?"hidden":"visible";
+ document.querySelector(".presets").style.visibility=(id==="p5"||id==="p6"||id==="p7"||id==="p8")?"hidden":"visible";
  render();
 }
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2255";
+var BUILD_ID="0822-2303";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
