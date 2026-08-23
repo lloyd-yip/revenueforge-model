@@ -95,6 +95,15 @@ h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin
 .qbox{background:var(--surface-2);border:1px solid var(--rule);border-radius:5px;padding:14px 16px;margin-bottom:11px}
 .qbox .q{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink);margin-bottom:6px}
 .qbox p{margin:0;font-size:13px}
+.titles{margin:10px 0 16px}
+.titles .tg{margin-bottom:14px}
+.titles .tl{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+ color:var(--ink-3);margin-bottom:6px}
+.titles .row{display:flex;flex-wrap:wrap;gap:6px}
+.titles .t{font-family:"IBM Plex Mono",monospace;font-size:11px;background:var(--surface);border:1px solid var(--rule);
+ border-radius:3px;padding:5px 10px;color:var(--ink-2)}
+.titles .t.p{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:600}
+.titles .t.n{border-color:var(--crit);background:var(--crit-soft);color:var(--crit);text-decoration:line-through}
 .stub{border:1px dashed var(--rule-strong);border-radius:6px;padding:18px 20px;color:var(--ink-3);max-width:80ch}
 .tabs .count{display:inline-block;margin-left:8px;background:var(--accent);color:var(--ground);
  font-size:9px;padding:1px 6px;border-radius:9px;vertical-align:middle}
@@ -1327,6 +1336,25 @@ td.pause{color:var(--crit)}
    at those companies during that period and ask <em>them</em> who ran delivery well. This function is small and everyone
    in it knows everyone. A referral from an ex-consultant beats any search you will run yourself.</p></div>
 
+  <h4>Job titles to search</h4>
+  <div class="titles">
+   <div class="tg"><div class="tl">Start here &mdash; the highest-yield search</div>
+    <div class="row"><span class="t p">Director of Professional Services</span><span class="t p">Head of Implementation</span></div></div>
+   <div class="tg"><div class="tl">Same job, other names</div>
+    <div class="row"><span class="t">Head of Professional Services</span><span class="t">Director of Implementation</span>
+     <span class="t">Director of Solutions Architecture</span><span class="t">Director of Technical Services</span>
+     <span class="t">Head of Technical Delivery</span><span class="t">Director of Delivery</span>
+     <span class="t">Head of Customer Onboarding</span></div></div>
+   <div class="tg"><div class="tl">The step-up hire &mdash; cheaper, hungrier, unproven at the level</div>
+    <div class="row"><span class="t">Manager, Professional Services</span><span class="t">Manager, Implementation</span>
+     <span class="t">Senior Implementation Manager</span><span class="t">Lead Solutions Architect</span></div></div>
+   <div class="tg"><div class="tl">Looks right, is not</div>
+    <div class="row"><span class="t n">Delivery Manager</span><span class="t n">Programme Manager</span>
+     <span class="t n">PMO Lead</span><span class="t n">Head of Client Services</span></div></div>
+  </div>
+  <p><b>Filter to:</b> companies at $10M&ndash;$100M ARR in data infrastructure, iPaaS, dev tools, API-first products or
+   revenue tooling. Then check they were there <b>through</b> the growth, not after it.</p>
+
   <h4>What they cost</h4>
   <table>
    <thead><tr><th>Tier</th><th>US base</th><th>Loaded / mo</th></tr></thead>
@@ -1384,6 +1412,26 @@ td.pause{color:var(--crit)}
    <p style="margin-top:10px">The open question worth answering before hiring one: <b>is this a developer who can talk to
    clients, or a client-facing implementer who can code?</b> The model currently assumes one person does both, which may
    not survive contact with reality.</p></div>
+  <h4>Job titles to search</h4>
+  <div class="titles">
+   <div class="tg"><div class="tl">Start here</div>
+    <div class="row"><span class="t p">Forward Deployed Engineer</span><span class="t p">Implementation Consultant</span></div></div>
+   <div class="tg"><div class="tl">Same job, other names</div>
+    <div class="row"><span class="t">Implementation Engineer</span><span class="t">Integration Engineer</span>
+     <span class="t">Automation Engineer</span><span class="t">Solutions Engineer (post-sales)</span>
+     <span class="t">Technical Consultant</span><span class="t">Professional Services Consultant</span>
+     <span class="t">Solutions Architect</span></div></div>
+   <div class="tg"><div class="tl">Looks right, is not</div>
+    <div class="row"><span class="t n">Software Engineer</span><span class="t n">Full-stack Developer</span></div></div>
+  </div>
+  <div class="callout"><p><b>Forward Deployed Engineer is worth understanding.</b> Palantir invented the title and AI
+   companies have adopted it wholesale. It means precisely this job: an engineer who goes into a customer&rsquo;s
+   environment, deploys the technology, adapts it to their reality and makes it actually work. If you find one, they have
+   done your job under a different name &mdash; and they self-select for people who <em>like</em> client contact, which
+   most engineers do not.</p></div>
+  <p>The reason to avoid a plain software engineer title is not skill &mdash; it is that the job is 40% client-facing.
+   Someone who applied to write code will resent the half of this role that is meetings.</p>
+
  </div>
 
  <!-- ============ AI REVENUE ARCHITECT ============ -->
@@ -1403,6 +1451,25 @@ td.pause{color:var(--crit)}
    <p style="margin-top:10px">The open question: <b>a closer who learned the architecture, or a technical person who learned
    to close?</b> The model assumes the latter is more likely to work, since the audit has to be genuinely diagnostic to be
    worth $897 &mdash; but that has not been pressure-tested.</p></div>
+  <h4>Job titles to search</h4>
+  <div class="titles">
+   <div class="tg"><div class="tl">Start here</div>
+    <div class="row"><span class="t p">Solutions Engineer</span><span class="t p">Sales Engineer</span></div></div>
+   <div class="tg"><div class="tl">Same job, other names</div>
+    <div class="row"><span class="t">Solutions Consultant (pre-sales)</span><span class="t">Value Engineer</span>
+     <span class="t">Business Value Consultant</span><span class="t">Principal Solutions Architect</span>
+     <span class="t">Technical Account Executive</span></div></div>
+   <div class="tg"><div class="tl">Also worth a look</div>
+    <div class="row"><span class="t">Growth strategist, boutique consultancy</span><span class="t">Ex-agency strategy lead</span></div></div>
+   <div class="tg"><div class="tl">Looks right, is not</div>
+    <div class="row"><span class="t n">Account Executive</span><span class="t n">SDR / BDR lead</span>
+     <span class="t n">Closer</span></div></div>
+  </div>
+  <p><b>Why a pure closer is the wrong search.</b> The audit has to be genuinely diagnostic to be worth $897 and to earn
+   the build. A closer runs a script and handles objections; they cannot sit with a founder and architect the fix.
+   A solutions engineer has spent their career doing exactly that &mdash; discovery, technical fit, and building the case
+   &mdash; and typically <em>wants</em> to own the number rather than support someone else&rsquo;s.</p>
+
  </div>
 
  <!-- ============ CLIENT SUCCESS ============ -->
@@ -1585,6 +1652,24 @@ td.pause{color:var(--crit)}
    build and neglect the boring monthly checks that actually prevent churn. Expansion should be a happy consequence of
    the rounds, not the reason for them.</p></div>
 
+  <h4>Job titles to search</h4>
+  <div class="titles">
+   <div class="tg"><div class="tl">Start here &mdash; this is the exact role</div>
+    <div class="row"><span class="t p">Technical Account Manager</span><span class="t p">Customer Success Engineer</span></div></div>
+   <div class="tg"><div class="tl">Same job, other names</div>
+    <div class="row"><span class="t">Senior Technical Account Manager</span><span class="t">Solutions Consultant (post-sales)</span>
+     <span class="t">Technical Customer Success Manager</span><span class="t">Customer Solutions Manager</span>
+     <span class="t">Strategic Account Manager (technical SaaS only)</span></div></div>
+   <div class="tg"><div class="tl">The transition hire &mdash; wants to move from building to accounts</div>
+    <div class="row"><span class="t">Implementation Consultant</span><span class="t">Senior Support Engineer</span></div></div>
+   <div class="tg"><div class="tl">Looks right, is not</div>
+    <div class="row"><span class="t n">Customer Success Manager</span><span class="t n">Enterprise CSM</span>
+     <span class="t n">Account Manager</span><span class="t n">Client Partner</span></div></div>
+  </div>
+  <p><b>Why plain &ldquo;Customer Success Manager&rdquo; is struck through:</b> the title is real but almost entirely
+   non-technical in practice, and the search returns thousands of them. Adding <em>Technical</em> or <em>Engineer</em> to the
+   query cuts the pool by roughly 95% and removes nearly everyone who would fail here on day one.</p>
+
   <h4>Timing and cost</h4>
   <p>The model adds one hire per full complement of live clients, and until you reach that number the job is yours or the
    delivery team&rsquo;s. That is correct early: <b>do not hire client success for your first handful of clients</b> &mdash;
@@ -1675,6 +1760,23 @@ td.pause{color:var(--crit)}
   <div class="decoy"><div class="dh">Cheapest available offshore support</div><p>This role touches live client systems with
    real credentials. The floor on competence is higher than a generic support hire, and a bad fix here is a client-facing
    outage, not an internal inconvenience.</p></div>
+
+  <h4>Job titles to search</h4>
+  <div class="titles">
+   <div class="tg"><div class="tl">Start here</div>
+    <div class="row"><span class="t p">Application Support Engineer</span><span class="t p">Technical Support Engineer (Tier 2)</span></div></div>
+   <div class="tg"><div class="tl">Same job, other names</div>
+    <div class="row"><span class="t">Platform Support Engineer</span><span class="t">Integration Support Specialist</span>
+     <span class="t">Managed Services Engineer</span><span class="t">Service Desk Engineer</span>
+     <span class="t">Production Support Analyst</span></div></div>
+   <div class="tg"><div class="tl">Looks right, is not</div>
+    <div class="row"><span class="t n">Customer Support Representative</span><span class="t n">Help Desk Technician</span>
+     <span class="t n">Junior Developer</span></div></div>
+  </div>
+  <p><b>Tier 2 matters in the search.</b> Tier 1 is scripted response and password resets. Tier 2 is where people actually
+   read logs, reproduce faults and fix configuration &mdash; which is the level this job needs. MSP service desks are a
+   particularly good hunting ground: their people are used to carrying many client environments at once, which most
+   product-company support engineers are not.</p>
 
   <h4>When to hire them</h4>
   <p>The signal is in the numbers above: <b>when upkeep crosses roughly one full-time person&rsquo;s worth of hours</b>. Before
@@ -2817,7 +2919,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2004";
+var BUILD_ID="0822-2007";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
