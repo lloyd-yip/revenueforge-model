@@ -2269,10 +2269,29 @@ td.pause{color:var(--crit)}
    first ten sales conversations, and that is fine &mdash; what matters is getting the <b>architecture</b> right before
    the first contract, because two of these decisions are permanent.</p>
 
-  <div class="callout warn"><p><b>Where it stands today, and it is a guess:</b> $897 audit &middot; $20k upfront &middot;
-   $3k/month, billed after a three-month window. One price for one undefined bundle. <b>This will not hold past the first
-   few sales calls</b>, because a client who wants three workflows and one who wants seven are being quoted the same
-   number.</p></div>
+  <h4>Decided &mdash; the locked architecture</h4>
+  <p>These are settled. Everything below them is the reasoning, and the open questions are at the bottom.</p>
+  <div class="callout"><p>
+   <b>1. Per-item pricing.</b> Every menu item carries its own upfront and its own recurring. Indicative:
+    $5&ndash;10k upfront, $2&ndash;5k/month, set by item.<br><br>
+   <b>2. Mix and match.</b> Clients take whichever items they want. Neither the combination nor the count is dictated.<br><br>
+   <b>3. A minimum total upfront &mdash; roughly $20k.</b> Not a minimum per item and not a minimum item count. The floor
+    is on total commitment.<br><br>
+   <b>4. The recurring is never discounted.</b> It is what it is, on the first item and the tenth.<br><br>
+   <b>5. Discounts come out of the upfront only</b>, with hard caps set in advance rather than negotiated in the moment.
+    An existing client adding an item later gets a better upfront; the monthly holds at list.<br><br>
+   <b>6. Value sets the price. Complexity sets the floor.</b> Complexity decides whether an item goes on the menu at all,
+    not what it costs.<br><br>
+   <b>7. An annual uplift clause from day one</b>, capped at a stated percentage, used every year at a small number rather
+    than saved up.<br><br>
+   <b>8. Cohort pricing.</b> New clients pay current list. Existing clients are grandfathered at signing.<br><br>
+   <b>9. A founding cohort, contractually repriced.</b> During validation, single-item clients below the minimum are
+    accepted &mdash; with an explicit contractual right to renegotiate pricing at first renewal.</p></div>
+
+  <div class="callout warn"><p><b>The disqualification rule that falls out of #3:</b> a client who can only <em>just</em>
+   reach the minimum is telling you something. Either they cannot identify enough use cases they want &mdash; which means
+   they do not have the problem badly enough &mdash; or they cannot afford it. <b>Both are reasons to decline, not
+   problems to engineer around.</b> The right clients clear the minimum easily and without persuasion.</p></div>
 
   <h4>The finding that should drive the architecture</h4>
   <p>Recurring share of revenue is the single biggest driver of what the business is eventually worth &mdash; it decides
@@ -2314,48 +2333,27 @@ td.pause{color:var(--crit)}
   <p><b>Expansion is frictionless.</b> An existing client adding an item five months in is a new line, not a
    renegotiation &mdash; a new upfront plus a new monthly, stacked onto what they already have.</p>
 
-  <div class="callout warn"><p><b>The early exception, and it is a real one.</b> During validation you take single-item
-   clients, because learning how to deliver matters more than revenue mix. That is correct &mdash; but see failure mode 5:
-   those clients are grandfathered at that price permanently.</p></div>
+  <h4>What can still go wrong</h4>
 
-  <h4>Failure modes in this pricing model</h4>
+  <div class="decoy"><div class="dh">Cherry-picking the cheap end</div>
+   <p>With items spanning $5&ndash;10k, clients rationally choose the cheapest combination that clears the minimum. Over
+    time the book skews toward your lowest-value items &mdash; which are usually also the least sticky and the easiest to
+    cancel. <b>Worth considering a rule that at least one anchor item is included</b>, or pricing the cheap items so they
+    are unattractive standalone. Currently unaddressed.</p></div>
 
-  <div class="decoy"><div class="dh">1. Discounting the recurring &mdash; the expensive mistake</div>
-   <p><b>Discount the upfront. Hold the recurring firm.</b> The upfront has a genuine cost economy: discovery,
-    integrations, credentials and training are shared across every item, so item four genuinely costs less to set up than
-    item one. <b>The recurring has no such economy</b> &mdash; six running workflows cost roughly six times as much to
-    monitor and maintain as one. Discounting it gives away margin with no cost basis behind it, and it damages the metric
-    that sets your exit multiple. The client feels the upfront discount at the moment of decision anyway, which is when
-    incentives actually work.</p></div>
+  <div class="decoy"><div class="dh">Discounts drifting past the cost saving</div>
+   <p>Handled by policy &mdash; hard caps, set in advance, and stacking discounts kept modest. The thing that makes the caps
+    correct rather than arbitrary is <b>measuring real setup hours for item one versus item four</b> on the first clients.
+    Until that number exists the caps are a sensible guess.</p></div>
 
-  <div class="decoy"><div class="dh">2. The discount outrunning the cost saving</div>
-   <p>If the stacking discount falls faster than your marginal delivery cost falls, each additional item is worth less
-    than it costs. <b>Rule: discount percentage must stay below the marginal cost saving percentage</b>, and you need to
-    actually know that number &mdash; which means measuring setup hours for item one versus item four on real clients.</p></div>
+  <div class="decoy"><div class="dh">Quote complexity as the menu grows</div>
+   <p>Five items with two prices each, plus capped discounts and a minimum, is explainable on a call. Fifteen items is a
+    configurator, and it slows every conversation. <b>Cap the menu at a size one person can hold in their head.</b></p></div>
 
-  <div class="decoy"><div class="dh">3. The minimum is a cliff, and cliffs get gamed</div>
-   <p>A client sitting at $18k will tempt your architect to either discount an item or bolt on a cheap one nobody needs.
-    <b>The second is much worse:</b> you now build, host and maintain something the client never uses &mdash; a permanent
-    support burden and a churn seed, because unused items are the first thing they question at renewal. <b>Never add an
-    item purely to clear the threshold.</b> If they cannot reach it with things they actually want, they are not a client
-    yet.</p></div>
-
-  <div class="decoy"><div class="dh">4. Cherry-picking the cheap end</div>
-   <p>With items spanning $5&ndash;10k, clients rationally pick the cheapest combination that clears $20k. Over time your
-    book skews toward your lowest-value items &mdash; which are also usually your least sticky. Worth considering a rule
-    that at least one <b>anchor item</b> is included, or pricing the cheap items so they are unattractive on their own.</p></div>
-
-  <div class="decoy"><div class="dh">5. Validation-phase clients are permanent</div>
-   <p>Price is grandfathered at signing. Ten single-item clients taken during validation are ten permanently sub-scale
-    accounts consuming delivery slots at maturity. <b>Cap the number deliberately, label them a founding cohort, and put a
-    stated repricing at first renewal in the contract.</b> Otherwise a decision that was correct for learning becomes a
-    drag you carry for years.</p></div>
-
-  <div class="decoy"><div class="dh">6. Quote complexity, and a model that no longer matches</div>
-   <p>Five items with two prices each plus stacking discounts plus a minimum is explainable. Fifteen items is a
-    configurator, and it slows every sales conversation. <b>Cap the menu at a size one person can explain from memory.</b>
-    Separately: mix-and-match means delivery hours are <em>per item</em>, while the capacity model still uses one number
-    for a whole onboarding. That will need revisiting once real per-item hours exist.</p></div>
+  <div class="decoy"><div class="dh">The capacity model no longer matches the pricing model</div>
+   <p>Mix-and-match means delivery hours are <b>per item</b>, while the capacity model still uses a single number for a
+    whole onboarding. Not wrong yet &mdash; it is an average &mdash; but it will need revisiting once real per-item hours
+    exist, because a client taking six items and one taking two are not the same delivery job.</p></div>
 
   <h4>The two axes &mdash; with one correction</h4>
   <p>You named the right two inputs: complexity to build, and perceived value to the client. But they should not be used
@@ -2420,16 +2418,14 @@ td.pause{color:var(--crit)}
   <ul>
    <li><b>What is the day-one menu?</b> Every price question is downstream of this and it does not exist yet. Nothing else
     here can be settled first.</li>
-   <li><b>$20k upfront is a floor, not a variable.</b> It is the minimum commitment and it does not come down at
-    maturity. During the first few months, while validating, a lower number is defensible &mdash; but that is a learning
-    decision, and every client signed there is grandfathered permanently.</li>
    <li><b>Does recurring start at signing or at go-live?</b> Currently go-live, which gifts the client roughly three months
     of fees. Most SaaS bills from signature. Worth <b>$9&ndash;21k of lifetime value per client</b>, and it is a decision,
     not a law.</li>
    <li><b>One onboarding fee, or an upfront per item?</b> Leaning: one onboarding fee plus a smaller per-item upfront.</li>
-   <li><b>What is the minimum commit?</b> Leaning four items &mdash; the point at which recurring share clears 70% and the
-    account is worth having. Single-item clients are probably not worth the relationship overhead at all, except during
-    early validation when learning matters more than mix.</li>
+   <li><b>Is an anchor item required?</b> Open. Without one, the cheapest-combination-that-clears-$20k is the rational
+    client choice, and the book drifts toward low-value items.</li>
+   <li><b>One onboarding fee plus smaller per-item upfronts, or the per-item upfronts alone?</b> The shared setup cost is
+    real and sits in item one either way &mdash; the question is whether to name it separately.</li>
    <li><b>Does the $897 audit anchor badly?</b> A jump from $897 to $20k+ is roughly 22&times;. Probably fine &mdash; the audit
     should feel trivially cheap relative to the build &mdash; but worth watching in the first ten calls.</li>
   </ul>
@@ -3595,7 +3591,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2313";
+var BUILD_ID="0822-2319";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
