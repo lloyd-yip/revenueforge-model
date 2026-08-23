@@ -2270,28 +2270,54 @@ td.pause{color:var(--crit)}
    the first contract, because two of these decisions are permanent.</p>
 
   <h4>Decided &mdash; the locked architecture</h4>
-  <p>These are settled. Everything below them is the reasoning, and the open questions are at the bottom.</p>
-  <div class="callout"><p>
-   <b>1. Per-item pricing.</b> Every menu item carries its own upfront and its own recurring. Indicative:
-    $5&ndash;10k upfront, $2&ndash;5k/month, set by item.<br><br>
-   <b>2. Mix and match.</b> Clients take whichever items they want. Neither the combination nor the count is dictated.<br><br>
-   <b>3. A minimum total upfront &mdash; roughly $20k.</b> Not a minimum per item and not a minimum item count. The floor
-    is on total commitment.<br><br>
-   <b>4. The recurring is never discounted.</b> It is what it is, on the first item and the tenth.<br><br>
-   <b>5. Discounts come out of the upfront only</b>, with hard caps set in advance rather than negotiated in the moment.
-    An existing client adding an item later gets a better upfront; the monthly holds at list.<br><br>
-   <b>6. Value sets the price. Complexity sets the floor.</b> Complexity decides whether an item goes on the menu at all,
-    not what it costs.<br><br>
-   <b>7. An annual uplift clause from day one</b>, capped at a stated percentage, used every year at a small number rather
-    than saved up.<br><br>
-   <b>8. Cohort pricing.</b> New clients pay current list. Existing clients are grandfathered at signing.<br><br>
-   <b>9. A founding cohort, contractually repriced.</b> During validation, single-item clients below the minimum are
-    accepted &mdash; with an explicit contractual right to renegotiate pricing at first renewal.</p></div>
+  <p>These are settled. Everything below is the reasoning; open questions are at the bottom.</p>
 
-  <div class="callout warn"><p><b>The disqualification rule that falls out of #3:</b> a client who can only <em>just</em>
-   reach the minimum is telling you something. Either they cannot identify enough use cases they want &mdash; which means
-   they do not have the problem badly enough &mdash; or they cannot afford it. <b>Both are reasons to decline, not
-   problems to engineer around.</b> The right clients clear the minimum easily and without persuasion.</p></div>
+  <div class="callout crit"><p><b>THE INITIAL SALE IS PRESCRIBED. THERE IS NO &Agrave; LA CARTE.</b></p>
+   <p style="margin-top:8px">The client is sold the whole stack &mdash; Pipeline Engine, Wingman, SalesPulse, Revenue
+    Dashboard &mdash; at one price. They do not see a line-item menu and they do not choose components.</p>
+   <p style="margin-top:8px"><b>Why:</b> the moment &ldquo;Automated SDR &mdash; $7k/mo&rdquo; appears on a page, the buyer
+    puts it next to a $97/month tool and you have lost. Every individual component is commoditised; <b>the assembled
+    system is not, because nobody else sells it assembled.</b> Line items invite exactly the comparison that kills the
+    deal, and a menu invites them to talk themselves out of the pieces that make the whole thing work.</p></div>
+
+  <div class="callout"><p>
+   <b>1. One prescribed package at the initial sale.</b> No component selection, no line items shown.<br><br>
+   <b>2. Line-item pricing exists internally only.</b> Surfaced to a client in exactly one situation: an upsell, for the
+    single item being added. Never as a menu.<br><br>
+   <b>3. Launch pricing: $20k upfront + $3&ndash;4k/month.</b> Deliberately below target. Price elasticity is unknown at
+    zero clients, and erring toward letting more people in buys learning that no amount of modelling will.<br><br>
+   <b>4. Target pricing once proven: ~$22k + $7.5k/month.</b> That monthly is not arbitrary &mdash; it is the level that
+    holds recurring share above 75%, which is the difference between the 7&ndash;10&times; and 10&ndash;14&times; band.<br><br>
+   <b>5. A founding cohort, contractually repriced &mdash; with the future number written in.</b> Capped at <b>ten clients
+    or six months, whichever comes first</b>. The contract states the specific price at first renewal, not merely that
+    pricing may change.<br><br>
+   <b>6. The recurring is never discounted.</b> Not at launch, not on upsell, not on the tenth item.<br><br>
+   <b>7. Discounts come out of the upfront only</b>, hard-capped in advance.<br><br>
+   <b>8. Value sets the price. Complexity sets the floor.</b> Complexity decides whether something goes on the menu at
+    all, not what it costs.<br><br>
+   <b>9. An annual uplift clause from day one</b>, capped, exercised every year at a small number rather than saved up.<br><br>
+   <b>10. Cohort pricing.</b> New clients pay current list; existing clients are grandfathered at signing.</p></div>
+
+  <div class="callout warn"><p><b>The monthly is the protected number.</b> Bundling was never what underpriced this
+   &mdash; the low recurring was. Old shape $20k + $3k; target shape $22k + $7.5k. The upfront barely moves; the monthly
+   is 2.5&times;. Negotiate the upfront freely. <b>Every $1k conceded on the recurring costs roughly $100k of exit value
+   at these multiples.</b> The upfront is cash; the recurring is the asset.</p></div>
+
+  <div class="callout crit"><p><b>The failure mode of the founding cohort is not the low price. It is never raising it.</b>
+   By month seven those ten clients are your friends and your case studies, and a vague &ldquo;pricing may change&rdquo;
+   clause is one nobody has the stomach to exercise. <b>Writing the future number into the original contract converts an
+   uncomfortable negotiation into a reminder of something already agreed.</b> That single drafting choice is worth more
+   than the clause itself.</p>
+   <p style="margin-top:8px">And cap the cohort by <b>count</b>, not only by time. A six-month window fails precisely when
+    things go well &mdash; twenty-five clients signed cheap in a good six months is twenty-five permanently sub-scale
+    accounts consuming delivery slots at maturity.</p></div>
+
+  <h4>Negotiation levers, in order</h4>
+  <p>Removing a system to cut the price is the <b>last</b> lever, not the first &mdash; it means a worse result, a weaker
+   case study, and less reason for them to stay.</p>
+  <p><b>1.</b> Extend payment terms on the upfront &mdash; same total, easier cheque.<br>
+   <b>2.</b> Discount the upfront against a longer commitment (12 or 24 months).<br>
+   <b>3.</b> Only then, remove a system &mdash; cutting both its upfront <em>and</em> its monthly, never just the upfront.</p>
 
   <h4>The finding that should drive the architecture</h4>
   <p>Recurring share of revenue is the single biggest driver of what the business is eventually worth &mdash; it decides
@@ -2319,11 +2345,12 @@ td.pause{color:var(--crit)}
    client starts with is close to permanent &mdash; which is why the minimum is enforced on total upfront rather than
    negotiated per deal.</p>
 
-  <h4>The architecture &mdash; &agrave; la carte with a minimum</h4>
+  <h4>The upsell architecture &mdash; &agrave; la carte, after they are a client</h4>
   <p><b>Every menu item carries its own upfront and its own recurring</b>, both set by value with complexity as the floor.
    Indicative shape: $5&ndash;10k upfront and $2&ndash;5k/month per item, depending on the item.</p>
-  <p><b>Clients mix and match freely.</b> Some take two, some take everything. What is enforced is not <em>which</em>
-   items or <em>how many</em> &mdash; it is that the <b>total upfront clears a minimum</b> of roughly $20k.</p>
+  <p><b>This applies to expansion, never to the first sale.</b> Once someone is a client, adding a system is a new line
+   &mdash; its own upfront plus its own monthly, stacked onto what they already have. That is the only moment a client
+   ever sees an individual item price.</p>
   <div class="callout"><p><b>A minimum on total spend is better than a minimum on item count.</b> It self-adjusts &mdash;
    two expensive items clears it, four cheap ones clears it, and you never have to arbitrate. The client experiences it as
    <em>&ldquo;pick enough that this is worth building properly&rdquo;</em> rather than as an arbitrary rule.</p></div>
@@ -3590,7 +3617,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2320";
+var BUILD_ID="0822-2344";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
