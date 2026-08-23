@@ -432,7 +432,7 @@ td.pause{color:var(--crit)}
   <button type="button" role="tab" data-p="p2" aria-selected="false"><em>2 &middot; Scale delivery</em><i id="rng2">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p3" aria-selected="false"><em>3 &middot; AI architects</em><i id="rng3">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p4" aria-selected="false"><em>4 &middot; Full arc</em><i id="rng4">&nbsp;</i></button>
-  <button type="button" role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">7</span></em><i>open questions</i></button>
+  <button type="button" role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">15</span></em><i>open questions</i></button>
   <button type="button" role="tab" data-p="p6" aria-selected="false"><em>Talent</em><i>who to hire</i></button>
 </div>
 
@@ -1004,6 +1004,154 @@ td.pause{color:var(--crit)}
         need <strong>5 deals a month</strong> to clear $10k at 10% of upfront, well beyond what two people deliver.</p>
     </div>
   </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">08</span><span class="chip locked">locked</span>
+      <p class="idea-q">Menu only. We do not do bespoke, and we say so out front.</p></div>
+    <div class="idea-b">
+      <p>Ten builds, each configured per client the way an Oracle or SAP implementation is configured &mdash; but no
+        genuinely bespoke work, ever. <b>Declaring it publicly converts a per-deal negotiation into a positioning
+        decision:</b> the client self-selects before you speak, and off-menu would require contradicting your own site.</p>
+      <p>Upsells are constrained to the same menu. The mechanism that makes this hold is not discipline &mdash; it is that
+        <b>architects have no price to quote off-menu</b>. Remove the ability rather than relying on willpower.</p>
+      <div class="settle"><div class="settle-k">Why now is the moment</div>
+        <p>You are delivery-bound today, so declining an off-menu client costs <b>nothing</b> &mdash; you were going to be
+          full anyway. At the far end of the arc you are lead-bound, and every declined deal is a permanent loss. The habit
+          is free to build now and expensive to start later.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">09</span><span class="chip locked">locked</span>
+      <p class="idea-q">What makes a request menu-able &mdash; and how we decide without taste</p></div>
+    <div class="idea-b">
+      <p>Four tests. It needs all four:</p>
+      <p><b>1. High perceived value</b> &mdash; it visibly moves revenue, profit or margin, so they assign real money to it.
+        <b>2. Repeatable</b> &mdash; not so unique per client that every version is a fresh build.
+        <b>3. Creates ongoing dependency</b> &mdash; it runs continuously on our infrastructure rather than handing them an
+        artifact they then own. Retention is worth roughly 3&times; what pricing is worth, so two requests can score
+        identically on value and repeatability and be worth wildly different amounts to us.
+        <b>4. Delegable</b> &mdash; someone who is not Lloyd or Geri can build it.</p>
+      <p>The 2&times;2 that matters: high-value-but-bespoke is the <b>dangerous</b> cell, because the money is real and the
+        temptation is maximum. Low-value-but-repeatable is the quiet one &mdash; it produces menu bloat, and ten things you
+        are famous for beat twenty-five things you offer.</p>
+      <div class="settle"><div class="settle-k">How this survives you not being in the room</div>
+        <p>Taste does not scale. So the architect&rsquo;s job at the point of sale is to <b>log it and decline it</b>, never
+          to evaluate it. Evaluation happens later, in batch, by whoever owns the menu.</p>
+        <p><b>Then replace prediction with a counter.</b> &ldquo;Other people will want this&rdquo; is a forecast. Build it
+          when <b>3&ndash;5 distinct clients</b> have asked for substantially the same thing. Waiting costs nothing &mdash;
+          you were declining it either way &mdash; and the log becomes a product roadmap that writes itself.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">10</span><span class="chip open">open</span>
+      <p class="idea-q">Are we loved, or merely depended upon?</p></div>
+    <div class="idea-b">
+      <p>The recurring fee is not maintenance labour &mdash; it is <b>continued operation of infrastructure the client has
+        restructured around</b>, running on our servers. Cancelling does not stop a service, it removes a capability. That is
+        a genuinely strong retention mechanism and it deepens as customisation accumulates.</p>
+      <p>But lock-in and loyalty look identical on a churn report. Clients who stay because leaving is <em>hard</em> churn at
+        the first opening &mdash; a budget cut, a new CTO, a competitor offering free migration &mdash; and critically,
+        <b>they never refer</b>. That caps growth precisely where the model already says you are capped: lead supply.</p>
+      <div class="settle"><div class="settle-k">What would settle it</div>
+        <p>At month six, ask your first clients what they would do if a competitor offered to rebuild it and migrate them
+          free. <b>Their hesitation is the real number.</b> Retention is worth ~3&times; pricing in this model, so this is the
+          single most valuable question you can ask a client.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">11</span><span class="chip open">open</span>
+      <p class="idea-q">Hosting it means we now have to run it like it matters &mdash; and that is not costed</p></div>
+    <div class="idea-b">
+      <p>The consequence of the answer above. You cannot claim &ldquo;mission-critical, lives on our servers&rdquo; without
+        accepting the obligation that comes with it:</p>
+      <p>&bull; <b>Upkeep at 12 hrs/client/month is a maintenance figure</b>, not an operations figure. Monitoring, incident
+        response and API changes breaking things overnight are a different cost.<br>
+        &bull; <b>An outage becomes a mass event.</b> Shared infrastructure means one bad deploy hits everyone at once &mdash;
+        the failure mode is a churn wave, not one unhappy client.<br>
+        &bull; <b>You are carrying liability.</b> Automation touching client CRM data and sending on their behalf means
+        contracts, insurance and a security posture across the whole book.</p>
+      <div class="settle"><div class="settle-k">Why it matters at exit, not just operationally</div>
+        <p>An acquirer looking at critical infrastructure for hundreds of clients with no SOC&nbsp;2, no redundancy and no
+          runbooks applies a <b>discount at diligence</b>. Cheap to build the discipline early; expensive to retrofit at
+          the LOI stage.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">12</span><span class="chip open">open</span>
+      <p class="idea-q">How many clients are we willing to hold at launch pricing, permanently?</p></div>
+    <div class="idea-b">
+      <p>Pricing low to make it easy to join is a reasonable launch decision, and it has a hidden benefit &mdash; a low
+        recurring fee means the <em>&ldquo;why am I paying this?&rdquo;</em> question never gets asked, so underpricing is
+        functionally a retention strategy as well as an acquisition one.</p>
+      <p>But <b>price is grandfathered at signing</b> in this model, which is correct and also means every client signed
+        cheap is cheap forever. The clients acquired in the next twelve months are the ones still being served in 2029 at
+        2026 prices.</p>
+      <div class="settle"><div class="settle-k">The decision to make deliberately</div>
+        <p>Not &ldquo;should I price low to start&rdquo; but <b>&ldquo;how many clients am I willing to hold at this price
+          before raising it?&rdquo;</b> Pick the number now rather than drifting into it.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">13</span><span class="chip open">open</span>
+      <p class="idea-q">Will a hired architect really close at 90% of Lloyd&rsquo;s rate?</p></div>
+    <div class="idea-b">
+      <p>The last failure mode still standing. The audit is not a pitch &mdash; it is pattern recognition across dozens of
+        businesses, which is exactly the thing that takes years to acquire. The model assumes a hire does it at 90% of a
+        CRO&rsquo;s rate.</p>
+      <p>The sensitivity is not subtle: at <b>50%</b> of your rate the arc terminates around <b>$5.7m/yr</b>; at
+        <b>90%</b> it reaches <b>$8.6m/yr</b>. A miss here does not slow you down, it caps you &mdash; because this hire is
+        the only thing that lifts the ceiling once your own calendar binds.</p>
+      <div class="settle"><div class="settle-k">What would settle it</div>
+        <p>Nothing but watching someone try. It cannot be reasoned away, and it is the strongest argument for hiring the
+          first architect <em>earlier than the model triggers it</em>, purely to learn the answer while it is still cheap
+          to be wrong.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">14</span><span class="chip open">open</span>
+      <p class="idea-q">Second channel: when, and which one?</p></div>
+    <div class="idea-b">
+      <p><b>Invites are the terminal constraint but not a near-term one.</b> They first bind at <b>M27</b> &mdash; delivery
+        and your own calendar bind for the 26 months before that. More leads before then convert to nothing.</p>
+      <p><b>Paid</b> is a multiplier on unit economics, not a fix for them, so it is downstream of proving retention. Your
+        LTV headroom is a genuine advantage against bootstrapped competitors and roughly worthless against venture-funded
+        ones in the same auction &mdash; you cannot out-lose someone burning venture money by design. Small spend early for
+        <em>learning</em>, scale when delivery can absorb it.</p>
+      <p><b>AEO</b> layers on top of SEO &mdash; LLMs read page one of an index, so you cannot be cited if you do not rank.
+        SEO-shaped timelines. Baseline measurement at <b>M0&ndash;M3</b> (cheap, and worthless if taken after content
+        exists), build at <b>M9&ndash;M15</b> so it lands before M27.</p>
+      <div class="settle"><div class="settle-k">The decision rule</div>
+        <p>Build the cheap mid-funnel version &mdash; a few extremely credible pages plus third-party mentions. At matched
+          ambition cold discovery is worth more (<b>$14.8m vs $11.5m</b> at +33% on each lever), and mid-funnel would need
+          the close rate near <b>45%</b> to match it &mdash; but the two converge at modest ambition, and the cheap build is
+          probably sufficient. <b>If the ceiling ever needs lifting by more than ~20%, the cheap version cannot get there</b>
+          and the expensive one is live again.</p>
+        <p><b>Dependency:</b> the credible case-study pages are substantially the same assets the marketing site is already
+          blocked on. Demo videos are now on the critical path for two things.</p></div>
+    </div>
+  </div>
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">15</span><span class="chip verify">verify</span>
+      <p class="idea-q">The model&rsquo;s &ldquo;net&rdquo; is not EBITDA &mdash; do not value the business off it</p></div>
+    <div class="idea-b">
+      <p>Payroll here counts <b>hire salaries only</b>: delivery, managers, architects, client success. It excludes founder
+        compensation, ad spend, tooling and infrastructure, admin, legal and insurance &mdash; and it charges nothing for
+        Lloyd&rsquo;s or Geri&rsquo;s time.</p>
+      <p>So the net line is <b>contribution after hire payroll</b>, not profit. A realistic EBITDA for a well-run productized
+        service is roughly <b>45&ndash;55% of revenue</b>, well below what this model shows.</p>
+      <div class="settle"><div class="settle-k">Why it matters</div>
+        <p>Every exit-value conversation runs off EBITDA. Using the model&rsquo;s net overstates the business by roughly a
+          third and would put a $100m label on something closer to $60m.</p></div>
+    </div>
+  </div>
+
 </div><!-- /p5 -->
 
 <div id="p6" hidden>
@@ -2919,7 +3067,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2007";
+var BUILD_ID="0822-2032";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
