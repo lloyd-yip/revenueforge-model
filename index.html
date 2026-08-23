@@ -2421,7 +2421,6 @@ td.pause{color:var(--crit)}
    <li><b>Does recurring start at signing or at go-live?</b> Currently go-live, which gifts the client roughly three months
     of fees. Most SaaS bills from signature. Worth <b>$9&ndash;21k of lifetime value per client</b>, and it is a decision,
     not a law.</li>
-   <li><b>One onboarding fee, or an upfront per item?</b> Leaning: one onboarding fee plus a smaller per-item upfront.</li>
    <li><b>Is an anchor item required?</b> Open. Without one, the cheapest-combination-that-clears-$20k is the rational
     client choice, and the book drifts toward low-value items.</li>
    <li><b>One onboarding fee plus smaller per-item upfronts, or the per-item upfronts alone?</b> The shared setup cost is
@@ -3591,7 +3590,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2319";
+var BUILD_ID="0822-2320";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
