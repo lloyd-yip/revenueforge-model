@@ -60,6 +60,42 @@ h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin
 .tabs button[aria-selected="true"] em{color:var(--ink)}
 .tabs button[aria-selected="true"] i{color:var(--accent);opacity:1}
 .tabs button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.subtabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 24px}
+.subtabs button{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.06em;
+ background:var(--surface);border:1px solid var(--rule);color:var(--ink-3);padding:8px 14px;
+ border-radius:4px;cursor:pointer;text-align:left}
+.subtabs button b{display:block;font-weight:600;color:var(--ink-2);letter-spacing:.08em;text-transform:uppercase;font-size:10px}
+.subtabs button span{display:block;font-size:10px;opacity:.8;margin-top:2px}
+.subtabs button[aria-selected="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.subtabs button[aria-selected="true"] b{color:var(--accent)}
+.role h3{font-family:"Source Serif 4",Georgia,serif;font-weight:600;font-size:22px;margin:30px 0 4px;letter-spacing:-.01em}
+.role h4{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+ color:var(--accent);margin:26px 0 10px;font-weight:600}
+.role p{color:var(--ink-2);max-width:82ch;margin:0 0 12px}
+.role p b,.role li b{color:var(--ink)}
+.role ul{color:var(--ink-2);max-width:82ch;padding-left:20px;margin:0 0 14px}
+.role li{margin-bottom:9px}
+.role .lead{font-family:"Source Serif 4",Georgia,serif;font-size:16px;color:var(--ink-2);max-width:76ch}
+.rolemeta{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:16px 0 6px}
+.rolemeta div{background:var(--surface);border:1px solid var(--rule);border-radius:5px;padding:11px 13px}
+.rolemeta .k{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.rolemeta .v{font-size:17px;font-weight:600;margin-top:3px;letter-spacing:-.01em}
+.callout{border-left:3px solid var(--accent);background:var(--surface);padding:13px 16px;border-radius:0 5px 5px 0;margin:14px 0}
+.callout.warn{border-left-color:var(--warn);background:var(--warn-soft)}
+.callout.crit{border-left-color:var(--crit);background:var(--crit-soft)}
+.callout p{margin:0;max-width:78ch}
+.role table{border-collapse:collapse;width:100%;margin:6px 0 16px;font-size:13px}
+.role th,.role td{text-align:left;padding:8px 11px;border-bottom:1px solid var(--rule);vertical-align:top}
+.role th{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.11em;text-transform:uppercase;
+ color:var(--ink-3);background:var(--surface-2)}
+.role td:first-child{color:var(--ink)}
+.decoy{border:1px solid var(--rule);border-radius:5px;padding:13px 16px;margin-bottom:10px;background:var(--surface)}
+.decoy .dh{font-weight:600;color:var(--crit);margin-bottom:5px}
+.decoy p{margin:0;font-size:13px}
+.qbox{background:var(--surface-2);border:1px solid var(--rule);border-radius:5px;padding:14px 16px;margin-bottom:11px}
+.qbox .q{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink);margin-bottom:6px}
+.qbox p{margin:0;font-size:13px}
+.stub{border:1px dashed var(--rule-strong);border-radius:6px;padding:18px 20px;color:var(--ink-3);max-width:80ch}
 .tabs .count{display:inline-block;margin-left:8px;background:var(--accent);color:var(--ground);
  font-size:9px;padding:1px 6px;border-radius:9px;vertical-align:middle}
 .ideas-h1{font-size:clamp(22px,3vw,29px);font-weight:700;letter-spacing:-.02em;margin:0 0 8px;line-height:1.15}
@@ -388,6 +424,7 @@ td.pause{color:var(--crit)}
   <button type="button" role="tab" data-p="p3" aria-selected="false"><em>3 &middot; AI architects</em><i id="rng3">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p4" aria-selected="false"><em>4 &middot; Full arc</em><i id="rng4">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">7</span></em><i>open questions</i></button>
+  <button type="button" role="tab" data-p="p6" aria-selected="false"><em>Talent</em><i>who to hire</i></button>
 </div>
 
 <div id="p1">
@@ -959,6 +996,279 @@ td.pause{color:var(--crit)}
     </div>
   </div>
 </div><!-- /p5 -->
+
+<div id="p6" hidden>
+ <div class="subtabs" role="tablist">
+  <button type="button" data-r="r1" aria-selected="true"><b>Head of Delivery</b><span>the factory builder &middot; specced</span></button>
+  <button type="button" data-r="r2" aria-selected="false"><b>Onboarding manager</b><span>the delivery IC &middot; draft</span></button>
+  <button type="button" data-r="r3" aria-selected="false"><b>AI Revenue Architect</b><span>the audit seat &middot; draft</span></button>
+  <button type="button" data-r="r4" aria-selected="false"><b>Client Success</b><span>retention &middot; draft</span></button>
+ </div>
+
+ <!-- ============ HEAD OF DELIVERY ============ -->
+ <div class="role" id="r1">
+  <h3>Head of Delivery</h3>
+  <p class="lead">The person who turns what you and Geri do by hand into a factory other people can run.
+   Not a project manager. Not a customer success lead. Someone whose whole career has been measured on
+   one number going down: what it costs to deliver a client.</p>
+
+  <div class="rolemeta">
+   <div><div class="k">Model lever</div><div class="v" id="t_mgrcost">&mdash;</div><div class="k" style="margin-top:4px">manager salary</div></div>
+   <div><div class="k">Arrives</div><div class="v" id="t_mgrwhen">&mdash;</div><div class="k" style="margin-top:4px">in the current arc</div></div>
+   <div><div class="k">Cost as % of cash</div><div class="v" id="t_mgrpct">&mdash;</div><div class="k" style="margin-top:4px">at that month</div></div>
+   <div><div class="k">Triggers every</div><div class="v" id="t_mgrper">&mdash;</div><div class="k" style="margin-top:4px">delivery hires</div></div>
+  </div>
+
+  <h4>What this person actually did before</h4>
+  <p>Post-sales at a B2B SaaS company splits into three separate functions. They are not the same job and
+   they are not the same people:</p>
+  <table>
+   <thead><tr><th>Function</th><th>Owns</th><th>Shape</th></tr></thead>
+   <tbody>
+    <tr><td><b>Professional Services / Implementation</b></td><td>Getting the customer live &mdash; fast, cheap, repeatably</td><td>Bounded. Has a start and an end. A production problem.</td></tr>
+    <tr><td>Customer Success</td><td>Adoption, renewal, expansion after go-live</td><td>Ongoing. A relationship problem.</td></tr>
+    <tr><td>Support</td><td>Fixing what breaks</td><td>Reactive. A queue problem.</td></tr>
+   </tbody>
+  </table>
+  <p><b>You want the first one.</b> Specifically a Director or Head of Professional Services / Implementation.
+   Not a CS leader &mdash; that is a commercial, relationship-management skill set and it is a different hire,
+   which the model already accounts for separately.</p>
+
+  <h4>Their week, concretely</h4>
+  <ul>
+   <li>Runs a team of implementation consultants, each carrying <b>8&ndash;15 customer onboardings at once</b>, all at different stages</li>
+   <li>Weekly portfolio review: where every account sits, what is blocked, who is overloaded</li>
+   <li>Owns the playbook &mdash; stages, templates, checklists, standard integrations, the QA gate before go-live</li>
+   <li>Takes escalations when an implementation goes sideways</li>
+   <li><b>Pushes recurring friction back into the product</b> &mdash; &ldquo;every customer hits this, stop making us solve it by hand&rdquo;</li>
+   <li>Hires and trains consultants; owns how fast a new one becomes productive</li>
+   <li>Reports weekly on time-to-live, cost-to-implement, services margin, and % of implementations on time</li>
+  </ul>
+  <div class="callout"><p>That fifth point is the one that matters most for you. Pushing friction back into the
+   product is <b>standard behaviour</b> in this role &mdash; it is exactly the loop you described where you invent,
+   Geri makes it work once, and then it has to be made deliverable 50 times. A PS leader has done that loop
+   for a living. A dev-shop ops leader has usually never had a product to push anything back into.</p></div>
+
+  <h4>Do they own retention and churn?</h4>
+  <p><b>They own the leading indicator, not the number.</b> PS leaders are measured on time-to-value and
+   onboarding quality precisely <em>because</em> those are the biggest single predictor of whether a customer
+   renews. But they do not run the renewal conversation, the QBR, or the upsell. That is Client Success.</p>
+  <p>So: a good Head of Delivery reduces churn structurally, by making sure every client gets to value fast and
+   consistently. They do not reduce it by managing relationships. If you find yourself asking them to save an
+   account, something has gone wrong upstream.</p>
+
+  <div class="callout warn"><p><b>One wrinkle specific to your model.</b> Your delivery org does not only onboard &mdash;
+   it also carries <b>permanent monthly upkeep</b> on every live client. That is more managed-services shaped than
+   pure SaaS implementation. The ideal candidate is therefore PS-primary <b>with some managed-services or
+   post-launch-ownership exposure</b>, not someone who has only ever handed off at go-live and walked away.</p></div>
+
+  <h4>Why SaaS beats a web dev shop</h4>
+  <p>It is not about skills. It is about <b>which direction their incentive has always pointed.</b></p>
+  <p><b>A dev shop makes money from utilisation.</b> Revenue is hours &times; rate. The ops leader keeps people
+   billable and stops fixed bids blowing up. Repeatability is actively against their interest &mdash; a dev shop
+   that productises loses the ability to charge custom prices. The model needs every job to be different enough
+   to justify a bespoke quote.</p>
+  <p><b>A SaaS implementation team is a cost centre attached to recurring revenue.</b> Their mandate every quarter
+   is: make onboarding cheaper and faster, because it is dragging gross margin and delaying time-to-value.
+   They are measured on cost-to-serve going <b>down</b>. They are structurally paid to eliminate their own work.</p>
+  <div class="callout"><p>Your model only works if cost per client falls. Hire the person whose entire career
+   has been that one metric.</p></div>
+  <ul>
+   <li><b>Retention orientation.</b> SaaS PS people connect onboarding quality to churn by reflex. A dev shop
+    delivers and moves on &mdash; the project <em>ending</em> is success. Your model has retention as one of its
+    largest levers.</li>
+   <li><b>The deliverable is bounded.</b> In SaaS PS the product exists; implementation is configuration,
+    integration, training and change management inside known bounds. That is your shape exactly. Dev shops
+    invent the deliverable each time.</li>
+   <li><b>Parallelism at the individual level.</b> A SaaS implementation consultant carries 8&ndash;15 concurrent
+    accounts as a matter of routine. Dev shop ICs carry one or two, deep &mdash; and their ops leaders <em>protect</em>
+    them from parallelism, because context-switching wrecks deep engineering. Opposite instinct to the one you need.</li>
+   <li><b>Stage-gated pipelines.</b> They run onboarding as a board with stages and work-in-progress limits, and
+    manage the portfolio rather than the project. That is literally the mechanic in this model.</li>
+  </ul>
+
+  <h4>Which SaaS, specifically</h4>
+  <table>
+   <thead><tr><th></th><th>Look for</th><th>Why</th></tr></thead>
+   <tbody>
+    <tr><td><b>Sector</b></td><td>Technical / infrastructure B2B &mdash; data platforms, iPaaS and integration tools, dev tools, API-first products, automation platforms, security tooling</td><td>Implementations there involve real API work, data mapping, custom logic</td></tr>
+    <tr><td><b>Avoid</b></td><td>CRM, martech, HR SaaS</td><td>Implementation is config and training. Too shallow &mdash; they will lose the room with your developers</td></tr>
+    <tr><td><b>Avoid</b></td><td>Salesforce / SAP / enterprise</td><td>12-month implementations with partner ecosystems. Wrong tempo, wrong economics</td></tr>
+    <tr><td><b>Company size</b></td><td>$10M&ndash;$100M ARR</td><td>Big enough the playbook had to be real; small enough they <em>built</em> it rather than inherited it</td></tr>
+    <tr><td><b>Implementation shape</b></td><td>$10k&ndash;$50k, 4&ndash;12 weeks</td><td>Matches your $20k / 3-month build. $500k enterprise rollouts are the wrong tempo; $2k self-serve has no depth</td></tr>
+   </tbody>
+  </table>
+
+  <h4>Non-negotiables</h4>
+  <ul>
+   <li><b>Built a delivery playbook from zero</b> &mdash; not inherited, not &ldquo;improved&rdquo;. You have nothing but
+    what is in Geri&rsquo;s head; they start from scratch.</li>
+   <li><b>Can state cost-to-deliver before and after.</b> Two numbers. If they cannot quantify their own impact,
+    they did not own it.</li>
+   <li><b>Managed people who each carried multiple concurrent accounts.</b> Ask the number. &ldquo;Each consultant
+    carried 10&ndash;12&rdquo; is the answer you want.</li>
+   <li><b>Technical credibility.</b> Does not need to code. Must not be bluffable by a developer.</li>
+   <li><b>Has performance-managed someone out.</b> Their job is holding a quality bar. Someone who has never held
+    anyone accountable will not hold yours when it is inconvenient.</li>
+   <li><b>Produces an artifact on request</b> &mdash; a playbook, SOP or runbook they wrote. No artifact, no hire.
+    This role <em>is</em> writing things down.</li>
+  </ul>
+
+  <h4>Prior achievements &mdash; always a ratio with a before and after</h4>
+  <ul>
+   <li>Onboarding time X weeks &rarr; Y weeks</li>
+   <li>Accounts per consultant X &rarr; Y</li>
+   <li>Services gross margin X% &rarr; Y%</li>
+   <li>Time-to-first-value X days &rarr; Y days</li>
+   <li>&ldquo;Took us from 40 to 300 customers without tripling the team&rdquo;</li>
+  </ul>
+  <p>Never &ldquo;delivered 200 projects&rdquo;. That is volume, not improvement.</p>
+
+  <h4>Personality</h4>
+  <ul>
+   <li><b>Systems thinker, not firefighter.</b> The failure mode is someone brilliant in a crisis who therefore
+    keeps creating them. You want someone slightly boring who prevents them.</li>
+   <li><b>Low ego about the work, high ego about the system.</b> They must not want to be the hero who saves the account.</li>
+   <li><b>Teacher instinct.</b> Half the job is capability transfer. Plenty of excellent operators cannot transfer skill.</li>
+   <li><b>Tolerant of ambiguity, intolerant of disorder.</b> The crux for you specifically: you will keep changing
+    what the product is and they must not freeze &mdash; but they must also refuse to let delivery be improvised.</li>
+  </ul>
+
+  <h4>The decoys &mdash; what will trick you</h4>
+  <div class="decoy"><div class="dh">Impressive logos</div><p>A Director of PS at Salesforce inherited a machine
+   200 people built over 15 years. They can <em>run</em> a machine. They have never <em>built</em> one. The person from
+   a company you have never heard of who built it from zero is worth more and costs less.</p></div>
+  <div class="decoy"><div class="dh">Team size managed</div><p>&ldquo;I managed 40&rdquo; beats &ldquo;I managed 6&rdquo;
+   in your gut, and is wrong. Managing 40 in a mature org is a different job. You want 5&ndash;15 in a scrappy one.</p></div>
+  <div class="decoy"><div class="dh">Domain expertise in AI or agencies</div><p>Feels safe. Domain is learnable in a
+   quarter; industrialisation takes a decade. Never trade the rare skill for the common one.</p></div>
+  <div class="decoy"><div class="dh">PMP / Scrum / Agile certifications</div><p>These certify <em>project</em> delivery
+   &mdash; the wrong discipline. Mildly negative signal: it usually means they think in projects.</p></div>
+  <div class="decoy"><div class="dh">Client-facing polish</div><p>They will meet clients occasionally. The job is
+   roughly 85% internal. Do not select for whoever interviews best.</p></div>
+  <div class="decoy"><div class="dh">&ldquo;I have worked closely with developers&rdquo;</div><p>Everyone says this. What
+   matters is whether developers <em>respected</em> them. Take a developer reference specifically and ask that person one
+   question: <em>did you follow their process when nobody was checking?</em></p></div>
+  <div class="decoy"><div class="dh">Ex-agency founder</div><p>Feels perfect &mdash; they ran a services business. But
+   they are usually generalists who did everything, and they want to run a company, not a function. High risk of role
+   conflict with you.</p></div>
+  <div class="decoy"><div class="dh">Willingness to be hands-on</div><p><b>This is the one that will actually get you.</b>
+   It sounds like exactly the right attitude for a small company. It is the primary failure mode: the person who does it
+   themselves instead of building the system, becomes indispensable, and quietly becomes your bottleneck. You want someone
+   <em>capable</em> of hands-on but <em>allergic</em> to it as a habit.</p></div>
+
+  <h4>How to test them</h4>
+  <div class="qbox"><div class="q">&ldquo;Walk me through a delivery process you took from bespoke to repeatable.
+   What did it cost before, what after, and how long did it take?&rdquo;</div>
+   <p>The core screen. Project people tell a story. Industrialisers give you two numbers.</p></div>
+  <div class="qbox"><div class="q">&ldquo;Tell me about a time you told a founder their idea could not be delivered
+   at scale &mdash; and what happened.&rdquo;</div>
+   <p>Weight this highest. If they have never done it they will be a passenger to your innovation, and you will end up
+    with designs that cannot be manufactured.</p></div>
+  <div class="qbox"><div class="q">&ldquo;What is the first thing you do here?&rdquo;</div>
+   <p>&ldquo;Run a few onboardings myself to learn the work&rdquo; is right. &ldquo;Write a strategy document&rdquo; is weak.
+    &ldquo;Hire people&rdquo; is disqualifying.</p></div>
+  <div class="qbox"><div class="q">Paid work-sample &mdash; best of all</div>
+   <p>Give them a real recording and notes from one of your onboardings and ask them to spec how they would make it
+    repeatable. Half a day, a few hundred dollars. It will tell you more than every interview combined.</p></div>
+
+  <h4>What they cost</h4>
+  <table>
+   <thead><tr><th>Tier</th><th>US base</th><th>Loaded / mo</th></tr></thead>
+   <tbody>
+    <tr><td>Step-up hire &mdash; was #2 under a VP, ready for the seat</td><td>$110&ndash;140k</td><td>$11&ndash;15k</td></tr>
+    <tr><td><b>Proven Director of PS</b> &mdash; built playbooks, ran 8&ndash;15 people</td><td>$150&ndash;190k + bonus</td><td><b>$16&ndash;20k</b></td></tr>
+    <tr><td>VP-level, done it at scale</td><td>$190&ndash;250k+</td><td>$20&ndash;27k</td></tr>
+   </tbody>
+  </table>
+  <table>
+   <thead><tr><th>Offshore (contractor, add ~5% not 30%)</th><th>Salary</th><th>/ mo</th><th>Timezone</th></tr></thead>
+   <tbody>
+    <tr><td><b>LatAm</b> &mdash; Argentina, Colombia, Brazil, Mexico</td><td>$70&ndash;110k</td><td><b>$6&ndash;9.5k</b></td><td>aligned with US</td></tr>
+    <tr><td>Eastern Europe</td><td>$65&ndash;95k</td><td>$5.7&ndash;8.3k</td><td>awkward for US calls</td></tr>
+    <tr><td>South Africa</td><td>$55&ndash;85k</td><td>$4.8&ndash;7.4k</td><td>EU-friendly</td></tr>
+    <tr><td>Philippines</td><td>$45&ndash;75k</td><td>$3.9&ndash;6.5k</td><td>hardest</td></tr>
+   </tbody>
+  </table>
+  <p>LatAm is the sweet spot &mdash; this person ends up on client escalation calls and your clients are US founders.</p>
+
+  <div class="callout crit"><p><b>The salary is noise. Stop optimising it.</b> At the month this hire triggers, the
+   entire gap between your cheapest and most expensive option is roughly <b>2% of that month&rsquo;s cash</b>. Meanwhile
+   changing one lever they own &mdash; how many builds a delivery person can carry, 1 to 3 &mdash; swung payroll
+   <b>$64k a month at identical revenue</b>. A good one is worth about six times their entire salary. A mediocre one costs
+   you the same amount permanently, and you will never see it as a line item &mdash; it just shows up as needing 13
+   delivery people where 5 would do.</p></div>
+
+  <h4>How to structure the offer</h4>
+  <p><b>Base $10&ndash;12k plus a real share of delivery gross margin or cost-to-deliver reduction.</b></p>
+  <p>It is affordable early. But mainly it is a <b>filter</b>: a project manager negotiates the base up, because they do
+   not believe they control the outcome. An industrialiser takes the upside, because they know they can move the number.
+   You will learn which one you are talking to in about ninety seconds, and the test costs you nothing.</p>
+  <p>You already have the baseline to measure against &mdash; hours per build, builds per person. This is the rare case
+   where a margin share is cleanly measurable rather than an argument waiting to happen.</p>
+
+  <div class="callout warn"><p><b>Timing.</b> Do not make this your first delivery hire &mdash; you cannot hire someone to
+   manage a team that does not exist. But <b>start writing down what you and Geri do on every onboarding, from now.</b> If
+   they arrive to no documentation, you are paying a Director&rsquo;s salary for six months of archaeology.</p></div>
+ </div>
+
+ <!-- ============ ONBOARDING MANAGER ============ -->
+ <div class="role" id="r2" hidden>
+  <h3>Onboarding manager</h3>
+  <p class="lead">The individual contributor who carries several client builds at once. The Head of Delivery&rsquo;s
+   job is to make these people fast; this is the seat being made fast.</p>
+  <div class="rolemeta">
+   <div><div class="k">Model lever</div><div class="v" id="t_delcost">&mdash;</div><div class="k" style="margin-top:4px">salary each</div></div>
+   <div><div class="k">First hire</div><div class="v" id="t_delwhen">&mdash;</div><div class="k" style="margin-top:4px">in the current arc</div></div>
+   <div><div class="k">Builds each carries</div><div class="v" id="t_wipper">&mdash;</div><div class="k" style="margin-top:4px">concurrently</div></div>
+   <div><div class="k">Hours added</div><div class="v" id="t_hirehrs">&mdash;</div><div class="k" style="margin-top:4px">effective, per month</div></div>
+  </div>
+  <div class="stub"><p><b>Not yet specced to the same depth.</b> What the model knows so far: they add effective delivery
+   hours, they carry a fixed number of concurrent builds, and each additional hire is slightly less effective than the last
+   because of coordination overhead &mdash; which a manager hire resets.</p>
+   <p style="margin-top:10px">The open question worth answering before hiring one: <b>is this a developer who can talk to
+   clients, or a client-facing implementer who can code?</b> The model currently assumes one person does both, which may
+   not survive contact with reality.</p></div>
+ </div>
+
+ <!-- ============ AI REVENUE ARCHITECT ============ -->
+ <div class="role" id="r3" hidden>
+  <h3>AI Revenue Architect</h3>
+  <p class="lead">Runs the paid audit and closes the build. Not a closer with a script &mdash; someone who can sit with a
+   founder, diagnose where the revenue engine is leaking, and architect the fix credibly enough to be trusted with it.</p>
+  <div class="rolemeta">
+   <div><div class="k">Base</div><div class="v" id="t_diagbase">&mdash;</div><div class="k" style="margin-top:4px">per month</div></div>
+   <div><div class="k">Audits / week</div><div class="v" id="t_diagaud">&mdash;</div><div class="k" style="margin-top:4px">their capacity</div></div>
+   <div><div class="k">Closes at</div><div class="v" id="t_diagclose">&mdash;</div><div class="k" style="margin-top:4px">of your rate</div></div>
+   <div><div class="k">First hire</div><div class="v" id="t_diagwhen">&mdash;</div><div class="k" style="margin-top:4px">in the current arc</div></div>
+  </div>
+  <div class="stub"><p><b>Not yet specced to the same depth.</b> What the model knows: they add audit capacity, close at a
+   discount to your own rate, and take a slice of upfront plus a capped slice of recurring. Their arrival is what unfreezes
+   growth once your own calendar becomes the constraint.</p>
+   <p style="margin-top:10px">The open question: <b>a closer who learned the architecture, or a technical person who learned
+   to close?</b> The model assumes the latter is more likely to work, since the audit has to be genuinely diagnostic to be
+   worth $897 &mdash; but that has not been pressure-tested.</p></div>
+ </div>
+
+ <!-- ============ CLIENT SUCCESS ============ -->
+ <div class="role" id="r4" hidden>
+  <h3>Client Success</h3>
+  <p class="lead">Owns the relationship after go-live &mdash; adoption, renewal, expansion. A different function and a
+   different person from the Head of Delivery, who owns getting them live.</p>
+  <div class="rolemeta">
+   <div><div class="k">Salary</div><div class="v" id="t_cscost">&mdash;</div><div class="k" style="margin-top:4px">per month</div></div>
+   <div><div class="k">One hire per</div><div class="v" id="t_csper">&mdash;</div><div class="k" style="margin-top:4px">live clients</div></div>
+   <div><div class="k">First hire</div><div class="v" id="t_cswhen">&mdash;</div><div class="k" style="margin-top:4px">in the current arc</div></div>
+   <div><div class="k">Retention assumed</div><div class="v" id="t_ret">&mdash;</div><div class="k" style="margin-top:4px">months</div></div>
+  </div>
+  <div class="stub"><p><b>Not yet specced to the same depth.</b> What the model knows: headcount scales with live client
+   count, on the principle that retention has to be staffed rather than hoped for.</p>
+   <p style="margin-top:10px">The open question, and it is a real one: <b>the model treats retention as a fixed input, not
+   as something this hire improves.</b> If a good CS person moves retention from 6 months to 12, they pay for themselves many
+   times over &mdash; but nothing in the model currently represents that, so their cost shows up without their benefit.</p></div>
+ </div>
+</div><!-- /p6 -->
+
 </div>
 
 <script>
@@ -2021,8 +2331,42 @@ function renderPhases(){
    last4.repTeam+"</b> rep"+(last4.repTeam===1?"":"s")+" and <b>"+last4.delTeam+"</b> on delivery.";}
 }
 
+// ---- Talent tab: keep the numbers in the role specs tied to the live model ----
+function renderTalent(){
+ if(!$("t_mgrcost"))return;
+ var v=V(), R=fullSim(v).rows;
+ var at=function(f){var i=R.findIndex(f);return i<0?null:R[i]};
+ var set=function(id,txt){var e=$(id); if(e)e.textContent=txt};
+ var mo=function(r){return r?("M"+r.m):"not in arc"};
+ var mgr=at(function(r){return r.mgrTeam>0});
+ set("t_mgrcost",money(v.mgrCost)+"/mo");
+ set("t_mgrwhen",mo(mgr));
+ set("t_mgrpct",mgr?((v.mgrCost/Math.max(mgr.cash,1))*100).toFixed(1)+"%":"\u2014");
+ set("t_mgrper","every "+v.mgrPer);
+ set("t_delcost",money(v.hireCost)+"/mo");
+ set("t_delwhen",mo(at(function(r){return r.delTeam>0})));
+ set("t_wipper",String(v.wipPerHire));
+ set("t_hirehrs",Math.round(v.hireHrs*v.hireEff/100)+" hrs");
+ set("t_diagbase",money(v.diagBase)+"/mo");
+ set("t_diagaud",v.diagAud+" / wk");
+ set("t_diagclose",v.diagClose+"%");
+ set("t_diagwhen",mo(at(function(r){return r.diagTeam>0})));
+ set("t_cscost",money(v.csCost)+"/mo");
+ set("t_csper","every "+v.csPer);
+ set("t_cswhen",mo(at(function(r){return r.csTeam>0})));
+ set("t_ret",v.retention+" mo");
+}
+var ROLE_IDS=["r1","r2","r3","r4"];
+document.querySelectorAll('.subtabs button[data-r]').forEach(function(b){
+ b.addEventListener("click",function(){
+  ROLE_IDS.forEach(function(x){var el=$(x); if(el)el.hidden=(x!==b.dataset.r)});
+  document.querySelectorAll('.subtabs button[data-r]').forEach(function(o){
+   o.setAttribute("aria-selected",o===b?"true":"false")});
+  window.scrollTo({top:0,behavior:"smooth"});
+ })});
+
 var _r=render;
-render=function(){_r();tagLabels();try{renderPhases()}catch(e){}};
+render=function(){_r();tagLabels();try{renderPhases()}catch(e){}try{renderTalent()}catch(e){}};
 
 IDS.forEach(function(i){$(i).addEventListener("input",function(){
   markCustom();
@@ -2035,18 +2379,18 @@ document.querySelectorAll(".presets button[data-preset]").forEach(function(b){
  b.addEventListener("click",function(){applyPreset(b.dataset.preset)})});
 
 installTips();
-var PANEL_IDS=["p1","p2","p3","p4","p5"];
+var PANEL_IDS=["p1","p2","p3","p4","p5","p6"];
 function showTab(id){
  PANEL_IDS.forEach(function(x){var el=$(x); if(el)el.hidden=(x!==id)});
  document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
   b.setAttribute("aria-selected",b.dataset.p===id?"true":"false")});
- document.querySelector(".presets").style.visibility=(id==="p5")?"hidden":"visible";
+ document.querySelector(".presets").style.visibility=(id==="p5"||id==="p6")?"hidden":"visible";
  render();
 }
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0820-2214";
+var BUILD_ID="0822-1940";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
