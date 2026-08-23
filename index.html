@@ -93,7 +93,8 @@ h1{font-size:clamp(26px,3.6vw,36px);font-weight:700;letter-spacing:-.02em;margin
 .decoy .dh{font-weight:600;color:var(--crit);margin-bottom:5px}
 .decoy p{margin:0;font-size:13px}
 .qbox{background:var(--surface-2);border:1px solid var(--rule);border-radius:5px;padding:14px 16px;margin-bottom:11px}
-.qbox .q{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--ink);margin-bottom:6px}
+.qbox .qhead{display:block;font-family:"Source Serif 4",Georgia,serif;font-size:15px;line-height:1.45;
+ color:var(--ink);margin-bottom:6px;font-weight:600}
 .qbox p{margin:0;font-size:13px}
 .titles{margin:10px 0 16px}
 .titles .tg{margin-bottom:14px}
@@ -1415,7 +1416,7 @@ td.pause{color:var(--crit)}
   <h4>What that looks like in practice</h4>
   <p>Three companies in your orbit, so the picture is concrete.</p>
 
-  <div class="qbox"><div class="q">Segment (now Twilio Segment) &mdash; customer data platform</div>
+  <div class="qbox"><div class="qhead">Segment (now Twilio Segment) &mdash; customer data platform</div>
    <p><b>What implementation involved:</b> brutal, and deeply technical. Every customer needed event tracking installed
     across their website, mobile apps and servers; a naming schema agreed so &ldquo;signup&rdquo; meant the same thing
     everywhere; then dozens of downstream destinations wired up and validated. Early on this was effectively a consulting
@@ -1426,7 +1427,7 @@ td.pause{color:var(--crit)}
    <p style="margin-top:8px"><b>Why it maps:</b> this is your problem almost exactly. Technical work, every client&rsquo;s
     stack slightly different, and the whole margin question is whether you industrialise it or do it by hand forever.</p></div>
 
-  <div class="qbox"><div class="q">Workato / Tray.io &mdash; enterprise automation and integration platforms</div>
+  <div class="qbox"><div class="qhead">Workato / Tray.io &mdash; enterprise automation and integration platforms</div>
    <p><b>What implementation involved:</b> solutions architects building actual workflows for customers. Discovery of the
     customer&rsquo;s process, mapping it onto the platform, building it, testing, handover, then training the customer&rsquo;s
     team to maintain it.</p>
@@ -1435,7 +1436,7 @@ td.pause{color:var(--crit)}
     difference is that you build on your own stack rather than selling a platform. Someone who ran delivery at an iPaaS
     company has done your job with a different logo on it.</p></div>
 
-  <div class="qbox"><div class="q">Gong &mdash; revenue intelligence</div>
+  <div class="qbox"><div class="qhead">Gong &mdash; revenue intelligence</div>
    <p><b>What implementation involved:</b> CRM integration and field mapping, connecting the dialer, calendar and
     conferencing, configuring trackers and scorecards, then rolling it out to a sales team and getting them to actually
     use it.</p>
@@ -1509,17 +1510,17 @@ td.pause{color:var(--crit)}
    <em>capable</em> of hands-on but <em>allergic</em> to it as a habit.</p></div>
 
   <h4>How to test them</h4>
-  <div class="qbox"><div class="q">&ldquo;Walk me through a delivery process you took from bespoke to repeatable.
+  <div class="qbox"><div class="qhead">&ldquo;Walk me through a delivery process you took from bespoke to repeatable.
    What did it cost before, what after, and how long did it take?&rdquo;</div>
    <p>The core screen. Project people tell a story. Industrialisers give you two numbers.</p></div>
-  <div class="qbox"><div class="q">&ldquo;Tell me about a time you told a founder their idea could not be delivered
+  <div class="qbox"><div class="qhead">&ldquo;Tell me about a time you told a founder their idea could not be delivered
    at scale &mdash; and what happened.&rdquo;</div>
    <p>Weight this highest. If they have never done it they will be a passenger to your innovation, and you will end up
     with designs that cannot be manufactured.</p></div>
-  <div class="qbox"><div class="q">&ldquo;What is the first thing you do here?&rdquo;</div>
+  <div class="qbox"><div class="qhead">&ldquo;What is the first thing you do here?&rdquo;</div>
    <p>&ldquo;Run a few onboardings myself to learn the work&rdquo; is right. &ldquo;Write a strategy document&rdquo; is weak.
     &ldquo;Hire people&rdquo; is disqualifying.</p></div>
-  <div class="qbox"><div class="q">Paid work-sample &mdash; best of all</div>
+  <div class="qbox"><div class="qhead">Paid work-sample &mdash; best of all</div>
    <p>Give them a real recording and notes from one of your onboardings and ask them to spec how they would make it
     repeatable. Half a day, a few hundred dollars. It will tell you more than every interview combined.</p></div>
 
@@ -2154,18 +2155,18 @@ td.pause{color:var(--crit)}
   </ul>
 
   <h4>Four things worth stealing</h4>
-  <div class="qbox"><div class="q">1. Per-unit pricing instead of a flat monthly fee</div>
+  <div class="qbox"><div class="qhead">1. Per-unit pricing instead of a flat monthly fee</div>
    <p>MSPs charge per seat or per device, so <b>their revenue grows automatically as the client grows</b>. A flat fee does
     not. If a client doubles their sales team, your fee arguably should move &mdash; that is expansion revenue with no sales
     conversation, and it converts your client&rsquo;s growth into yours. It is also a far better retention story than
     hosting alone: you are priced like a partner rather than a vendor.</p></div>
-  <div class="qbox"><div class="q">2. Tiered service levels</div>
+  <div class="qbox"><div class="qhead">2. Tiered service levels</div>
    <p>Bronze / silver / gold gives an upsell path that lives entirely inside the menu. No bespoke work required to grow
     an account.</p></div>
-  <div class="qbox"><div class="q">3. The vCIO function</div>
+  <div class="qbox"><div class="qhead">3. The vCIO function</div>
    <p>Good MSPs run a &ldquo;virtual CIO&rdquo; doing quarterly strategic planning with the client. That is the Client
     Success / TAM seat, and their version is worth copying in detail rather than reinventing.</p></div>
-  <div class="qbox"><div class="q">4. Monthly value reporting</div>
+  <div class="qbox"><div class="qhead">4. Monthly value reporting</div>
    <p>MSPs learned the hard way that doing the job perfectly makes you invisible, and invisible is a churn risk. If nothing
     breaks and nobody reports on what was prevented, the client starts wondering what they pay for.</p></div>
 
@@ -3548,13 +3549,14 @@ function showTab(id){
  PANEL_IDS.forEach(function(x){var el=$(x); if(el)el.hidden=(x!==id)});
  document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
   b.setAttribute("aria-selected",b.dataset.p===id?"true":"false")});
- document.querySelector(".presets").style.visibility=(id==="p5"||id==="p6"||id==="p7"||id==="p8")?"hidden":"visible";
+ document.querySelectorAll('.presets button[data-preset]').forEach(function(b){
+  b.style.display=(id==="p5")?"none":"";});
  render();
 }
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2305";
+var BUILD_ID="0822-2307";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
