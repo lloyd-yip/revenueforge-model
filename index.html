@@ -1089,9 +1089,73 @@ td.pause{color:var(--crit)}
    still exists whether the customer uses it or not. In your business, <b>the client&rsquo;s team using the workflow is the
    entire deliverable</b>. No adoption means there was never anything to retain. Adoption is not a nice-to-have layered on
    top of delivery here &mdash; it <em>is</em> delivery.</p>
-   <p style="margin-top:8px">Which exposes a gap in this model: <b>retention is a fixed input</b> you set with a slider.
-   Adoption is the thing that would actually move it, and nothing here represents that. So the model charges you for the
-   people who drive adoption without ever crediting them with the retention they would buy.</p></div>
+   <p style="margin-top:8px">We deliberately <b>do not model adoption as a number</b>. It is too situational to put a
+    slider on, and a false precision here would be worse than an honest gap. It is handled where it actually lives &mdash;
+    in who owns it, and in the handoff below.</p></div>
+
+  <h4>How the Head of Delivery thinks about adoption</h4>
+  <p>The distinguishing belief, and it is worth testing for directly in the interview:
+   <b>adoption is a delivery outcome, not a customer-success favour.</b></p>
+  <p>A weak candidate treats adoption as somebody else&rsquo;s problem that starts after their work ends. A strong one
+   designs for it during the build, because they know the two are the same thing:</p>
+  <ul>
+   <li><b>At design time</b> they ask <em>who on the client&rsquo;s side will operate this, and what is their actual skill
+    level?</em> A workflow that only the client&rsquo;s most technical person can run is a workflow that dies when that
+    person is busy.</li>
+   <li><b>During the build</b> they decide what the client operates versus what stays with you. Getting that line wrong in
+    either direction is fatal &mdash; too much on them and it goes unused, too much on you and your upkeep hours never fall.</li>
+   <li><b>At handover</b> they own the training. Not a recorded walkthrough &mdash; the client&rsquo;s people doing the thing,
+    with the delivery person watching and correcting.</li>
+   <li><b>For the first few weeks after go-live</b> they stay close, watching whether it is actually being run, and fixing
+    friction fast while attention is still high.</li>
+  </ul>
+  <div class="callout"><p><b>The tell in an interview:</b> ask what &ldquo;done&rdquo; meant on their last team. If the answer
+   is a technical milestone &mdash; live, deployed, in production &mdash; they are a delivery manager. If it is a usage
+   condition, they are what you need.</p></div>
+
+  <h4>The handoff &mdash; where delivery ends and client success begins</h4>
+  <p>This is the single most important boundary in the org and the one most companies leave undefined. Undefined means
+   drift, and drift means churn nobody sees coming.</p>
+  <table>
+   <thead><tr><th></th><th>Head of Delivery</th><th>Client Success</th></tr></thead>
+   <tbody>
+    <tr><td><b>Owns</b></td><td>Getting them live and getting them <em>using it</em></td><td>Keeping them using it, and growing the account</td></tr>
+    <tr><td><b>Period</b></td><td>Signing &rarr; adoption threshold</td><td>Adoption threshold &rarr; forever</td></tr>
+    <tr><td><b>Measured on</b></td><td>Time-to-value, cost-to-deliver, % hitting threshold on time</td><td>Retention, expansion, usage staying alive</td></tr>
+    <tr><td><b>Fails by</b></td><td>Declaring done when the tech works</td><td>Not noticing usage decay until renewal</td></tr>
+   </tbody>
+  </table>
+
+  <p><b>The trigger is a usage condition, not a date and not a milestone.</b> Something like: <em>the client&rsquo;s own team
+   has run this unaided for three consecutive weeks.</em> Set the specific bar per build type. Until it is met, the client
+   stays on the delivery board and keeps consuming a slot.</p>
+
+  <div class="callout"><p><b>What actually gets handed over</b> &mdash; if this is a Slack message rather than a document,
+   the handoff has not happened:</p></div>
+  <ul>
+   <li>What was built, and specifically <b>what was customised</b> versus standard</li>
+   <li>Who on the client side was trained, and honestly how capable each of them is</li>
+   <li>The usage signal to watch, and what &ldquo;healthy&rdquo; looks like for this particular client</li>
+   <li>Known fragilities &mdash; what will break first, and what to do when it does</li>
+   <li>Anything promised in the sale that has not yet been delivered</li>
+  </ul>
+  <p><b>Held as a live meeting with the client&rsquo;s champion present</b>, not a document thrown over a wall. The champion
+   needs to meet the person who now owns them, or client success starts from zero relationship on an account they did not build.</p>
+
+  <p><b>What delivery keeps after handoff:</b> the monthly upkeep hours and technical escalation. They do not vanish &mdash;
+   your model has them attached to every live client permanently. What changes is that they are no longer <em>driving</em>;
+   they are responding.</p>
+
+  <div class="callout crit"><p><b>Four ways this handoff fails, all of them common:</b></p>
+   <p style="margin-top:8px">&bull; <b>No defined trigger</b> &mdash; the handoff never formally happens, both sides assume
+    the other has it, and the account is orphaned in plain sight.<br>
+    &bull; <b>Handed off on a date</b> &mdash; &ldquo;90 days post-signing&rdquo; hands over non-adopted clients on schedule,
+    which is worse than not handing off at all.<br>
+    &bull; <b>No artifact</b> &mdash; client success starts blind, asks the client questions the client already answered,
+    and burns the credibility delivery built.<br>
+    &bull; <b>Delivery disappears completely</b> &mdash; technical questions bounce back and forth, the client concludes
+    nobody owns them, and you have manufactured a churn risk out of pure process.</p></div>
+
 
   <div class="callout warn"><p><b>One wrinkle specific to your model.</b> Your delivery org does not only onboard &mdash;
    it also carries <b>permanent monthly upkeep</b> on every live client. That is more managed-services shaped than
@@ -1343,19 +1407,100 @@ td.pause{color:var(--crit)}
  <!-- ============ CLIENT SUCCESS ============ -->
  <div class="role" id="r4" hidden>
   <h3>Client Success</h3>
-  <p class="lead">Owns the relationship after go-live &mdash; adoption, renewal, expansion. A different function and a
-   different person from the Head of Delivery, who owns getting them live.</p>
+  <p class="lead">Owns the client after the adoption threshold is met: keeping the workflows in use, catching decay before
+   it becomes churn, and finding the next build. A different function and a different person from the Head of Delivery,
+   who owns getting them there.</p>
   <div class="rolemeta">
    <div><div class="k">Salary</div><div class="v" id="t_cscost">&mdash;</div><div class="k" style="margin-top:4px">per month</div></div>
    <div><div class="k">One hire per</div><div class="v" id="t_csper">&mdash;</div><div class="k" style="margin-top:4px">live clients</div></div>
    <div><div class="k">First hire</div><div class="v" id="t_cswhen">&mdash;</div><div class="k" style="margin-top:4px">in the current arc</div></div>
    <div><div class="k">Retention assumed</div><div class="v" id="t_ret">&mdash;</div><div class="k" style="margin-top:4px">months</div></div>
   </div>
-  <div class="stub"><p><b>Not yet specced to the same depth.</b> What the model knows: headcount scales with live client
-   count, on the principle that retention has to be staffed rather than hoped for.</p>
-   <p style="margin-top:10px">The open question, and it is a real one: <b>the model treats retention as a fixed input, not
-   as something this hire improves.</b> If a good CS person moves retention from 6 months to 12, they pay for themselves many
-   times over &mdash; but nothing in the model currently represents that, so their cost shows up without their benefit.</p></div>
+
+  <h4>What this role is not</h4>
+  <p>Not a classic SaaS customer success manager running quarterly business reviews and a renewal calendar. That version of
+   the job assumes a product the customer logs into daily and a renewal date twelve months out. Neither is true here.</p>
+  <p>Your clients are founders of $300k&ndash;$10M businesses. They did not buy software. <b>They bought a system that
+   is supposed to run without them thinking about it</b> &mdash; which means the failure mode is silent. Nothing errors.
+   Nobody complains. The workflow just quietly stops being used, and six weeks later they cannot tell you what they are
+   paying for.</p>
+  <div class="callout crit"><p><b>The whole job is catching silence early.</b> An unhappy client tells you. A disengaged
+   one does not &mdash; they simply cancel, and you find out on the invoice.</p></div>
+
+  <h4>What they own</h4>
+  <ul>
+   <li><b>Usage stays alive.</b> Someone is running the workflows, and it is still producing the outcome that was sold.</li>
+   <li><b>The champion risk.</b> The person who bought and drove this internally leaves, changes role, or gets busy. This is
+    the single most common cause of quiet churn in any implemented system, and it is entirely detectable in advance.</li>
+   <li><b>Proving the value out loud.</b> Founders forget. Somebody has to periodically show them the number the system
+    produced, in their language, or the fee starts feeling arbitrary.</li>
+   <li><b>The next build.</b> Expansion is not a separate sales motion here &mdash; it is noticing that a client who
+    automated one thing has an obvious second thing, and routing that back to you or an architect.</li>
+   <li><b>The early-warning signal.</b> They are the ones who tell delivery that a build type keeps decaying after month
+    four, which is a delivery problem wearing a retention costume.</li>
+  </ul>
+
+  <h4>The signals they watch</h4>
+  <p>Concrete, not vibes. If they cannot tell you these per client from memory, they are not doing the job:</p>
+  <ul>
+   <li>Is the workflow running, and at what volume compared to month one?</li>
+   <li>Who touched it last, and when?</li>
+   <li>Is the trained operator still in the seat?</li>
+   <li>How long since the client initiated contact, rather than responding to us?</li>
+   <li>Has anything in their business changed that the build assumed &mdash; new CRM, new team, new offer?</li>
+  </ul>
+  <div class="callout warn"><p><b>Build the ability to see this into the product.</b> If checking usage means asking the
+   client, you will not do it consistently and you will be relying on the client to self-report their own disengagement.
+   That is not a metric, it is a hope. This is a real argument for instrumenting what you build from the first client
+   onward, even crudely.</p></div>
+
+  <h4>Non-negotiables</h4>
+  <ul>
+   <li><b>Enough technical literacy to tell whether a workflow is being used correctly</b> &mdash; not just whether the
+    client says they are happy. Cannot be a pure relationship person.</li>
+   <li><b>Credible in a conversation with a founder.</b> Your clients run real businesses and will not tolerate an account
+    manager reading from a script.</li>
+   <li><b>Proactive by temperament.</b> The entire job is contacting people who have not contacted you. Someone who works
+    from an inbox will fail silently and look busy the whole time.</li>
+   <li><b>Comfortable delivering bad news internally</b> &mdash; telling delivery that their build is decaying, and telling
+    you that something you sold is not landing.</li>
+  </ul>
+
+  <h4>Personality</h4>
+  <ul>
+   <li><b>Systematic, not charming.</b> Charm keeps a dying account pleasant. A checklist run every month catches it while
+    it is still saveable. Hire the second one.</li>
+   <li><b>Genuinely curious about the client&rsquo;s business</b>, because expansion comes from noticing an adjacent problem,
+    not from asking &ldquo;is there anything else we can help with?&rdquo;</li>
+   <li><b>Tolerates repetition.</b> This job is the same five questions, every client, every month, forever. Someone who
+    needs novelty will drift into firefighting and stop doing the rounds &mdash; which is precisely when churn arrives.</li>
+  </ul>
+
+  <h4>The decoys</h4>
+  <div class="decoy"><div class="dh">Great with people</div><p>Table stakes and nearly meaningless. Everyone in this
+   function interviews warm. Ask instead what their <em>process</em> was for spotting an at-risk account before the client
+   raised anything. No process, no hire.</p></div>
+  <div class="decoy"><div class="dh">Big-logo enterprise CS experience</div><p>Enterprise CS is QBR choreography and
+   multi-stakeholder politics on annual contracts. Your clients are founders on monthly fees who will not attend a QBR.
+   Wrong muscle entirely.</p></div>
+  <div class="decoy"><div class="dh">Carried a big book of accounts</div><p>&ldquo;I managed 200 accounts&rdquo; usually means
+   an inbox and a renewal calendar. You want someone who carried fewer accounts with real depth on each.</p></div>
+  <div class="decoy"><div class="dh">Sales-adjacent CS</div><p>Someone comped mainly on expansion will chase the next
+   build and neglect the boring monthly checks that actually prevent churn. Expansion should be a happy consequence of
+   the rounds, not the reason for them.</p></div>
+
+  <h4>Timing and cost</h4>
+  <p>The model adds one hire per full complement of live clients, and until you reach that number the job is yours or the
+   delivery team&rsquo;s. That is correct early: <b>do not hire client success for your first handful of clients</b> &mdash;
+   you learn what actually causes decay by watching it yourself, and that knowledge is what makes the eventual hire
+   effective rather than guessing.</p>
+  <p>Cost is materially below the Head of Delivery. This is a strong nearshore role &mdash; the work is scheduled, systematic
+   and relationship-led rather than deeply technical &mdash; provided the timezone allows real conversations with US founders.</p>
+
+  <div class="callout warn"><p><b>Known incompleteness, stated honestly.</b> This model treats retention as a fixed input you
+   set with a slider. In reality this hire is the main thing that moves it &mdash; so the model charges you for them without
+   ever crediting the retention they buy. That is a deliberate choice: adoption and retention dynamics are too situational to
+   model without inventing false precision. Judge this hire on the ownership described above, not on anything the numbers say.</p></div>
  </div>
 </div><!-- /p6 -->
 
@@ -1540,7 +1685,9 @@ function fullSim(v){
    if(age>=v.billed && age<Math.min(v.retention,v.billed+v.diagRecMo))
     diagRecComm+=c.n*(v.reprice?curRec:(c.rec||v.recurring))*(c.diagShare||0)*(v.diagCommRec/100);});
   var diagComp=diagTeam*v.diagBase+diagUpComm+diagRecComm;
-  var csTeam=v.csPer>0?Math.ceil(live/v.csPer):0;   // retention has to be staffed
+  // one client-success hire per FULL csPer clients -- ceil() was hiring a $6k/mo CSM
+  // in month one for a single client
+  var csTeam=v.csPer>0?Math.floor(live/v.csPer):0;
   var csCostMo=csTeam*v.csCost;
   var payroll=del.filter(function(h){return m>=h.m}).length*v.hireCost + mgrTeam*v.mgrCost + diagComp + csCostMo;
    var net=cash-commission-payroll;
@@ -2480,7 +2627,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-1949";
+var BUILD_ID="0822-1954";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
