@@ -1057,6 +1057,42 @@ td.pause{color:var(--crit)}
    consistently. They do not reduce it by managing relationships. If you find yourself asking them to save an
    account, something has gone wrong upstream.</p>
 
+  <h4>Who owns adoption?</h4>
+  <p><b>It is split, and the split point is go-live.</b></p>
+  <ul>
+   <li><b>Head of Delivery owns adoption up to and through go-live</b> &mdash; the handover, the training, the
+    &ldquo;your team can actually operate this without us&rdquo; gate.</li>
+   <li><b>Client Success owns adoption after go-live</b> &mdash; ongoing usage, drift, the champion leaving, expansion.</li>
+  </ul>
+  <p>This is why serious implementation teams measure <b>time-to-<em>value</em></b>, not time-to-live. Working software
+   that nobody uses is not a delivered implementation, it is a delivered invoice.</p>
+
+  <div class="callout crit"><p><b>The handoff is where churn is manufactured.</b> The classic failure: delivery declares
+   victory at &ldquo;it works&rdquo;, client success inherits an account that never actually adopted, and nobody notices
+   until four months later when the renewal conversation lands and usage is flat. By then it is unrecoverable, and it will
+   look like a client success failure when it was a handoff failure.</p></div>
+
+  <p><b>The fix, and it is a one-line policy:</b> an implementation is not complete at go-live. It is complete when a
+   defined <b>adoption threshold</b> is met &mdash; something measurable, like <em>the client has run this themselves for
+   three consecutive weeks without our involvement</em>. Until then it stays on the delivery team&rsquo;s board and keeps
+   consuming a slot.</p>
+  <p>That single rule does three things: it stops delivery gaming the metric by declaring done early, it makes the handoff
+   an event rather than a drift, and &mdash; in this model &mdash; it correctly charges the cost of a slow-adopting client
+   to delivery capacity, where it actually falls.</p>
+
+  <div class="callout warn"><p><b>Your version is blurrier than standard SaaS.</b> Your delivery org never fully leaves
+   &mdash; every live client carries permanent monthly upkeep. So the delivery team stays in contact indefinitely, which
+   pushes more of the adoption burden onto them than a classic implementation team would carry. Worth being explicit about
+   in the job description, because a candidate from pure SaaS PS will assume they hand off and walk away.</p></div>
+
+  <div class="callout"><p><b>And the reason this matters more for you than for them:</b> at a SaaS company the product
+   still exists whether the customer uses it or not. In your business, <b>the client&rsquo;s team using the workflow is the
+   entire deliverable</b>. No adoption means there was never anything to retain. Adoption is not a nice-to-have layered on
+   top of delivery here &mdash; it <em>is</em> delivery.</p>
+   <p style="margin-top:8px">Which exposes a gap in this model: <b>retention is a fixed input</b> you set with a slider.
+   Adoption is the thing that would actually move it, and nothing here represents that. So the model charges you for the
+   people who drive adoption without ever crediting them with the retention they would buy.</p></div>
+
   <div class="callout warn"><p><b>One wrinkle specific to your model.</b> Your delivery org does not only onboard &mdash;
    it also carries <b>permanent monthly upkeep</b> on every live client. That is more managed-services shaped than
    pure SaaS implementation. The ideal candidate is therefore PS-primary <b>with some managed-services or
@@ -1098,6 +1134,44 @@ td.pause{color:var(--crit)}
     <tr><td><b>Implementation shape</b></td><td>$10k&ndash;$50k, 4&ndash;12 weeks</td><td>Matches your $20k / 3-month build. $500k enterprise rollouts are the wrong tempo; $2k self-serve has no depth</td></tr>
    </tbody>
   </table>
+
+  <h4>What that looks like in practice</h4>
+  <p>Three companies in your orbit, so the picture is concrete.</p>
+
+  <div class="qbox"><div class="q">Segment (now Twilio Segment) &mdash; customer data platform</div>
+   <p><b>What implementation involved:</b> brutal, and deeply technical. Every customer needed event tracking installed
+    across their website, mobile apps and servers; a naming schema agreed so &ldquo;signup&rdquo; meant the same thing
+    everywhere; then dozens of downstream destinations wired up and validated. Early on this was effectively a consulting
+    engagement &mdash; every stack was different and the work was invented fresh each time.</p>
+   <p style="margin-top:8px"><b>What the PS leader did:</b> turned it into a repeatable motion. Standard tracking plans by
+    vertical, reference implementations, validation tooling, a defined go-live gate. The idea of a &ldquo;tracking
+    plan&rdquo; as a <em>deliverable</em> rather than a conversation came out of exactly this pressure.</p>
+   <p style="margin-top:8px"><b>Why it maps:</b> this is your problem almost exactly. Technical work, every client&rsquo;s
+    stack slightly different, and the whole margin question is whether you industrialise it or do it by hand forever.</p></div>
+
+  <div class="qbox"><div class="q">Workato / Tray.io &mdash; enterprise automation and integration platforms</div>
+   <p><b>What implementation involved:</b> solutions architects building actual workflows for customers. Discovery of the
+    customer&rsquo;s process, mapping it onto the platform, building it, testing, handover, then training the customer&rsquo;s
+    team to maintain it.</p>
+   <p style="margin-top:8px"><b>Why this is the closest analogue you will find:</b> it is functionally the same business as
+    yours. Someone diagnoses a company&rsquo;s process, architects an automation, builds it, hands it over. The only
+    difference is that you build on your own stack rather than selling a platform. Someone who ran delivery at an iPaaS
+    company has done your job with a different logo on it.</p></div>
+
+  <div class="qbox"><div class="q">Gong &mdash; revenue intelligence</div>
+   <p><b>What implementation involved:</b> CRM integration and field mapping, connecting the dialer, calendar and
+    conferencing, configuring trackers and scorecards, then rolling it out to a sales team and getting them to actually
+    use it.</p>
+   <p style="margin-top:8px"><b>Why it is here:</b> it shows the hybrid you need. Technical enough to require real
+    integration work, but the last mile is <b>change management</b> &mdash; getting humans to adopt something. Your builds
+    are the same: the workflow can be perfect and still fail because the client&rsquo;s team will not use it. A Gong
+    implementation leader has fought that exact battle repeatedly.</p></div>
+
+  <div class="callout warn"><p><b>The caveat that matters for all three.</b> You want someone from the <b>growth years,
+   not from today</b>. Someone at Segment in 2018 building the playbook is a completely different hire from someone who
+   joined post-acquisition and ran an established machine. Same logo on the CV, opposite experience.</p>
+   <p style="margin-top:8px">The line that separates them: <em>&ldquo;Was the playbook there when you arrived, or did you
+   write it?&rdquo;</em></p></div>
 
   <h4>Non-negotiables</h4>
   <ul>
@@ -1171,6 +1245,22 @@ td.pause{color:var(--crit)}
   <div class="qbox"><div class="q">Paid work-sample &mdash; best of all</div>
    <p>Give them a real recording and notes from one of your onboardings and ask them to spec how they would make it
     repeatable. Half a day, a few hundred dollars. It will tell you more than every interview combined.</p></div>
+
+  <h4>Where to find them</h4>
+  <p>Search these titles on LinkedIn:</p>
+  <ul>
+   <li>Director / Head of <b>Professional Services</b></li>
+   <li>Head of <b>Implementation</b> or <b>Onboarding</b></li>
+   <li>Director of <b>Solutions Architecture</b> &mdash; the more technical variant</li>
+   <li>Director of <b>Technical Services</b></li>
+   <li>Manager, Implementation &mdash; for the step-up hire at the lower end of the salary band</li>
+  </ul>
+  <p>Filter to companies in the <b>$10M&ndash;$100M ARR</b> band: data infrastructure, iPaaS, dev tools, API-first
+   products, revenue tooling. Then check tenure &mdash; you want someone who was there <b>through</b> a growth phase, not
+   someone who arrived after it.</p>
+  <div class="callout"><p><b>The highest-signal move available to you:</b> find people who were implementation consultants
+   at those companies during that period and ask <em>them</em> who ran delivery well. This function is small and everyone
+   in it knows everyone. A referral from an ex-consultant beats any search you will run yourself.</p></div>
 
   <h4>What they cost</h4>
   <table>
@@ -2390,7 +2480,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-1940";
+var BUILD_ID="0822-1949";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
