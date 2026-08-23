@@ -432,7 +432,7 @@ td.pause{color:var(--crit)}
   <button type="button" role="tab" data-p="p2" aria-selected="false"><em>2 &middot; Scale delivery</em><i id="rng2">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p3" aria-selected="false"><em>3 &middot; AI architects</em><i id="rng3">&nbsp;</i></button>
   <button type="button" role="tab" data-p="p4" aria-selected="false"><em>4 &middot; Full arc</em><i id="rng4">&nbsp;</i></button>
-  <button type="button" role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">15</span></em><i>open questions</i></button>
+  <button type="button" role="tab" data-p="p5" aria-selected="false"><em>Ideas <span class="count">16</span></em><i>open questions</i></button>
   <button type="button" role="tab" data-p="p6" aria-selected="false"><em>Talent</em><i>who to hire</i></button>
   <button type="button" role="tab" data-p="p7" aria-selected="false"><em>Exit</em><i>what it is worth</i></button>
 </div>
@@ -1150,6 +1150,45 @@ td.pause{color:var(--crit)}
       <div class="settle"><div class="settle-k">Why it matters</div>
         <p>Every exit-value conversation runs off EBITDA. Using the model&rsquo;s net overstates the business by roughly a
           third and would put a $100m label on something closer to $60m.</p></div>
+    </div>
+  </div>
+
+
+  <div class="idea">
+    <div class="idea-h"><span class="idea-n">16</span><span class="chip open">open</span>
+      <p class="idea-q">Pricing that grows with the client &mdash; without an unpredictable bill</p></div>
+    <div class="idea-b">
+      <p>Borrowed from MSPs, who charge per seat or per device so <b>revenue grows automatically as the client grows</b>,
+        with no sales conversation. A flat monthly fee does not do that &mdash; a client who doubles their sales team pays
+        you exactly the same as the day they signed.</p>
+      <p><b>But raw usage metering would be a mistake here</b>, for three reasons:</p>
+      <p>&bull; <b>Unpredictable bills breed resentment.</b> If every menu item meters separately and every meter moves
+        monthly, nobody can budget and every invoice is a small argument.<br>
+        &bull; <b>Never price on a unit the client cannot see.</b> API calls, tokens and compute are invisible to them
+        &mdash; they have no idea how many calls a workflow makes, so the bill feels arbitrary and unauditable.<br>
+        &bull; <b>Worst of all, it inverts the incentive.</b> If usage costs money, the rational client uses it less
+        &mdash; you would be charging them for succeeding with the thing you sold them.</p>
+
+      <div class="settle"><div class="settle-k">The shape that solves it</div>
+        <p><b>Usage sets the band. The band sets the price. The price is flat.</b></p>
+        <p>Each menu item carries a flat monthly price. That price sits in a band determined by <b>one</b> client-size
+          metric they already track and control &mdash; sales seats, monthly lead volume, locations. Bands are reviewed
+          <b>annually</b>, not monthly.</p>
+        <p>The client gets a bill that does not move and a number they understand. You get revenue that rises as they
+          grow. And because the metric is their own headcount or volume, they will never shrink it to lower your invoice.</p></div>
+
+      <p><b>That gives two clean expansion paths, neither of which needs a meter:</b></p>
+      <p>1. <b>More menu items installed &rarr; more MRR.</b> Discrete, transparent, and it is the upsell motion you
+        already want. This alone produces expansion revenue.<br>
+        2. <b>The client grows &rarr; the band moves &rarr; more MRR.</b> One conversation a year, fully predictable.</p>
+
+      <p>An annual true-up is the other workable variant: bill flat all year, reconcile once against actual size. Same
+        properties, one conversation instead of a renegotiation.</p>
+
+      <div class="settle"><div class="settle-k">What would settle it</div>
+        <p>Pick the size metric before the first contract, because it is nearly impossible to change later &mdash; it has
+          to be something every client in the ICP has, tracks accurately, and cannot game. Ask in the first ten audits
+          what number they would consider fair to be priced against. <b>Their answer is the metric.</b></p></div>
     </div>
   </div>
 
@@ -3301,7 +3340,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2246";
+var BUILD_ID="0822-2248";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
