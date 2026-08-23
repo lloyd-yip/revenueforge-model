@@ -2054,6 +2054,79 @@ td.pause{color:var(--crit)}
    <p>MSPs learned the hard way that doing the job perfectly makes you invisible, and invisible is a churn risk. If nothing
     breaks and nobody reports on what was prevented, the client starts wondering what they pay for.</p></div>
 
+  <h4>The scorecard &mdash; what a buyer actually measures</h4>
+  <p>Every one of these is checked in diligence. Green now, or a plan to be green by the time you sell.</p>
+  <table>
+   <thead><tr><th>Metric</th><th>Premium threshold</th><th>Where this model puts you</th></tr></thead>
+   <tbody>
+    <tr><td><b>Recurring % of revenue</b><br><span style="color:var(--ink-3);font-size:12px">the single biggest multiple driver</span></td><td>&gt;70% good, &gt;80% premium</td><td id="k_rec">&mdash;</td></tr>
+    <tr><td><b>Gross revenue retention</b><br><span style="color:var(--ink-3);font-size:12px">before any expansion</span></td><td>&gt;90% / yr</td><td id="k_grr">&mdash;</td></tr>
+    <tr><td><b>Net revenue retention</b><br><span style="color:var(--ink-3);font-size:12px">expansion beating churn</span></td><td>&gt;100% is the gold standard</td><td>not modelled &mdash; expansion is off</td></tr>
+    <tr><td><b>Customer concentration</b></td><td>largest &lt;10%, top 5 &lt;25%</td><td id="k_conc">&mdash;</td></tr>
+    <tr><td><b>Revenue growth, trailing 12mo</b></td><td>&gt;30% premium, &gt;20% floor</td><td id="k_grow">&mdash;</td></tr>
+    <tr><td><b>Rule of 40</b><br><span style="color:var(--ink-3);font-size:12px">growth % + EBITDA %</span></td><td>&gt;40</td><td id="k_r40">&mdash;</td></tr>
+    <tr><td><b>Revenue per employee</b></td><td>&gt;$250k strong</td><td id="k_rpe">&mdash;</td></tr>
+    <tr><td><b>CAC payback</b></td><td>&lt;12 months</td><td id="k_cac">&mdash;</td></tr>
+    <tr><td><b>Cost to deliver, trend</b></td><td>falling year on year</td><td id="k_cost">&mdash;</td></tr>
+    <tr><td><b>Contract length</b></td><td>annual minimum, multi-year premium</td><td>a decision, not an output</td></tr>
+    <tr><td><b>EBITDA</b></td><td>$3m before double digits are possible</td><td id="k_3m">&mdash;</td></tr>
+   </tbody>
+  </table>
+  <div class="callout"><p><b>Two of these you already win structurally.</b> CAC payback is near zero because the audit
+   liquidates acquisition at the point of sale, and revenue per employee is roughly triple the enterprise-SaaS median.
+   Make sure whoever writes your information memorandum knows to lead with both &mdash; buyers price what they are shown.</p></div>
+
+  <h4>Qualitative &mdash; the things that must be TRUE</h4>
+  <p>These are not measured, they are verified. Each one is worth a chunk of multiple on its own.</p>
+  <ul>
+   <li><b>The founder is not in delivery.</b> Not &ldquo;mostly not&rdquo; &mdash; not at all, and demonstrably so for at
+    least twelve months before a sale.</li>
+   <li><b>The founder is not the top salesperson.</b> If you personally close most deals, the buyer is purchasing your
+    calendar, and they know you will leave.</li>
+   <li><b>Documented process.</b> Runbooks, SOPs, an onboarding playbook someone new can follow. This is the single
+    cheapest multiple protection available and it costs you nothing but the habit.</li>
+   <li><b>A management team that stays.</b> Buyers pay for the org, not the founder. A Head of Delivery who signs a
+    retention package is worth more than a year of margin improvement.</li>
+   <li><b>Clean financials.</b> Accrual accounting, reviewed or audited statements, revenue tied to signed contracts.
+    Cash-basis books with no contracts behind them cannot be verified and get discounted on principle.</li>
+   <li><b>Assignable contracts.</b> Change-of-control clauses that permit transfer. A book of business that legally cannot
+    be sold is not a book of business.</li>
+   <li><b>Clear IP ownership.</b> Everything built by contractors assigned in writing. This is a common and expensive
+    surprise.</li>
+   <li><b>Security posture.</b> For hosted systems touching client data: SOC&nbsp;2, DPAs, incident response. Cheap to build
+    early, brutal to retrofit under an LOI.</li>
+   <li><b>No single platform dependency</b> that could be cut off. If one vendor&rsquo;s API terminating would break half
+    your book, that is a disclosed risk and it prices in.</li>
+  </ul>
+
+  <h4>Multiple killers &mdash; the things that must NOT happen</h4>
+  <p>Any one of these can cost several turns of multiple, and some end a deal outright.</p>
+  <div class="decoy"><div class="dh">One client above 20% of revenue</div><p>Concentration risk is the most common
+   reason a good business gets a mediocre price. The buyer models what happens if that client leaves, and prices the
+   business as if they already have.</p></div>
+  <div class="decoy"><div class="dh">Month-to-month contracts</div><p>Revenue that can walk with thirty days&rsquo; notice
+   is barely recurring revenue. This is a paperwork decision worth turns of multiple, and it is free to fix at signing
+   and impossible to fix retroactively.</p></div>
+  <div class="decoy"><div class="dh">Flat or declining growth at the point of sale</div><p>The model plateaus by design.
+   Selling into that plateau converts a 10&ndash;14&times; business into a 5&ndash;7&times; one with no other change.</p></div>
+  <div class="decoy"><div class="dh">A churn spike in the trailing twelve months</div><p>Buyers weight recent cohorts
+   heavily. One bad year immediately before a sale is worth more to them than three good ones before it.</p></div>
+  <div class="decoy"><div class="dh">Key delivery people with no contracts</div><p>Someone who holds the knowledge, has no
+   non-solicit, and could leave with clients is a diligence finding that either kills the deal or funds an escrow.</p></div>
+  <div class="decoy"><div class="dh">Unprofitable legacy clients you never repriced</div><p>The grandfathered-pricing
+   problem, surfacing years later as a margin drag the buyer will model forward forever.</p></div>
+  <div class="decoy"><div class="dh">Undisclosed scope creep</div><p>Clients receiving work outside the contract because
+   somebody once said yes. It shows up in diligence as unbilled cost of delivery and calls the whole margin story into
+   question.</p></div>
+  <div class="decoy"><div class="dh">A material incident with no runbook</div><p>An outage or breach is survivable. An
+   outage or breach with no documented response, and no evidence you fixed the cause, is a governance failure &mdash; and
+   buyers price governance failures as character rather than as bad luck.</p></div>
+
+  <div class="callout warn"><p><b>The pattern worth noticing:</b> almost nothing on either list is expensive, and almost
+   nothing can be fixed quickly. Contract terms, documentation, concentration limits, security posture and founder
+   distance are all <b>cheap decisions made early and impossible to retrofit late</b>. That is the entire argument for
+   reading this page now rather than in year four.</p></div>
+
   <h4>Where the analogy breaks &mdash; and it matters</h4>
   <div class="callout crit"><p><b>IT is defensive spend. You are offensive spend.</b></p>
    <p style="margin-top:8px">An MSP sells something every business needs and nobody cancels &mdash; when times get hard, IT
@@ -3178,6 +3251,21 @@ function renderTalent(){
  set("x_rec",(L.recR/Math.max(L.cash,1)*100).toFixed(0)+"%");
  set("x_grow",flat?"flat":(g>0?"+"+g.toFixed(0)+"%":g.toFixed(0)+"%"));
  set("x_3m",x3?("M"+x3.m):"not in arc");
+ // ---- diligence scorecard ----
+ var heads=L.delTeam+L.mgrTeam+L.diagTeam+L.csTeam+2;
+ var eb=rev*0.5, r40=g+50;
+ var ok=function(id,txt,good){var e=$(id);if(!e)return;e.innerHTML=txt;
+  e.style.color=good===true?"var(--accent)":(good===false?"var(--crit)":"var(--ink-2)")};
+ var recP=L.recR/Math.max(L.cash,1)*100;
+ ok("k_rec",recP.toFixed(0)+"% &mdash; "+(recP>=70?"passes":"below threshold"),recP>=70);
+ ok("k_grr","retention lever says "+v.retention+" months",null);
+ ok("k_conc",Math.round(L.live)+" clients, avg "+(100/Math.max(L.live,1)).toFixed(1)+"% each",L.live>=20);
+ ok("k_grow",flat?"flat at the plateau":"+"+g.toFixed(0)+"% trailing",!flat&&g>=20);
+ ok("k_r40",flat?"~50 (all margin, no growth)":"~"+r40.toFixed(0),true);
+ ok("k_rpe",money(rev/Math.max(heads,1))+" per head",rev/Math.max(heads,1)>=250000);
+ ok("k_cac","near zero &mdash; the audit liquidates it",true);
+ ok("k_cost",Math.round(delivHrs(v,1))+" hrs &rarr; "+Math.round(delivHrs(v,v.floor/100))+" hrs per build",true);
+ ok("k_3m",x3?("crossed at M"+x3.m):"not reached in arc",!!x3);
 }
 var ROLE_IDS=["r1","r2","r3","r4","r5"];
 document.querySelectorAll('.subtabs button[data-r]').forEach(function(b){
@@ -3213,7 +3301,7 @@ function showTab(id){
 document.querySelectorAll('.tabs button[data-p]').forEach(function(b){
  b.addEventListener("click",function(){showTab(b.dataset.p)})});
 
-var BUILD_ID="0822-2244";
+var BUILD_ID="0822-2246";
 $("buildTag").textContent="build "+BUILD_ID;
 $("latestBtn").addEventListener("click",function(){
  location.replace(location.pathname+"?v="+Date.now()+location.hash);
